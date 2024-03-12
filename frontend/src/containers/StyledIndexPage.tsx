@@ -2,7 +2,18 @@ import styled from 'styled-components';
 
 interface HeightProps {
 	height?: string;
-}
+} // textarea 높이
+
+interface AlignProps {
+	$align?: string;
+} // text 정렬
+
+interface MarginProps {
+	$marginRight?: string;
+	$marginLeft?: string;
+	$marginTop?: string;
+	$marginBottom?: string;
+} // 마진용
 
 export const StyledIndexPage = styled.div`
 	height: calc(100vh - 70px);
@@ -12,10 +23,11 @@ export const StyledIndexPage = styled.div`
 	justify-content: center;
 	align-items: center;
 `;
+// 인덱스 페이지 전체
 
 export const StyledBox = styled.div`
 	width: 85vw;
-	height: 75vh;
+	height: 84vh;
 
 	border-radius: 15px;
 	padding: 5px;
@@ -27,10 +39,27 @@ export const StyledBox = styled.div`
 	background-color: #e2d5e7;
 	flex-direction: column;
 `;
+// 인덱스 페이지 설명 영역
+
+export const StyledLetter = styled.div`
+	width: 75vw;
+	height: 40vh;
+
+	border: 2px solid #fff6f2;
+	border-radius: 15px;
+	margin-top: 2vh;
+
+	padding-bottom: 1.5vh;
+
+	display: flex;
+	justify-content: center;
+
+	flex-direction: column;
+`; // 입력 영역
 
 export const StyledInput = styled.input`
-	width: 70vw;
-	height: 3vh;
+	width: 68vw;
+	height: 2vh;
 
 	border-left-width: 0;
 	border-right-width: 0;
@@ -42,10 +71,10 @@ export const StyledInput = styled.input`
 
 	background-color: transparent;
 
-	line-height: 22px;
+	line-height: 21px;
 
-	::placeholder {
-		color: #999;
+	&::placeholder {
+		color: #9d86a6 !important;
 		font-family: 'Inter', sans-serif;
 		font-weight: 400;
 	}
@@ -56,24 +85,10 @@ export const StyledInput = styled.input`
 		border-bottom-color: #fff6f2;
 	}
 `;
-
-export const StyledLetter = styled.div`
-	width: 75vw;
-	height: 40vh;
-
-	border: 2px solid #fff6f2;
-	border-radius: 15px;
-  margin-top: 2vh;
-
-	display: flex;
-	justify-content: center;
-	align-items: center;
-
-	flex-direction: column;
-`;
+// 상황 input
 
 export const StyledTextarea = styled.textarea<HeightProps>`
-	width: 70vw;
+	width: 68vw;
 	height: ${(props) => props.height || '44px'};
 
 	background-attachment: local;
@@ -88,26 +103,35 @@ export const StyledTextarea = styled.textarea<HeightProps>`
 	overflow: hidden;
 
 	word-break: break-all;
-	overflow: hidden;
 
 	&:focus {
 		outline: none;
 	}
 
 	&::placeholder {
-    font-size: 0.725rem;
-		color: #999 bold;
+		font-size: 0.70rem;
+		color: #9d86a6 !important;
 		font-family: 'Inter', sans-serif;
 		font-weight: 400;
 	}
 `;
+// 상대, 메시지 입력 영역
 
-export const StyledText = styled.span`
+export const StyledText = styled.p<MarginProps>`
 	font-size: 0.875rem;
-  display: block;
-`;
+	display: block;
+	margin: auto;
+	margin: ${(props) => props.$marginTop || 'auto'} ${(props) => props.$marginRight || 'auto'}
+		${(props) => props.$marginBottom || 'auto'} ${(props) => props.$marginLeft || 'auto'};
+`; // 단순 텍스트용
 
-export const StyleImage = styled.img`
-  width: 100px; 
-  height: 140px; 
+export const StyledImage = styled.img`
+	width: 100px;
+	height: 140px;
 `;
+// 이미지
+
+export const TextAlign = styled.div<AlignProps>`
+	text-align: ${(props) => props.$align || 'center'};
+`;
+// 텍스트 정렬

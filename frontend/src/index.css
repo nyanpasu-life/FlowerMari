@@ -14,4 +14,12 @@
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  -ms-overflow-style: none; /* Internet Explorer에 대한 설정 */
+  overflow: -moz-scrollbars-none; /* Firefox에 대한 설정 */
+  
+}
+
+::-webkit-scrollbar {
+  display: none; /* Chrome, Safari 및 Opera에 대한 설정 */
 }
