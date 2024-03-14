@@ -1,46 +1,56 @@
 import { useState } from 'react';
-import { StyledCard, StyledInfo, StyledRecommendBtn, StyledName, StyledLanguage, TextAlign } from './StyledFlowerCard';
+import {
+	StyledCard,
+	StyledInfo,
+	StyledFlowerArea,
+	StyledRecommend,
+	StyledName,
+	StyledMeaning,
+	TextAlign,
+	StyledCloseButton,
+	CloseSpan,
+} from './StyledFlowerCard';
 
 interface FlowerProps {
 	link?: string;
 	$isMain?: boolean;
 	$isSelected?: boolean;
 	$name?: string;
+	$recommend?: boolean;
 	$meaning?: Array<String>;
-	$used?: boolean;
-	accordianClick?: () => void;
+	clickDelete?: (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-export const FlowerCard = ({ link, $isMain, $isSelected, $name, $meaning, $used, accordianClick }: FlowerProps) => {
+export const FlowerCard = ({ link, $isMain, $isSelected, $name,$recommend, $meaning, clickDelete }: FlowerProps) => {
 
 	return (
 		<>
 			<StyledCard>
-				{/* 꽃 이미지 */}	
-				<StyledRecommendBtn
-					src={link}
-					$isMain={$isMain}
-					$isSelected={$isSelected}
-					disabled={!$used}
-					onClick={() => {
-						if (accordianClick) {
-							accordianClick();
-						}
-					}}
-				></StyledRecommendBtn>
+				{/* 꽃 이미지 */}
+				<StyledFlowerArea>
+					<div style={{ marginLeft: 'auto'}}>
+						{!$isMain && $recommend && (
+							<StyledCloseButton onClick={clickDelete}>
+								<CloseSpan className='material-symbols-outlined'>cancel</CloseSpan>
+							</StyledCloseButton>
+						)}
+					</div>
+					<StyledRecommend src={link} $isMain={$isMain} $isSelected={$isSelected}></StyledRecommend>
+				</StyledFlowerArea>
 				{/* 꽃말 정보 */}
 				<StyledInfo>
 					<TextAlign $align='left'>
-						<StyledName $marginLeft='0.5vw' $marginTop='1.2vh'>
+						<StyledName $marginLeft='1.0vw' $marginTop='0.8vh'>
 							{$name}
 						</StyledName>
 						{$meaning &&
 							$meaning.length > 0 &&
 							$meaning.map((meaning, index) => (
-								<StyledLanguage key={index} $marginLeft='0.5vw' $marginTop='0.5vh'>
+								<StyledMeaning key={index} $marginLeft='0.5vw' $marginTop='0.5vh'>
 									{' '}
-									{'ㆍ'}{meaning}{' '}
-								</StyledLanguage>
+									{'ㆍ'}
+									{meaning}{' '}
+								</StyledMeaning>
 							))}
 					</TextAlign>
 				</StyledInfo>

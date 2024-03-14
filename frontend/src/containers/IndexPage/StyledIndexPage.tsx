@@ -16,7 +16,7 @@ interface MarginProps {
 } // 마진용
 
 export const StyledIndexPage = styled.div`
-	height: calc(100vh - 70px);
+	height: calc(var(--vh, 1vh) * 100 - 60px);
 	position: relative;
 
 	display: flex;
@@ -27,7 +27,11 @@ export const StyledIndexPage = styled.div`
 
 export const StyledBox = styled.div`
 	width: 85vw;
-	height: 84vh;
+	height: 78vh;
+
+	@media (max-height: 630px) {
+		height: 85vh;
+	}
 
 	border-radius: 15px;
 	padding: 5px;
@@ -47,7 +51,7 @@ export const StyledLetter = styled.div`
 
 	border: 2px solid #fff6f2;
 	border-radius: 15px;
-	margin-top: 2vh;
+	margin-top: 1vh;
 
 	padding-bottom: 1.5vh;
 
@@ -58,6 +62,8 @@ export const StyledLetter = styled.div`
 `; // 입력 영역
 
 export const StyledInput = styled.input`
+	font-family: 'Cafe 24 Oneprettynight-v2.0';
+
 	width: 68vw;
 	height: 2vh;
 
@@ -74,9 +80,10 @@ export const StyledInput = styled.input`
 	line-height: 21px;
 
 	&::placeholder {
-		color: #9d86a6 !important;
-		font-family: 'Inter', sans-serif;
+		font-family: 'Cafe 24 Oneprettynight-v2.0';
 		font-weight: 400;
+		font-size: 1rem;
+		color: #9d86a6 !important;
 	}
 
 	&:focus {
@@ -88,6 +95,8 @@ export const StyledInput = styled.input`
 // 상황 input
 
 export const StyledTextarea = styled.textarea<HeightProps>`
+	font-family: 'Cafe 24 Oneprettynight-v2.0';
+
 	width: 68vw;
 	height: ${(props) => props.height || '44px'};
 
@@ -109,25 +118,38 @@ export const StyledTextarea = styled.textarea<HeightProps>`
 	}
 
 	&::placeholder {
-		font-size: 0.70rem;
-		color: #9d86a6 !important;
-		font-family: 'Inter', sans-serif;
+		font-family: 'Cafe 24 Oneprettynight-v2.0';
 		font-weight: 400;
+		font-size: 1rem;
+		color: #9d86a6 !important;
+
+		@media (max-width: 340px) {
+			font-size: 0.945rem;
+		}
 	}
 `;
 // 상대, 메시지 입력 영역
 
 export const StyledText = styled.p<MarginProps>`
-	font-size: 0.875rem;
+	font-family: 'Cafe 24 Oneprettynight-v2.0';
+	font-size: 1.2rem;
+
+	@media (max-width: 340px) {
+		font-size: 0.98rem;
+	}
+
+	@media (min-width: 768px) {
+		font-size: 1.5rem;
+	}
+
 	display: block;
-	margin: auto;
 	margin: ${(props) => props.$marginTop || 'auto'} ${(props) => props.$marginRight || 'auto'}
 		${(props) => props.$marginBottom || 'auto'} ${(props) => props.$marginLeft || 'auto'};
 `; // 단순 텍스트용
 
 export const StyledImage = styled.img`
 	width: 100px;
-	height: 140px;
+	height: auto;
 `;
 // 이미지
 

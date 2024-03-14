@@ -1,6 +1,7 @@
-import { Menu } from '../components/menu/Menubar';
-import { useNavigate } from "react-router-dom";
-
+import mainFlower from '../../assets/images/mainFlower.png';
+import CustomButton from '../../components/button/CustomButton';
+import { Menu } from '../../components/menu/Menubar';
+import { useNavigate } from 'react-router-dom';
 import {
 	StyledIndexPage,
 	StyledBox,
@@ -11,8 +12,6 @@ import {
 	StyledImage,
 	TextAlign,
 } from './StyledIndexPage';
-import mainFlower from '../assets/images/mainFlower.png';
-import CustomButton from '../components/button/CustomButton';
 import { ChangeEvent, useState } from 'react';
 
 export const IndexPage = () => {
@@ -30,8 +29,8 @@ export const IndexPage = () => {
 	};
 
 	const goToGenerate = () => {
-		navigate("/generate");
-	}
+		navigate('/generate');
+	};
 
 	return (
 		<>
@@ -39,9 +38,15 @@ export const IndexPage = () => {
 			<StyledIndexPage>
 				<StyledBox>
 					<StyledImage src={mainFlower}></StyledImage>
-					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>꽃을 통해 전하고 싶은 말을 전해보세요. </StyledText>
-					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>전하고 싶은 말을 적으면 꽃말을 기준으로 </StyledText>
-					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>꽃을 선택해 꽃다발을 만들어드려요. </StyledText>
+					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
+						꽃을 통해 전하고 싶은 말을 전해보세요.{' '}
+					</StyledText>
+					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
+						전하고 싶은 말을 적으면 꽃말을 기준으로{' '}
+					</StyledText>
+					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
+						꽃을 선택해 꽃다발을 만들어드려요.{' '}
+					</StyledText>
 
 					<StyledLetter>
 						<TextAlign $align='left'>
@@ -50,7 +55,9 @@ export const IndexPage = () => {
 						<TextAlign>
 							<StyledInput placeholder='예) 여자친구와 200일'></StyledInput>
 							<TextAlign $align='left'>
-								<StyledText $marginLeft='3.5vw' $marginTop='1.2vh'>Dear.</StyledText>
+								<StyledText $marginLeft='3.5vw' $marginTop='1.2vh'>
+									Dear.
+								</StyledText>
 							</TextAlign>
 							<StyledTextarea
 								value={value1}
@@ -66,7 +73,7 @@ export const IndexPage = () => {
 						</TextAlign>
 					</StyledLetter>
 
-					<CustomButton onClick={goToGenerate}>만들기</CustomButton>
+					<CustomButton $make={true} onClick={goToGenerate}>만들기</CustomButton>
 				</StyledBox>
 			</StyledIndexPage>
 		</>
