@@ -1,9 +1,9 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { IndexPage } from './containers/IndexPage.tsx';
+import { IndexPage } from './containers/IndexPage/IndexPage.tsx';
 import { useEffect } from 'react';
 import { LoginPage } from './containers/loginPage/LoginPage.tsx';
-import { Menu } from './components/menu/Menubar.tsx';
 import { GeneratePage } from './containers/generatePage/GeneratePage.tsx';
+import { CompletePage } from './containers/completePage/CompletePage.tsx';
 
 export default function App() {
 	function setScreenSize() {
@@ -32,8 +32,10 @@ export default function App() {
 				<Routes>
 					<Route>
 						{/* 레이아웃이 필요한 페이지 */}
-						<Route path='/' element={<IndexPage />} />
+						<Route path='/' element={<LoginPage />} />
+						<Route path='/index' element={<IndexPage />} />
 						<Route path='/generate' element={<GeneratePage />} />
+						<Route path='/complete' element={<CompletePage />} />
 					</Route>
 					<Route></Route>
 				</Routes>

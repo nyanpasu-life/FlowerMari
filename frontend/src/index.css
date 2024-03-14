@@ -23,3 +23,16 @@
 ::-webkit-scrollbar {
   display: none; /* Chrome, Safari 및 Opera에 대한 설정 */
 }
+
+.scroll-locked {
+  overflow: hidden;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+}

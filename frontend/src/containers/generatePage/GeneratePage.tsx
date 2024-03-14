@@ -1,6 +1,9 @@
 import { Accordion } from '../../components/accordion/Accordion';
 import { StyledGeneratePage, StyledBouquetImage } from './StyledGeneratePage';
+import { useState } from 'react';
+import { MakeModal } from '../../components/modal/makeModal/MakeModal';
 import CustomButton from '../../components/button/CustomButton';
+import { FlowerListModal } from '../../components/modal/flowerModal/FlowerListModal'
 interface BouquetProps {
 	link?: string;
 }
@@ -71,6 +74,32 @@ export const GeneratePage = ({ link }: BouquetProps) => {
 		},
 	];
 
+	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
+	const [isListModalOpened, setIsListModalOpened] = useState(false);
+
+	const html = document.querySelector('html');
+
+	const openModal = () => {
+    setIsMakeModalOpened(true);
+    html?.classList.add('scroll-locked');
+  };
+
+	const closeModal = () => {
+		setIsMakeModalOpened(false);
+		html?.classList.remove('scroll-locked');
+	};
+
+	const openListModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+		setIsListModalOpened(true)
+		e.stopPropagation();
+		html?.classList.add('scroll-locked');
+	}
+
+	const CloseListModal = () => {
+		setIsListModalOpened(false)
+		html?.classList.remove('scroll-locked');
+	}
+
 	return (
 		<>
 			<StyledGeneratePage>
@@ -78,13 +107,14 @@ export const GeneratePage = ({ link }: BouquetProps) => {
 					src='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
 					alt='img'
 				></StyledBouquetImage>
-
 				{/* 꽃 하나 당 추천 꽃 세개 묶음 */}
 				{arrayOfArrays.map((item, index) => {
 					const startIdx = index * 3;
 					const endIdx = startIdx + 3;
 					const extractedItems = recommendArrays.slice(startIdx, endIdx);
-					{/* 추천 꽃 추출 */}
+					{
+						/* 추천 꽃 추출 */
+					}
 
 					return (
 						<Accordion
@@ -92,11 +122,17 @@ export const GeneratePage = ({ link }: BouquetProps) => {
 							$index={index}
 							$item={item}
 							$recommendArrays={extractedItems}
+							openListModal={(e) => openListModal(e)}
 						></Accordion>
 					);
 				})}
-				<CustomButton>확인</CustomButton>
+				<div style={{ marginBottom: '2vh' }}>
+					<CustomButton $check={true} onClick={openModal}>확인</CustomButton>
+				</div>
 			</StyledGeneratePage>
+
+			{isMakeModalOpened && <MakeModal closeModal={closeModal}></MakeModal>}
+			{isListModalOpened && <FlowerListModal CloseListModal={CloseListModal}></FlowerListModal>}
 		</>
 	);
 };

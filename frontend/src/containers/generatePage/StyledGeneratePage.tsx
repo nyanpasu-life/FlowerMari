@@ -14,4 +14,7 @@ export const StyledBouquetImage = styled.img`
 	height: auto;
 
 	border-radius: 15px;
+
+	margin-top: 2.5vh;
+	margin-bottom: 2vh;
 `; // 꽃다발 이미지
