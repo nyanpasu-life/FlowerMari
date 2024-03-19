@@ -55,7 +55,7 @@ export const StyledRecommend = styled.div<borderProps>`
 		margin-left: 1vw;
 	}
 
-	border: #F3F3F3;
+	border: #f3f3f3;
 
 	border-top-left-radius: 50px;
 	border-top-right-radius: 50px;
@@ -63,12 +63,11 @@ export const StyledRecommend = styled.div<borderProps>`
 	background: ${(props) => `url(${props.src})`} no-repeat center center;
 	background-size: 60% 80%;
 
-	background-color: rgba(243,243,243,1);
+	background-color: rgba(243, 243, 243, 1);
 	background-blend-mode: multiply;
 
 	overflow: hidden;
 `;
-
 
 // 꽃 정보
 export const StyledInfo = styled.button`
@@ -92,7 +91,10 @@ export const StyledInfo = styled.button`
 	align-items: center;
 	flex-direction: column;
 
-	border: 1.5px solid #D7D7D7;
+	transition:
+		background-color 0.3s ease;
+
+	border: 1.5px solid #d7d7d7;
 	border-radius: 15px;
 
 	background: none;
@@ -100,17 +102,21 @@ export const StyledInfo = styled.button`
 	margin: auto;
 	margin-left: 2.5vw;
 
+	&:hover {
+			background-color: #e9e7e7;
+		}
 `;
 
+// 꽃 추가 버튼
 export const StyledAddButton = styled.button<borderProps>`
-
 	background: none;
 	border: none;
 `;
 
+// 꽃 추가 span
 export const AddSpan = styled.span`
 	&.material-symbols-outlined {
-		color: #D7D7D7;
+		color: #d7d7d7;
 		font-size: 28px;
 
 		@media (min-width: 768px) {

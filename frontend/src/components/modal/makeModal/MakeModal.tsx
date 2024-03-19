@@ -38,7 +38,7 @@ export const MakeModal = ({ closeModal }: ModalProps) => {
 							src='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
 							alt='img'
 						></StyledBouquetImage>
-						<CustomButton onClick={goToComplete}>만들기</CustomButton>
+						<CustomButton $check={true} onClick={goToComplete}>만들기</CustomButton>
 					</StyledConfirmInfo>
 				</StyledModal>
 			</StyledModalBackground>

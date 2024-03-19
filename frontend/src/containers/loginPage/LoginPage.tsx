@@ -14,7 +14,9 @@ export const LoginPage = () => {
 	return (
 		<>
 			<StyledLoginPage>
+				{/* 로고 */}
 				<StyledLogoImage src={Logo}></StyledLogoImage>
+				{/* 카카오 로그인 버튼 */}
 				<CustomButton $kakao={true} onClick={goToIndex}>
 					{' '}
 					<StyledKakaoImg src={kakao} alt='kakao'></StyledKakaoImg>카카오 계정으로 로그인하기

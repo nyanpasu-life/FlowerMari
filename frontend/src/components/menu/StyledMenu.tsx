@@ -21,7 +21,7 @@ export const StyledMenu = styled.div`
 
 	margin-top: 5px;
 	background-color: #e2d5e7;
-`;
+`; // 메뉴바
 
 export const StyledMenuButton = styled.button`
 	display: flex;
@@ -31,7 +31,16 @@ export const StyledMenuButton = styled.button`
 
   background: none;
   border: none;
-`;
+
+	transition:
+		box-shadow 0.3s ease,
+		background-color 0.3s ease;
+
+	&:hover {
+		background-color: #d7c4df;
+		// 호버시 변경
+	}
+`; // 메뉴 버튼 개별
 
 export const StyledMenuImg = styled.img`
 	width: 35px;
@@ -41,6 +50,11 @@ export const StyledMenuImg = styled.img`
 export const StyledMenuText = styled.p<MarginProps>`
 	font-family: 'Cafe 24 Oneprettynight-v2.0';
 	font-size: 0.8rem;
+
+	@media (min-width: 768px) {
+		font-size: 1.1rem;
+	}
+
 	display: block;
 	margin: auto;
 	margin: ${(props) => props.$marginTop || 'auto'} ${(props) => props.$marginRight || 'auto'}

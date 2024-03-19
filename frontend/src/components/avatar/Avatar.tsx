@@ -7,6 +7,7 @@ interface AvatarProps {
 export const Avatar = ({ link }: AvatarProps) => {
   return (
     <>
+    {/* 프로필 사진 */}
     <StyledAvatar>
       <AvatarImage src={link} alt="img" />
     </StyledAvatar>

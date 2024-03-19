@@ -7,6 +7,7 @@ export const StyledGeneratePage = styled.div`
 	flex-direction: column;
 
 	margin: auto;
+	margin-top: 55px;
 `; // 페이지
 
 export const StyledBouquetImage = styled.img`
