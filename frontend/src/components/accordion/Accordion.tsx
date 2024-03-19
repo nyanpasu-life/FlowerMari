@@ -36,13 +36,14 @@ export const Accordion = ({ $index, $item, $recommendArrays, openListModal }: Re
 
 	const clickDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		setEmpty(true);
+		setActive(false)
 		e.stopPropagation();
-	};
+	}; // 삭제버튼 클릭
 
 	const clickAddFlower = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		setEmpty(false);
 		e.stopPropagation();
-	};
+	}; // 추가버튼 클릭
 
 	return (
 		<AccordionSection>
@@ -64,6 +65,7 @@ export const Accordion = ({ $index, $item, $recommendArrays, openListModal }: Re
 					</AccordionMenu>
 				)}
 
+				{/* 상단 메뉴이고, 삭제해서 현재 빈 칸인 경우 */}
 				{empty && (
 					<AccordionMenu>
 						<EmptyFlowerCard $recommend={true} clickAddFlower={(e) => clickAddFlower(e)}></EmptyFlowerCard>
@@ -72,7 +74,7 @@ export const Accordion = ({ $index, $item, $recommendArrays, openListModal }: Re
 
 				{/* 아코디언 collapse 메뉴 */}
 				<AccordionContent ref={content} style={{ height: height }}>
-					<AccordionText $marginLeft='5vw' $marginTop='2vh' $marginBottom='-2vh'>
+					<AccordionText $marginLeft='2.5vw' $marginTop='2vh' $marginBottom='-2vh'>
 						이 꽃은 어떠세요?
 					</AccordionText>
 					{$recommendArrays.map((extractedItem, idx) => (

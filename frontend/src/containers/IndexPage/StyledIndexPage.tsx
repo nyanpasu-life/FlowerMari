@@ -65,7 +65,6 @@ export const StyledInput = styled.input`
 	font-family: 'Cafe 24 Oneprettynight-v2.0';
 
 	width: 68vw;
-	height: 2vh;
 
 	border-left-width: 0;
 	border-right-width: 0;
@@ -77,7 +76,8 @@ export const StyledInput = styled.input`
 
 	background-color: transparent;
 
-	line-height: 21px;
+	line-height: 1.32rem;
+	font-size: 1.32rem;
 
 	&::placeholder {
 		font-family: 'Cafe 24 Oneprettynight-v2.0';
@@ -98,13 +98,14 @@ export const StyledTextarea = styled.textarea<HeightProps>`
 	font-family: 'Cafe 24 Oneprettynight-v2.0';
 
 	width: 68vw;
-	height: ${(props) => props.height || '44px'};
+	height: ${(props) => props.height || '3rem'};
 
 	background-attachment: local;
 	background-image: linear-gradient(to right, transparent 15px, transparent 15px),
 		linear-gradient(to left, transparent 15px, transparent 15px),
-		repeating-linear-gradient(transparent, transparent 20px, #fff6f2 21px, #fff6f2 22px, #fff6f2 10px);
-	line-height: 22px;
+		repeating-linear-gradient(transparent, transparent 1.375rem, #fff6f2 1.4375rem, #fff6f2 1.5rem, #fff6f2 0.625px);
+	line-height: 1.5rem;
+	font-size: 1.375rem;
 
 	border: none;
 	background-color: inherit;
@@ -138,7 +139,7 @@ export const StyledText = styled.p<MarginProps>`
 		font-size: 0.98rem;
 	}
 
-	@media (min-width: 768px) {
+	@media (min-width: 767px) {	
 		font-size: 1.5rem;
 	}
 

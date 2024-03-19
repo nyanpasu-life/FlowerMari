@@ -2,6 +2,7 @@ import mainFlower from '../../assets/images/mainFlower.png';
 import CustomButton from '../../components/button/CustomButton';
 import { Menu } from '../../components/menu/Menubar';
 import { useNavigate } from 'react-router-dom';
+import { Header } from '../../components/header/Headerbar';
 import {
 	StyledIndexPage,
 	StyledBox,
@@ -34,8 +35,10 @@ export const IndexPage = () => {
 
 	return (
 		<>
-			<Menu link='https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'></Menu>
 			<StyledIndexPage>
+				{/* 로그인 헤더 */}
+				<Header link='https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'></Header>
+				{/* 헤더를 제외한 영역 */}
 				<StyledBox>
 					<StyledImage src={mainFlower}></StyledImage>
 					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
@@ -47,11 +50,13 @@ export const IndexPage = () => {
 					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
 						꽃을 선택해 꽃다발을 만들어드려요.{' '}
 					</StyledText>
-
+					
+					{/* 입력 영역 */}
 					<StyledLetter>
 						<TextAlign $align='left'>
 							<StyledText $marginLeft='3.5vw'>상황</StyledText>
 						</TextAlign>
+						{/* 상황 입력 영역 */}
 						<TextAlign>
 							<StyledInput placeholder='예) 여자친구와 200일'></StyledInput>
 							<TextAlign $align='left'>
@@ -59,23 +64,29 @@ export const IndexPage = () => {
 									Dear.
 								</StyledText>
 							</TextAlign>
+							{/* 대상 입력 영역 */}
 							<StyledTextarea
 								value={value1}
 								placeholder='dear : 귀엽고 사랑스러운 여자친구에게'
 								onChange={(e) => handleChangeOptionValues(e, setValue1)}
 							></StyledTextarea>
+							{/* 마음 입력 영역 */}
 							<StyledTextarea
 								value={value2}
 								placeholder='꽃을 통해 전하고 싶은 마음을 적어주세요.'
-								height='88px'
+								height='6rem'
 								onChange={(e) => handleChangeOptionValues(e, setValue2)}
 							></StyledTextarea>
 						</TextAlign>
 					</StyledLetter>
 
-					<CustomButton $make={true} onClick={goToGenerate}>만들기</CustomButton>
+					{/* 만들기 버튼 */}
+					<CustomButton $make={true} onClick={goToGenerate}>
+						만들기
+					</CustomButton>
 				</StyledBox>
 			</StyledIndexPage>
+			<Menu></Menu>
 		</>
 	);
 };

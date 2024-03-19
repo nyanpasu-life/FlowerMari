@@ -41,26 +41,35 @@ export const StyledModal = styled.div`
 	box-shadow: 2px 7px 15px 8px rgba(0, 0, 0, 0.3);
 `;
 
-export const StyledCloseButton = styled.button`
-	background: none;
-	border: none;
-
-	margin-left: auto;
-	margin-top: 1vh;
-	margin-right: 1vw;
-
-	&:hover {
-		background-color: #d9d9d9;
-	}
-`;
-
 export const CloseSpan = styled.span`
+	color: #bdbdbd;
+
 	&.material-symbols-outlined {
 		font-variation-settings:
 			'FILL' 0,
 			'wght' 100,
 			'GRAD' 0,
 			'opsz' 24;
+	}
+`;
+
+export const StyledCloseButton = styled.button`
+	background: none;
+	border: none;
+
+	border-radius: 30%;
+
+	transition:
+		box-shadow 0.3s ease,
+		background-color 0.3s ease;
+
+	margin-left: auto;
+	margin-top: 1vh;
+	margin-right: 1vw;
+
+	&:hover ${CloseSpan} {
+		color:  #505050;
+		transition: color 0.3s ease;
 	}
 `;
 

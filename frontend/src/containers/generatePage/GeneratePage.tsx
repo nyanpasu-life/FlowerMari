@@ -1,9 +1,10 @@
 import { Accordion } from '../../components/accordion/Accordion';
+import { Header } from '../../components/header/Headerbar';
 import { StyledGeneratePage, StyledBouquetImage } from './StyledGeneratePage';
 import { useState } from 'react';
 import { MakeModal } from '../../components/modal/makeModal/MakeModal';
 import CustomButton from '../../components/button/CustomButton';
-import { FlowerListModal } from '../../components/modal/flowerModal/FlowerListModal'
+import { FlowerListModal } from '../../components/modal/flowerModal/FlowerListModal';
 interface BouquetProps {
 	link?: string;
 }
@@ -80,9 +81,9 @@ export const GeneratePage = ({ link }: BouquetProps) => {
 	const html = document.querySelector('html');
 
 	const openModal = () => {
-    setIsMakeModalOpened(true);
-    html?.classList.add('scroll-locked');
-  };
+		setIsMakeModalOpened(true);
+		html?.classList.add('scroll-locked');
+	};
 
 	const closeModal = () => {
 		setIsMakeModalOpened(false);
@@ -90,19 +91,21 @@ export const GeneratePage = ({ link }: BouquetProps) => {
 	};
 
 	const openListModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-		setIsListModalOpened(true)
+		setIsListModalOpened(true);
 		e.stopPropagation();
 		html?.classList.add('scroll-locked');
-	}
+	};
 
 	const CloseListModal = () => {
-		setIsListModalOpened(false)
+		setIsListModalOpened(false);
 		html?.classList.remove('scroll-locked');
-	}
+	};
 
 	return (
 		<>
 			<StyledGeneratePage>
+				{/* 로그인 헤더 */}
+				<Header link='https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'></Header>
 				<StyledBouquetImage
 					src='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
 					alt='img'
@@ -127,11 +130,15 @@ export const GeneratePage = ({ link }: BouquetProps) => {
 					);
 				})}
 				<div style={{ marginBottom: '2vh' }}>
-					<CustomButton $check={true} onClick={openModal}>확인</CustomButton>
+					<CustomButton $check={true} onClick={openModal}>
+						확인
+					</CustomButton>
 				</div>
 			</StyledGeneratePage>
-
+			
+			{/* 완성 확인 모달 */}
 			{isMakeModalOpened && <MakeModal closeModal={closeModal}></MakeModal>}
+			{/* 꽃 리스트 모달 */}
 			{isListModalOpened && <FlowerListModal CloseListModal={CloseListModal}></FlowerListModal>}
 		</>
 	);

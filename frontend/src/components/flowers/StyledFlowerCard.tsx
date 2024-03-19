@@ -38,8 +38,9 @@ export const StyledCard = styled.div<MarginProps>`
 
 	border: none;
 	background-color: transparent;
-`;
+`; 
 
+// 꽃 사진 + 버튼 영역
 export const StyledFlowerArea = styled.div`
 	position: relative;
 
@@ -74,22 +75,11 @@ export const StyledRecommend = styled.div<borderProps>`
 	overflow: hidden;
 `;
 
-export const StyledCloseButton = styled.button<borderProps>`
-	position: absolute;
-
-	left: 65px;
-
-	@media (min-width: 768px) {
-		left: 100px;
-	}
-
-	background: none;
-	border: none;
-`;
-
+// 삭제 span 
 export const CloseSpan = styled.span`
+
 	&.material-symbols-outlined {
-		color: #E2D5E7;
+		color: #e2d5e7;
 		font-size: 28px;
 
 		@media (min-width: 768px) {
@@ -101,6 +91,26 @@ export const CloseSpan = styled.span`
 			'wght' 100,
 			'GRAD' 0,
 			'opsz' 24;
+	}
+`;
+
+// 삭제 버튼
+export const StyledCloseButton = styled.button`
+	position: absolute;
+	left: 65px;
+
+	@media (min-width: 768px) {
+		left: 100px;
+	}
+
+	background: none;
+	border: none;
+
+	&:hover {
+		${CloseSpan} {
+			color: #5a2e6b;
+			transition: color 0.3s ease;
+		}
 	}
 `;
 
@@ -128,9 +138,9 @@ export const StyledInfo = styled.div<isMain>`
 
 	margin: auto;
 	margin-left: 2.5vw;
-
 `;
 
+// 꽃 이름
 export const StyledName = styled.p<MarginProps>`
 	font-family: 'Cafe 24 Oneprettynight-v2.0';
 	font-size: 1.25rem;
@@ -143,8 +153,9 @@ export const StyledName = styled.p<MarginProps>`
 	text-align: left;
 	margin: ${(props) => props.$marginTop || 'auto'} ${(props) => props.$marginRight || 'auto'}
 		${(props) => props.$marginBottom || 'auto'} ${(props) => props.$marginLeft || 'auto'};
-`; // 꽃 이름
+`;
 
+// 꽃말
 export const StyledMeaning = styled.p<MarginProps>`
 	font-family: 'Cafe 24 Oneprettynight-v2.0';
 	font-size: 0.8rem;
@@ -161,8 +172,8 @@ export const StyledMeaning = styled.p<MarginProps>`
 
 	margin: ${(props) => props.$marginTop || 'auto'} ${(props) => props.$marginRight || 'auto'}
 		${(props) => props.$marginBottom || 'auto'} ${(props) => props.$marginLeft || 'auto'};
-`; // 단순 텍스트용
+`;
 
 export const TextAlign = styled.div<AlignProps>`
 	text-align: ${(props) => props.$align || 'center'};
-`;
+`; // 텍스트 마진

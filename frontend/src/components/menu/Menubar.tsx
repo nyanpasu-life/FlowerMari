@@ -5,11 +5,8 @@ import make from './../../assets/images/make.svg'
 import search from './../../assets/images/search.svg'
 import find from './../../assets/images/find.svg'
 
-interface MenuProps {
-  link?: string;
-}
 
-export const Menu = ({ link }: MenuProps) => {
+export const Menu = () => {
 
   const navigate = useNavigate();
 
@@ -27,17 +24,21 @@ export const Menu = ({ link }: MenuProps) => {
 
   return (
     <StyledMenu>
+      {/* 메뉴바 */}
       <StyledMenuButton onClick={goToGenerate}>
         <StyledMenuImg src={make} alt="make"></StyledMenuImg>
+        {/* 만들기 버튼과 아이콘*/}
         <StyledMenuText $marginLeft="-0.6vw">만들기</StyledMenuText>
       </StyledMenuButton>
 
       <StyledMenuButton>
+        {/* 검색 버튼과 아이콘 */}
         <StyledMenuImg src={search} alt="search"></StyledMenuImg>
         <StyledMenuText>검색</StyledMenuText>
       </StyledMenuButton>
 
       <StyledMenuButton>
+        {/* 꽃집 찾기 버튼과 아이콘 */}
         <StyledMenuImg src={find} alt="find"></StyledMenuImg>
         <StyledMenuText>꽃집 찾기</StyledMenuText>
       </StyledMenuButton>

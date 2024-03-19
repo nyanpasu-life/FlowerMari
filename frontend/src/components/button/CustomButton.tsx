@@ -51,6 +51,10 @@ const StyledButton = styled.button<ButtonProps>`
 		$make &&
 		css`
 			background: #fff6f2;
+
+			&:hover {
+				background: #e8e1dd;
+			}
 		`}
 
     ${({ $check }) =>
@@ -58,6 +62,10 @@ const StyledButton = styled.button<ButtonProps>`
 		css`
 			background: #ffffff;
 			box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+			&:hover {
+				background: #e4e4e4;
+			}
 		`}
 
     ${({ $kakao }) =>
@@ -74,8 +82,8 @@ const StyledButton = styled.button<ButtonProps>`
 			display: flex;
 			align-items: center;
 			text-align: center;
-            justify-content: center;
-            
+      justify-content: center;
+
 			font-size: 1.2rem;
 
 			@media (max-width: 340px) {
