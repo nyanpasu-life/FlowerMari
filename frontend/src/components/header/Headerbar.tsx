@@ -1,16 +1,16 @@
 import { StyledHeader, StyledMargin } from './StyledHeaderbar';
+import { HeaderDropdown } from '../dropdown/headerDropDown/HeaderDropDown';
 import { Avatar } from '../avatar/Avatar';
 interface MenuProps {
 	link?: string;
 }
 
-export const Header = ({ link}: MenuProps) => {
+export const Header = ({link}: MenuProps) => {
 	return (
 		<>
 			<StyledHeader>
 				<StyledMargin>
-					{/* 프로필 사진 */}
-					<Avatar link={link}></Avatar>
+					<HeaderDropdown></HeaderDropdown>
 				</StyledMargin>
 			</StyledHeader>
 		</>

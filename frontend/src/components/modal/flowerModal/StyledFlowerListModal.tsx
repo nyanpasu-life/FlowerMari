@@ -21,8 +21,9 @@ export const StyledModal = styled.div`
 	overflow-y: auto;
 
 	@media (max-width: 290px) {
-		width: 280px;
+		width: 270px;
 	}
+
 	@media (min-width: 400px) {
 		width: 380px;
 	}

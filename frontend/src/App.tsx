@@ -4,6 +4,7 @@ import { useEffect } from 'react';
 import { LoginPage } from './containers/loginPage/LoginPage.tsx';
 import { GeneratePage } from './containers/generatePage/GeneratePage.tsx';
 import { CompletePage } from './containers/completePage/CompletePage.tsx';
+import { BouquetListPage } from './containers/bouquetListPage/BouquetListPage.tsx';
 
 export default function App() {
 	function setScreenSize() {
@@ -36,6 +37,7 @@ export default function App() {
 						<Route path='/index' element={<IndexPage />} />
 						<Route path='/generate' element={<GeneratePage />} />
 						<Route path='/complete' element={<CompletePage />} />
+						<Route path='/list' element={<BouquetListPage />} />
 					</Route>
 					<Route></Route>
 				</Routes>
