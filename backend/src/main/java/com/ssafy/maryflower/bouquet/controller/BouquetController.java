@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import java.util.List;
 
 import java.util.Optional;
 
@@ -38,8 +39,8 @@ public class BouquetController {
         return ResponseEntity.ok("success");
     }
 
-    @GetMapping("/text-input")
-    public SseEmitter processSendUserInputToAIServer(@RequestBody UserDataHolder userDataHolder){
+    @PostMapping("/text-input")
+    private SseEmitter processSendUserInputToAIServer(@RequestBody UserDataHolder userDataHolder){
 
         // 토큰에서 userId 추출.
         Long userId=1L;
@@ -55,6 +56,9 @@ public class BouquetController {
         // 요청에 대한 requestId 생성
         String requestId= bouquetService.generateRequestID();
 
+        // userId를 key 값으로 requestId 캐시 (regenerate시 requestId를 기억하기 위함)
+        cacheService.cacheRequestIdWithUserId(userId, requestId);
+
         // userData를 담아 놓을 Dto 생성
         userDataHolder.setUserId (userId);
 
@@ -67,5 +71,30 @@ public class BouquetController {
         // sseEmitter 생성 후 반환
         return sseEmitters.addEmitter(requestId);
     }
+
+    @PostMapping("/re-generate")
+    private ResponseEntity<String> processSendUserFlowersToAIServer(@RequestBody List<String> flowers){
+
+        // 토큰에서 userId 추출.
+        Long userId=1L;
+
+        // api 호출 회수 조회.
+        if(bouquetService.checkApiUses(userId)>5) {
+            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS,"API 사용 횟수를 초과하였습니다");
+        }
+
+        // api 사용로그 저장
+        bouquetService.createApiLog(userId);
+
+        // redis 캐시 확인해 requestId 조회.
+        String requestId=cacheService.cacheRequestIdWithUserId(userId);
+
+        // Redis ch1으로 publish
+        DataPublishService.publishFlowerDataToAIServer(flowers,requestId);
+
+        return ResponseEntity.ok("success");
+    }
+
+
 
 }
