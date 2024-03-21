@@ -58,7 +58,7 @@ export const StyledRecommend = styled.div<borderProps>`
 	border: #f3f3f3;
 
 	border-top-left-radius: 50px;
-	border-top-right-radius: 50px;
+	border-top-right-radius: 50px;	
 
 	background: ${(props) => `url(${props.src})`} no-repeat center center;
 	background-size: 60% 80%;

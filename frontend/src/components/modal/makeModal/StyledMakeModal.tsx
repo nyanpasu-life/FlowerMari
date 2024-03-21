@@ -18,7 +18,7 @@ export const StyledModal = styled.div`
 	height: 75vh;
 
 	@media (max-width: 290px) {
-		width: 280px;
+		width: 270px;
 	}
 	
 	@media (min-width: 400px) {

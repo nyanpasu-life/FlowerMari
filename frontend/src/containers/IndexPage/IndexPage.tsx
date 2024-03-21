@@ -13,6 +13,7 @@ import {
 	StyledText,
 	StyledImage,
 	TextAlign,
+	InfoAlign
 } from './StyledIndexPage';
 import React, { ChangeEvent, useState } from 'react';
 
@@ -48,16 +49,17 @@ export const IndexPage: React.FC = () => {
 				{/* 헤더를 제외한 영역 */}
 				<StyledBox>
 					<StyledImage src={mainFlower}></StyledImage>
-					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
-						꽃을 통해 전하고 싶은 말을 전해보세요.{' '}
-					</StyledText>
-					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
-						전하고 싶은 말을 적으면 꽃말을 기준으로{' '}
-					</StyledText>
-					<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
-						꽃을 선택해 꽃다발을 만들어드려요.{' '}
-					</StyledText>
-					
+					<InfoAlign>
+						<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
+							꽃을 통해 전하고 싶은 말을 전해보세요.{' '}
+						</StyledText>
+						<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
+							전하고 싶은 말을 적으면 꽃말을 기준으로{' '}
+						</StyledText>
+						<StyledText $marginTop='0vh' $marginBottom='0.5vh'>
+							꽃을 선택해 꽃다발을 만들어드려요.{' '}
+						</StyledText>
+					</InfoAlign>
 					{/* 입력 영역 */}
 					<StyledLetter>
 						<TextAlign $align='left'>

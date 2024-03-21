@@ -27,37 +27,34 @@ export const StyledIndexPage = styled.div`
 
 export const StyledBox = styled.div`
 	width: 85vw;
-	height: 78vh;
-
-	@media (max-height: 630px) {
-		height: 85vh;
-	}
+	height: 85vh;
 
 	border-radius: 15px;
 	padding: 5px;
 
 	display: flex;
-	justify-content: center;
+	flex-direction: column;
+	justify-content: space-around;
 	align-items: center;
 
 	background-color: #e2d5e7;
-	flex-direction: column;
+
 `;
 // 인덱스 페이지 설명 영역
 
 export const StyledLetter = styled.div`
 	width: 75vw;
-	height: 40vh;
+	height: 42vh;
 
 	border: 2px solid #fff6f2;
 	border-radius: 15px;
 	margin-top: 1vh;
 
+	padding-top: 1.5vh;
 	padding-bottom: 1.5vh;
 
 	display: flex;
 	justify-content: center;
-
 	flex-direction: column;
 `; // 입력 영역
 
@@ -78,6 +75,11 @@ export const StyledInput = styled.input`
 
 	line-height: 1.32rem;
 	font-size: 1.32rem;
+
+	@media (max-width: 340px) {
+		line-height: 0.945rem;
+		font-size: 0.945rem;
+	}
 
 	&::placeholder {
 		font-family: 'Cafe 24 Oneprettynight-v2.0';
@@ -106,6 +108,10 @@ export const StyledTextarea = styled.textarea<HeightProps>`
 		repeating-linear-gradient(transparent, transparent 1.375rem, #fff6f2 1.4375rem, #fff6f2 1.5rem, #fff6f2 0.625px);
 	line-height: 1.5rem;
 	font-size: 1.375rem;
+
+	@media (max-width: 340px) {
+		font-size: 0.945rem;
+	}
 
 	border: none;
 	background-color: inherit;
@@ -136,10 +142,10 @@ export const StyledText = styled.p<MarginProps>`
 	font-size: 1.2rem;
 
 	@media (max-width: 340px) {
-		font-size: 0.98rem;
+		font-size: 0.945rem;
 	}
 
-	@media (min-width: 767px) {	
+	@media (min-width: 767px) {
 		font-size: 1.5rem;
 	}
 
@@ -151,8 +157,20 @@ export const StyledText = styled.p<MarginProps>`
 export const StyledImage = styled.img`
 	width: 100px;
 	height: auto;
+
+	@media (max-height: 610px) {
+		width: 75px;
+		height: auto;
+	}
 `;
 // 이미지
+
+export const InfoAlign = styled.div`
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+`
 
 export const TextAlign = styled.div<AlignProps>`
 	text-align: ${(props) => props.$align || 'center'};

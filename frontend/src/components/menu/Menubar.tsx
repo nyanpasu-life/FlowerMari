@@ -14,8 +14,8 @@ export const Menu = () => {
 		navigate('/index');
 	};
 
-  const goToSearch = () => {
-		navigate('/search');
+  const goToList = () => {
+		navigate('/list');
 	};
 
   const goToFind = () => {
@@ -31,7 +31,7 @@ export const Menu = () => {
         <StyledMenuText $marginLeft="-0.6vw">만들기</StyledMenuText>
       </StyledMenuButton>
 
-      <StyledMenuButton>
+      <StyledMenuButton onClick={goToList}>
         {/* 검색 버튼과 아이콘 */}
         <StyledMenuImg src={search} alt="search"></StyledMenuImg>
         <StyledMenuText>검색</StyledMenuText>
