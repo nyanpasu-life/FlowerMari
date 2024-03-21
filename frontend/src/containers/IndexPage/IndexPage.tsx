@@ -3,6 +3,7 @@ import CustomButton from '../../components/button/CustomButton';
 import { Menu } from '../../components/menu/Menubar';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../../components/header/Headerbar';
+import { postTextInputs} from "../../api/bouquetCreate.ts";
 import {
 	StyledIndexPage,
 	StyledBox,
@@ -13,11 +14,12 @@ import {
 	StyledImage,
 	TextAlign,
 } from './StyledIndexPage';
-import { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, useState } from 'react';
 
-export const IndexPage = () => {
-	const [value1, setValue1] = useState<string>('');
-	const [value2, setValue2] = useState<string>('');
+export const IndexPage: React.FC = () => {
+	const [whom, setWhom] = useState<string>('');
+	const [situation, setSituation] = useState<string>('');
+	const [message, setMessage] = useState<string>('');
 
 	const navigate = useNavigate();
 
@@ -29,7 +31,12 @@ export const IndexPage = () => {
 		}
 	};
 
-	const goToGenerate = () => {
+	// const goToGenerate = () => {
+	// 	navigate('/generate');
+	// };
+
+	const handleSubmit = async () => {
+		await postTextInputs({ whom, situation, message });
 		navigate('/generate');
 	};
 
@@ -58,7 +65,7 @@ export const IndexPage = () => {
 						</TextAlign>
 						{/* 상황 입력 영역 */}
 						<TextAlign>
-							<StyledInput placeholder='예) 여자친구와 200일'></StyledInput>
+							<StyledInput placeholder='예) 여자친구와 200일' onChange={(e) => setSituation(e.target.value)}></StyledInput>
 							<TextAlign $align='left'>
 								<StyledText $marginLeft='3.5vw' $marginTop='1.2vh'>
 									Dear.
@@ -66,22 +73,21 @@ export const IndexPage = () => {
 							</TextAlign>
 							{/* 대상 입력 영역 */}
 							<StyledTextarea
-								value={value1}
+								value={whom}
 								placeholder='dear : 귀엽고 사랑스러운 여자친구에게'
-								onChange={(e) => handleChangeOptionValues(e, setValue1)}
+								onChange={(e) => setWhom(e.target.value)}
 							></StyledTextarea>
 							{/* 마음 입력 영역 */}
 							<StyledTextarea
-								value={value2}
 								placeholder='꽃을 통해 전하고 싶은 마음을 적어주세요.'
 								height='6rem'
-								onChange={(e) => handleChangeOptionValues(e, setValue2)}
+								onChange={(e) => setMessage(e.target.value)}
 							></StyledTextarea>
 						</TextAlign>
 					</StyledLetter>
 
 					{/* 만들기 버튼 */}
-					<CustomButton $make={true} onClick={goToGenerate}>
+					<CustomButton $make={true} onClick={handleSubmit}>
 						만들기
 					</CustomButton>
 				</StyledBox>
