@@ -18,17 +18,17 @@ interface FlowerProps {
 	$name?: string;
 	$recommend?: boolean;
 	$meaning?: Array<String>;
-	clickDelete?: (e : React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
+	$isChoice?: boolean;
+	clickDelete?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-export const FlowerCard = ({ link, $isMain, $isSelected, $name,$recommend, $meaning, clickDelete }: FlowerProps) => {
-
+export const FlowerCard = ({ link, $isMain, $isSelected, $name, $recommend, $meaning, $isChoice, clickDelete }: FlowerProps) => {
 	return (
 		<>
-			<StyledCard>
+			<StyledCard $isChoice={$isChoice}>
 				{/* 꽃 이미지 */}
 				<StyledFlowerArea>
-					<div style={{ marginLeft: 'auto'}}>
+					<div style={{ marginLeft: 'auto' }}>
 						{!$isMain && $recommend && (
 							<StyledCloseButton onClick={clickDelete}>
 								<CloseSpan className='material-symbols-outlined'>cancel</CloseSpan>

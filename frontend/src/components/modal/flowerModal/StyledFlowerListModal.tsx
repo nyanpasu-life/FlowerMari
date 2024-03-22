@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface listProps {
+	$isChoice?: boolean;
+}
+
 export const StyledModalBackground = styled.div`
 	position: fixed;
 	top: 0;
@@ -93,6 +97,15 @@ export const StyledCloseButton = styled.button`
 		transition: color 0.3s ease;
 	}
 `; // 닫기 버튼
+
+export const StyledClickArea = styled.button<listProps>`
+	border: none;
+	outline: none;
+
+	width: 100%;
+
+	background-color: ${(props) => (props.$isChoice ? '#f3f3f3' : 'transparent')};
+`
 
 export const StyledConfirmInfo = styled.div<{ fixedHeight: number }>`
   height: calc(110% - ${({ fixedHeight }) => fixedHeight}px);

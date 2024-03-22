@@ -21,23 +21,29 @@ interface isMain {
 	$main?: boolean;
 }
 
+interface listProps {
+	$isChoice?: boolean;
+}
+
 // 전체
-export const StyledCard = styled.div<MarginProps>`
+export const StyledCard = styled.div<MarginProps & listProps>`
 	width: max-content;
-	height: 150px;
+	height: max-content;
 
 	display: flex;
 	justify-content: center;
 	align-items: center;
 
-	margin-top: 2vh;
+	margin-top: 1vh;
+	margin-bottom: 1vh;
 
 	@media (min-width: 768px) {
-		margin-top: 4vh;
+		margin-top: 2vh;
+		margin-bottom: 2vh;
 	}
 
 	border: none;
-	background-color: transparent;
+	background-color: ${(props) => (props.$isChoice ? '#f3f3f3' : 'transparent')};
 `; 
 
 // 꽃 사진 + 버튼 영역
@@ -143,14 +149,14 @@ export const StyledInfo = styled.div<isMain>`
 // 꽃 이름
 export const StyledName = styled.p<MarginProps>`
 	font-family: 'Cafe 24 Oneprettynight-v2.0';
-	font-size: 1.25rem;
+	font-size: 1.5rem;
 
 	@media (min-width: 768px) {
 		font-size: 1.8rem;
 	}
 
 	display: block;
-	text-align: left;
+	text-align: center;
 	margin: ${(props) => props.$marginTop || 'auto'} ${(props) => props.$marginRight || 'auto'}
 		${(props) => props.$marginBottom || 'auto'} ${(props) => props.$marginLeft || 'auto'};
 `;
@@ -158,14 +164,18 @@ export const StyledName = styled.p<MarginProps>`
 // 꽃말
 export const StyledMeaning = styled.p<MarginProps>`
 	font-family: 'Cafe 24 Oneprettynight-v2.0';
-	font-size: 0.8rem;
+	font-size: 1.1rem;
 
-	@media (max-width: 340px) {
-		font-size: 0.65rem;
+	@media (max-width: 300px) {
+		font-size: 0.9rem;
+	}
+
+	@media (min-width: 640px) {
+		font-size: 1.2rem;
 	}
 
 	@media (min-width: 768px) {
-		font-size: 1.23rem;
+		font-size: 1.55rem
 	}
 
 	display: block;
