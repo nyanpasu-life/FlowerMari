@@ -22,8 +22,15 @@ import static com.nimbusds.oauth2.sdk.Role.*;
 @Service
 public class PrincipalOauthUserService extends DefaultOAuth2UserService {
 
+//  @Autowired
+//  private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+  private final BCryptPasswordEncoder bCryptPasswordEncoder;
+
   @Autowired
-  private BCryptPasswordEncoder bCryptPasswordEncoder;
+  public PrincipalOauthUserService(BCryptPasswordEncoder bCryptPasswordEncoder) {
+    this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+  }
 
   @Autowired
   private MemberRepository memberRepository;
