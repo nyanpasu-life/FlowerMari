@@ -11,6 +11,7 @@ import com.ssafy.maryflower.bouquet.sse.SseEmitters;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
@@ -27,23 +28,19 @@ public class BouquetController {
     private final BouquetService bouquetService;
     private final CacheService cacheService;
     private final DataPublishService DataPublishService;
-    private final FlowerRepository flowerRepository;
 
-    @PostMapping("/test")
-    private ResponseEntity<String> forTest() {
-        return ResponseEntity.ok("Success");
-    }
 
-    @PostMapping("/test2")
-    private ResponseEntity<String> forDBTest() {
 
-        Optional<Long> test = flowerRepository.findFlowerByName("test");
+    // SSE 통신 엔드포인트
+    @GetMapping(value = "/subscribe", produces = "text/event-stream")
+    public SseEmitter subscribe(){
 
-        return ResponseEntity.ok("success");
+        Long userId = 1L;
+        return sseEmitters.addEmitter(cacheService.cacheRequestIdWithUserId(userId));
     }
 
     @PostMapping("/text-input")
-    private SseEmitter processSendUserInputToAIServer(@RequestBody UserDataHolder userDataHolder) {
+    public ResponseEntity<String> processSendUserInputToAIServer(@RequestBody UserDataHolder userDataHolder) {
 
         // 토큰에서 userId 추출.
         Long userId = 1L;
@@ -71,8 +68,8 @@ public class BouquetController {
         // API를 통해 꽃다발에 사용할 꽃 추출 후, Redis ch1으로 publish
         DataPublishService.publishFlowerDataToAIServer(userDataHolder.getWhom(), userDataHolder.getSituation(), userDataHolder.getMessage(), requestId);
 
-        // sseEmitter 생성 후 반환
-        return sseEmitters.addEmitter(requestId);
+        // 200 응답 반환
+        return ResponseEntity.ok("success");
     }
 
     @PostMapping("/re-generate")
@@ -128,9 +125,12 @@ public class BouquetController {
         }
         // 캐시 데아터 삭제
         cacheService.deleteUserDataHolderDto(requestId);
+
         // 캐시 데이터 삭제
         cacheService.deleteRequestIdFromCache(userId);
 
+        // sse 통신 제거.
+        sseEmitters.removeEmitter(requestId);
 
         return ResponseEntity.ok("success");
     }
