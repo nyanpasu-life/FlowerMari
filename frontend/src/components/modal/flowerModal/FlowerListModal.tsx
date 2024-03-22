@@ -7,38 +7,32 @@ import {
 	ColorButtonList,
 	StyledScroll,
 	StyledFixed,
+	StyledClickArea,
 } from './StyledFlowerListModal';
 import { FlowerColor } from '../../flowerColorButton/FlowerColorButton';
 import { useNavigate } from 'react-router-dom';
 import { FlowerCard } from '../../../components/flowers/FlowerCard';
-import CustomButton from '../../button/CustomButton';
 import { useEffect, useRef, useState } from 'react';
-
-interface RecommendItem {
-	$url: string;
-	$name: string;
-	$meaning: string[];
-}
+import { bouquetStore } from '../../../stores/bouquetStore';
+import CustomButton from '../../button/CustomButton';
 
 interface RecommendProps {
-	$index?: number;
-	$item?: {
-		$name: string;
-		$meaning: string[];
-	};
 	CloseListModal: () => void;
 }
 
-export const FlowerListModal = ({ $index, $item, CloseListModal }: RecommendProps) => {
+export const FlowerListModal = ({ CloseListModal }: RecommendProps) => {
+	const { allFlowers } = bouquetStore.getState();
+
 	const navigate = useNavigate();
+
+	const fixedRef = useRef<HTMLDivElement>(null);
+	const [fixedHeight, setFixedHeight] = useState<number>(0);
+	const [clickIndex, setClickIndex] = useState<number>(-1);
 
 	const goToGenerate = () => {
 		CloseListModal();
 		navigate('/generate');
 	};
-
-	const fixedRef = useRef<HTMLDivElement>(null);
-	const [fixedHeight, setFixedHeight] = useState<number>(0);
 
 	useEffect(() => {
 		if (fixedRef.current) {
@@ -46,16 +40,9 @@ export const FlowerListModal = ({ $index, $item, CloseListModal }: RecommendProp
 		}
 	}, []);
 
-	type MyArrayItem = {
-		$name: string;
-		$meaning: string[];
+	const clickOnList = (index: number) => {
+		setClickIndex(index);
 	};
-
-	const arrayOfArrays: MyArrayItem[] = [
-		{ $name: '레이스 플라워', $meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'] },
-		{ $name: '레이스', $meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'] },
-		{ $name: '플라워', $meaning: ['정열', '화려함', '당신의 사랑이 나를 행복하게 합니다'] },
-	];
 
 	return (
 		<>
@@ -72,16 +59,25 @@ export const FlowerListModal = ({ $index, $item, CloseListModal }: RecommendProp
 					<StyledConfirmInfo fixedHeight={fixedHeight}>
 						{/* 카드 스크롤 영역 */}
 						<StyledScroll>
-							{arrayOfArrays.map(($item) => (
-								<FlowerCard
-									$isMain={true}
-									$isSelected={false}
-									$recommend={false}
-									$name={$item.$name}
-									$meaning={$item.$meaning}
-									link='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
-								/>
-							))}
+							{allFlowers.map(($item, index) => {
+									const meanings = $item.meaning.split(',').map((item) => item.trim());
+									// 꽃말에 의한 추천, 꽃말만 추출 후 분리
+								return (
+									<StyledClickArea
+										onClick={() => clickOnList(index)}
+										$isChoice={index === clickIndex}
+									>
+										<FlowerCard
+											$isMain={true}
+											$isSelected={false}
+											$recommend={false}
+											$name={$item.name}
+											$meaning={meanings}
+											link='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
+										/>
+									</StyledClickArea>
+								);
+							})}
 						</StyledScroll>
 						{/* 색상 및 확인 버튼 영역 */}
 						<StyledFixed ref={fixedRef}>
