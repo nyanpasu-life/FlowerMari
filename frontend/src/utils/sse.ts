@@ -2,7 +2,7 @@ import { bouquetStore } from '../stores/bouquetStore';
 
 const setupSSE = () => {
     const { setBouquetData } = bouquetStore.getState();
-    const eventSource = new EventSource('/path/to/sse');
+    const eventSource = new EventSource('/bouquet/sse');
 
     eventSource.onmessage = (event) => {
         const data = JSON.parse(event.data);
@@ -13,7 +13,7 @@ const setupSSE = () => {
             setBouquetData(data.data);
         }
         // 재생성 이벤트 처리
-        else if (data.eventType === 'regenerateEvent') {
+        else if (data.eventType === 'reGenerateEvent') {
             // 재생성 이벤트에 대한 데이터 설정. allFlowers는 현재 상태 유지
             setBouquetData(data.data);
         }

@@ -12,6 +12,7 @@ export const postTextInputs = async (inputs: TextInputs): Promise<void> => {
     try {
         const response = await api.post('/bouquet/text-input', inputs);
         console.log(response.data);
+
     } catch (error) {
         console.error(error);
     }
