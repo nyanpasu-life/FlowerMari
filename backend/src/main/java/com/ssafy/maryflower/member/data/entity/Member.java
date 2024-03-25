@@ -18,8 +18,7 @@ public class Member extends BaseEntity { // Base Entity extends 필요
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "user_id")
-  private Long id;
+  private Long memberId;
 
   private String kakaoId;
   private String password;
@@ -30,8 +29,8 @@ public class Member extends BaseEntity { // Base Entity extends 필요
   private UserRole role; //ADMIN, MANAGER, USER
 
   @Builder
-  public Member(Long id, String kakaoId, String password, String profileImage, UserRole role) {
-    this.id = id;
+  public Member(Long memberId, String kakaoId, String password, String profileImage, UserRole role) {
+    this.memberId = memberId;
     this.kakaoId = kakaoId;
     this.password = password;
     this.profileImage = profileImage;
