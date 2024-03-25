@@ -1,9 +1,9 @@
 package com.ssafy.maryflower.bouquet.service;
 
 
-import com.ssafy.maryflower.bouquet.data.entitiy.*;
+import com.ssafy.maryflower.bouquet.data.entity.*;
 import com.ssafy.maryflower.bouquet.data.repository.*;
-import com.ssafy.maryflower.member.data.entitiy.Member;
+import com.ssafy.maryflower.member.data.entity.Member;
 import com.ssafy.maryflower.member.data.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

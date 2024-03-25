@@ -1,4 +1,4 @@
-package com.ssafy.maryflower.bouquet.data.entitiy;
+package com.ssafy.maryflower.bouquet.data.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

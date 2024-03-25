@@ -1,8 +1,8 @@
-package com.ssafy.maryflower.member.data.entitiy;
+package com.ssafy.maryflower.member.data.entity;
 
-import com.ssafy.maryflower.bouquet.data.entitiy.ApiLog;
-import com.ssafy.maryflower.bouquet.data.entitiy.Bouquet;
-import com.ssafy.maryflower.bouquet.data.entitiy.MemberBouquet;
+import com.ssafy.maryflower.bouquet.data.entity.ApiLog;
+import com.ssafy.maryflower.bouquet.data.entity.Bouquet;
+import com.ssafy.maryflower.bouquet.data.entity.MemberBouquet;
 import com.ssafy.maryflower.global.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Setter;
