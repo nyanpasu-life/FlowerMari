@@ -16,6 +16,7 @@ import {
 	InfoAlign
 } from './StyledIndexPage';
 import React, { ChangeEvent, useState } from 'react';
+import setupSSE from "../../utils/sse.ts";
 
 export const IndexPage: React.FC = () => {
 	const [whom, setWhom] = useState<string>('');
@@ -38,6 +39,7 @@ export const IndexPage: React.FC = () => {
 
 	const handleSubmit = async () => {
 		await postTextInputs({ whom, situation, message });
+		setupSSE();
 		navigate('/generate');
 	};
 
