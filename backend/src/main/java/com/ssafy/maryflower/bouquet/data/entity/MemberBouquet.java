@@ -1,6 +1,6 @@
-package com.ssafy.maryflower.bouquet.data.entitiy;
+package com.ssafy.maryflower.bouquet.data.entity;
 
-import com.ssafy.maryflower.member.data.entitiy.Member;
+import com.ssafy.maryflower.member.data.entity.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;

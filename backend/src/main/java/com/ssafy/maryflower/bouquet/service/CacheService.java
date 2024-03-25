@@ -4,7 +4,7 @@ import com.ssafy.maryflower.bouquet.data.dto.request.UserDataHolder;
 import com.ssafy.maryflower.bouquet.data.dto.response.FlowerDto;
 import com.ssafy.maryflower.bouquet.data.dto.response.firstGenerateDto;
 import com.ssafy.maryflower.bouquet.data.dto.response.reGenerateDto;
-import com.ssafy.maryflower.bouquet.data.entitiy.Flower;
+import com.ssafy.maryflower.bouquet.data.entity.Flower;
 import com.ssafy.maryflower.bouquet.data.repository.FlowerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.CacheEvict;

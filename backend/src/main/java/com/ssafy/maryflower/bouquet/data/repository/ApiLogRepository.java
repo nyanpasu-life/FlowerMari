@@ -1,6 +1,6 @@
 package com.ssafy.maryflower.bouquet.data.repository;
 
-import com.ssafy.maryflower.bouquet.data.entitiy.ApiLog;
+import com.ssafy.maryflower.bouquet.data.entity.ApiLog;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

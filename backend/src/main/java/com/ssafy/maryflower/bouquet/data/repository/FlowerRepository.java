@@ -1,7 +1,7 @@
 package com.ssafy.maryflower.bouquet.data.repository;
 
 import com.ssafy.maryflower.bouquet.data.dto.response.FlowerDto;
-import com.ssafy.maryflower.bouquet.data.entitiy.Flower;
+import com.ssafy.maryflower.bouquet.data.entity.Flower;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
