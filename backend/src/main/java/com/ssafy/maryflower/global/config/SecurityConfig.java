@@ -1,58 +1,77 @@
 package com.ssafy.maryflower.global.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.maryflower.global.auth.*;
 import com.ssafy.maryflower.global.service.PrincipalOauthUserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @EnableWebSecurity //시큐리티 활성화 -> 기본 스프링 필터 체인에 등록
+@RequiredArgsConstructor
 public class SecurityConfig  {
 
-  @Autowired
-  private PrincipalOauthUserService principalOauthUserService;
+//  private final PrincipalOauthUserService principalOauthUserService;
+  private final JwtTokenProvider jwtTokenProvider;
+  private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+  private final JwtAccessDeniedHandler jwtAccessDeniedHandler;
+  private final ObjectMapper objectMapper;
 
   @Bean
-  public BCryptPasswordEncoder bCryptPasswordEncoder() {
-    return new BCryptPasswordEncoder();
+  public PasswordEncoder passwordEncoder() {
+    // BCrypt Encoder 사용
+    return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+  }
+
+  @Bean
+  public WebSecurityCustomizer webSecurityCustomizer() { // security를 적용하지 않을 리소스
+    return web -> web.ignoring()
+            // error endpoint를 열어줘야 함, favicon.ico 추가!
+            .requestMatchers("/error", "/favicon.ico");
   }
 
   @Bean
   public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
     http
         .csrf(CsrfConfigurer::disable)
+            .sessionManagement(sm -> sm
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(authorize -> authorize
+                    // 해당 API에 대해서는 모든 요청을 허가
+                    .requestMatchers("/member", "/member/check").permitAll()
+                    .requestMatchers("/auth/login", "/auth/reissue", "auth/oauth2/login/*").permitAll()
+                    // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
+                    .anyRequest().authenticated())
 
-        .authorizeHttpRequests(request -> request
-            .requestMatchers("/user/**").permitAll()
-            .requestMatchers("/manager/**").hasRole("MANAGER")
-            .requestMatchers("/admin/**").hasRole("ADMIN")
-            .anyRequest().authenticated()
-        )
+            .exceptionHandling(ex -> {
+              ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                      .accessDeniedHandler(jwtAccessDeniedHandler);
+            }).addFilterBefore(new JwtAuthenticationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class)
+            // JwtException 핸들링을 위한 Exception 필터
+            .addFilterBefore(new JwtExceptionFilter(objectMapper), JwtAuthenticationFilter.class);
+//        .oauth2Login(oauth2 -> oauth2
+//            .loginPage("/login")
+//            .defaultSuccessUrl("/")
+//            .userInfoEndpoint(endpoint -> endpoint.userService(principalOauthUserService))
+//        )
 
-//        .and()
-//        .formLogin()
-//        .loginPage("/loginForm") //미인증자일경우 해당 uri를 호출
-//        .loginProcessingUrl("/login") //login 주소가 호출되면 시큐리티가 낚아 채서(post로 오는것) 대신 로그인 진행 -> 컨트롤러를 안만들어도 된다.
-//        .defaultSuccessUrl("/")
-
-        .oauth2Login(oauth2 -> oauth2
-            .loginPage("/login")
-            .defaultSuccessUrl("/")
-            .userInfoEndpoint(endpoint -> endpoint.userService(principalOauthUserService))
-        );
-
-//        .and()
-//        .oauth2Login()
-//        .loginPage("/loginForm")
-//        .defaultSuccessUrl("/")
-//        .userInfoEndpoint()
-//        .userService(principalOauthUserService);//구글 로그인이 완료된(구글회원) 뒤의 후처리가 필요함 . Tip.코드x, (엑세스 토큰+사용자 프로필 정보를 받아옴)
-
+//
+//            .formLogin()
+//            .loginPage("/loginForm") //미인증자일경우 해당 uri를 호출
+//            .loginProcessingUrl("/login") //login 주소가 호출되면 시큐리티가 낚아 채서(post로 오는것) 대신 로그인 진행 -> 컨트롤러를 안만들어도 된다.
+//            .defaultSuccessUrl("/");
 
 
     return http.build();

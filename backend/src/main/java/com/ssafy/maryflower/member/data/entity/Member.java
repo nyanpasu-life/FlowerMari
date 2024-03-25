@@ -1,43 +1,35 @@
 package com.ssafy.maryflower.member.data.entity;
 
-import com.nimbusds.oauth2.sdk.Role;
+import com.ssafy.maryflower.global.auth.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Entity
 @Data
 @NoArgsConstructor
-public class Member {
+public class Member { // Base Entity extends 필요
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "user_id")
   private Long id;
 
-  private String username;
+  private String kakaoId;
   private String password;
-  private String email;
+  private String nickname;
+  private String profileImage;
 
   @Enumerated(EnumType.STRING)
-  private Role role; //ADMIN, MANAGER, USER
-  //private String role;
-
-  private String provider; //어떤 OAuth인지(google, naver 등)
-  private String provideId; // 해당 OAuth 의 key(id)
-
-  private LocalDateTime createDate;
+  private UserRole role; //ADMIN, MANAGER, USER
 
   @Builder
-  public Member(String username, String password, String email, Role role, String provider, String provideId, LocalDateTime createDate) {
-    this.username = username;
+
+  public Member(Long id, String kakaoId, String password, String profileImage, UserRole role) {
+    this.id = id;
+    this.kakaoId = kakaoId;
     this.password = password;
-    this.email = email;
+    this.profileImage = profileImage;
     this.role = role;
-    this.provider = provider;
-    this.provideId = provideId;
-    this.createDate = createDate;
   }
 }
