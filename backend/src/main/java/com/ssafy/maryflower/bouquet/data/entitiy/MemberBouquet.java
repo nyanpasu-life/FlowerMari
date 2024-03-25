@@ -4,6 +4,7 @@ import com.ssafy.maryflower.member.data.entitiy.Member;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.lang.NonNull;
 
 @Entity
 @Getter
@@ -16,10 +17,12 @@ public class MemberBouquet {
 
     @ManyToOne
     @JoinColumn(name= "member_id")
+    @NonNull
     private Member member;
 
     @ManyToOne
     @JoinColumn(name= "bouquet_id")
+    @NonNull
     private Bouquet bouquet;
 
 
