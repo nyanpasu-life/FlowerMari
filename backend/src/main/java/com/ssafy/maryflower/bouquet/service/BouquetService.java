@@ -52,16 +52,20 @@ public class BouquetService {
     public void saveBucketData(String whom,String situation, String message,String imageUrl,Long memberId,List<Long> flowerIds){
         // 사용자가 입력한 Text
         Bouquet bouquet = new Bouquet();
+
+        // Member 엔티티 조회
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalArgumentException("부적절한 멤버 아이디"));
         bouquet.setWhom(whom);
         bouquet.setSituation(situation);
         bouquet.setMessage(message);
         bouquet.setImageUrl(imageUrl);
+        bouquet.setMember(member);
         // 꽃다발 저장.
         bouquetRepository.save(bouquet);
 
-        // Member 엔티티 조회.
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(()->new IllegalArgumentException("부적절한 멤버 아이디"));
+
+
 
         // MemberBouquet 생성 및 저장.
         MemberBouquet MemberBouquet = new MemberBouquet();
