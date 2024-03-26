@@ -25,7 +25,7 @@ repositories {
 
 dependencies {
 	runtimeOnly 'com.mysql:mysql-connector-j'
-
+	implementation 'org.springframework.boot:spring-boot-starter-webflux'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	compileOnly 'org.projectlombok:lombok'
@@ -48,6 +48,9 @@ dependencies {
 
 	// cache
 	implementation 'org.springframework.boot:spring-boot-starter-cache'
+
+	// actuator for health-check
+	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
