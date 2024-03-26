@@ -1,7 +1,7 @@
 package com.ssafy.maryflower.global.auth;
 
 
-import com.ssafy.maryflower.global.auth.dto.JwtToken;
+import com.ssafy.maryflower.global.auth.data.dto.JwtToken;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,8 +41,8 @@ public class JwtTokenProvider {
                             @Value("${spring.jwt.access-token-validity-in-seconds}") long accessTokenValidityInSeconds,
                             @Value("${spring.jwt.refresh-token-validity-in-seconds}") long refreshTokenValidityInSeconds,
                             AES128Util aes128Util) {
-        byte[] keyBytes = Decoders.BASE64.decode(secretKey); // base64로 디코딩 -> 바이트 배열로 변환
-        this.key = Keys.hmacShaKeyFor(keyBytes); // hmacsha256으로 다시 암호화?
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenValidityInSeconds = accessTokenValidityInSeconds;
         this.refreshTokenValidityInSeconds = refreshTokenValidityInSeconds;
         this.aes128Util = aes128Util;

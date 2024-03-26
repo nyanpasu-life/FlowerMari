@@ -3,7 +3,7 @@ package com.ssafy.maryflower.member.data.entity;
 import com.ssafy.maryflower.bouquet.data.entity.ApiLog;
 import com.ssafy.maryflower.bouquet.data.entity.MemberBouquet;
 import com.ssafy.maryflower.global.BaseEntity;
-import com.ssafy.maryflower.global.auth.UserRole;
+import com.ssafy.maryflower.global.auth.data.UserRole;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.NoArgsConstructor;
@@ -14,15 +14,15 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
-public class Member extends BaseEntity { // Base Entity extends 필요
+public class Member extends BaseEntity {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long memberId;
 
+  @Column(unique = true)
   private String kakaoId;
   private String password;
-  private String nickname;
   private String profileImage;
 
   @Enumerated(EnumType.STRING)

@@ -1,6 +1,7 @@
 package com.ssafy.maryflower.global.auth.controller;
 
-import com.ssafy.maryflower.global.auth.dto.LoginResponseDto;
+import com.ssafy.maryflower.global.auth.data.dto.LoginDto;
+import com.ssafy.maryflower.global.auth.data.dto.LoginResponseDto;
 import com.ssafy.maryflower.global.auth.service.OAuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -30,8 +31,9 @@ public class OAuthController {
 
   @GetMapping("login/kakao")
   public ResponseEntity<LoginResponseDto> kakaoLogin(@RequestParam String code){
-    LoginResponseDto res = oAuthService.kakaoOAuthClient(code);
-    HttpHeaders headers = getHeadersWithCookie(res);
+    LoginDto dto = oAuthService.kakaoOAuthClient(code);
+    HttpHeaders headers = getHeadersWithCookie(dto.getJwtToken().getRefreshToken());
+    LoginResponseDto res = new LoginResponseDto(dto);
     return new ResponseEntity<>(res, headers, HttpStatus.OK);
   }
 
@@ -50,8 +52,8 @@ public class OAuthController {
     return new ResponseEntity<String>("필요한 쿠키가 존재하지 않습니다", HttpStatus.BAD_REQUEST);
   }
 
-  private HttpHeaders getHeadersWithCookie(LoginResponseDto res) {
-    ResponseCookie cookie = ResponseCookie.from("refreshToken", res.getJwtToken().deleteRefreshToken())
+  private HttpHeaders getHeadersWithCookie(String refreshToken) {
+    ResponseCookie cookie = ResponseCookie.from("refreshToken", refreshToken)
             .maxAge(refreshTokenValidityInSeconds)
             .path("/")
             .secure(true)

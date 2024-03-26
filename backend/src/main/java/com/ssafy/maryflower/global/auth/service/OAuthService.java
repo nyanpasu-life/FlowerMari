@@ -3,11 +3,11 @@ package com.ssafy.maryflower.global.auth.service;
 
 import com.ssafy.maryflower.global.auth.AES128Util;
 import com.ssafy.maryflower.global.auth.JwtTokenProvider;
-import com.ssafy.maryflower.global.auth.UserRole;
-import com.ssafy.maryflower.global.auth.dto.JwtToken;
-import com.ssafy.maryflower.global.auth.dto.KakaoOAuthMemberInfoResponse;
-import com.ssafy.maryflower.global.auth.dto.LoginResponseDto;
-import com.ssafy.maryflower.global.auth.dto.KakaoOAuthAccessTokenResponse;
+import com.ssafy.maryflower.global.auth.data.UserRole;
+import com.ssafy.maryflower.global.auth.data.dto.JwtToken;
+import com.ssafy.maryflower.global.auth.data.dto.KakaoOAuthMemberInfoResponse;
+import com.ssafy.maryflower.global.auth.data.dto.LoginDto;
+import com.ssafy.maryflower.global.auth.data.dto.KakaoOAuthAccessTokenResponse;
 import com.ssafy.maryflower.member.data.entity.Member;
 import com.ssafy.maryflower.member.data.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
@@ -54,7 +54,7 @@ public class OAuthService {
     }
 
     @Transactional
-    public LoginResponseDto kakaoOAuthClient(String code) {
+    public LoginDto kakaoOAuthClient(String code) {
         KakaoOAuthMemberInfoResponse res = getKakaoUserInfo(code);
         String memberId = res.getOauthId();
         log.info("oauthId : {}", memberId);
@@ -62,12 +62,12 @@ public class OAuthService {
         return login(memberId);
     }
 
-    private LoginResponseDto login(String kakaoId) {
+    private LoginDto login(String kakaoId) {
         JwtToken jwtToken = makeJwtToken(kakaoId);
         Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("멤버가 없습니다."));
 
-        return LoginResponseDto.builder()
-                .kakaoId(kakaoId)
+        return LoginDto.builder()
+                .memberId(member.getMemberId())
                 .profileImage(member.getProfileImage())
                 .jwtToken(jwtToken)
                 .build();

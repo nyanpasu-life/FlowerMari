@@ -1,8 +1,8 @@
 package com.ssafy.maryflower.global.auth.service;
 
 
-import com.ssafy.maryflower.global.auth.dto.KakaoOAuthMemberInfoResponse;
-import com.ssafy.maryflower.global.auth.dto.KakaoOAuthAccessTokenResponse;
+import com.ssafy.maryflower.global.auth.data.dto.KakaoOAuthMemberInfoResponse;
+import com.ssafy.maryflower.global.auth.data.dto.KakaoOAuthAccessTokenResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
@@ -62,7 +62,6 @@ public class KaKaoOAuthClient implements OAuthClient {
     @Override
     public KakaoOAuthMemberInfoResponse getMemberInfo(String accessToken) {
         HttpHeaders headers = new HttpHeaders();
-        log.info("kakao access_token : {}", accessToken);
         headers.setBearerAuth(accessToken);
 
         KakaoOAuthMemberInfoResponse res = restTemplate.exchange(

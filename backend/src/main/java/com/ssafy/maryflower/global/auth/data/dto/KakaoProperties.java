@@ -1,4 +1,4 @@
-package com.ssafy.maryflower.global.auth.dto;
+package com.ssafy.maryflower.global.auth.data.dto;
 
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
