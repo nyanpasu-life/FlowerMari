@@ -9,14 +9,11 @@ import { bouquetStore } from '../../stores/bouquetStore';
 import { postRegenerateInputs } from '../../api/bouquetReCreate.ts'
 
 export const GeneratePage = () => {
-	const usedFlower = bouquetStore(state => state.usedFlower);
-	const recommendByMeaning = bouquetStore(state => state.recommendByMeaning);
-	const allFlowers = bouquetStore(state => state.allFlowers);
-	console.log(usedFlower, recommendByMeaning, allFlowers);
+	const {bouquetUrl,usedFlower, recommendByMeaning, allFlowers, setBouquetData,recommendByPopularity} = bouquetStore.getState();
 	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
 	// 확인 모달, 꽃 전체 리스트 모달
-
+	//확인
 	const html = document.querySelector('html');
 
 	const uf = allFlowers.filter((flower) => usedFlower.includes(flower.flowerId));
@@ -51,15 +48,10 @@ export const GeneratePage = () => {
 	}; // 꽃 전체 리스트 모달 닫기
 
 	const handleSubmit = async () => {
-		const inputs: String[] = ['빨강 장미', '수국', '백합'];
+		const inputs: string[] = ['빨강 장미', '수국', '백합'];
 		await postRegenerateInputs(inputs);
 	};
 
-	useEffect(() => {
-		console.log('usedFlower:', usedFlower);
-		console.log('recommendByMeaning:', recommendByMeaning);
-		console.log('allFlowers:', allFlowers);
-	}, [usedFlower, recommendByMeaning, allFlowers]);
 	return (
 		<>
 			<StyledGeneratePage>

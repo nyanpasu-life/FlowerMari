@@ -17,7 +17,7 @@ import {
 } from './StyledIndexPage';
 import React, { ChangeEvent, useState } from 'react';
 import setupSSE from "../../utils/sse.ts";
-
+import {discon} from "../../api/discon.ts";
 export const IndexPage: React.FC = () => {
 	const [whom, setWhom] = useState<string>('');
 	const [situation, setSituation] = useState<string>('');
@@ -37,10 +37,12 @@ export const IndexPage: React.FC = () => {
 	// 	navigate('/generate');
 	// };
 
+	const disconn = async () => {
+		await discon();
+	}
 	const handleSubmit = async () => {
 		await postTextInputs({ whom, situation, message });
-		setupSSE();
-		navigate('/generate');
+		setupSSE(navigate);
 	};
 
 	return (
@@ -93,6 +95,9 @@ export const IndexPage: React.FC = () => {
 					{/* 만들기 버튼 */}
 					<CustomButton $make={true} onClick={handleSubmit}>
 						만들기
+					</CustomButton>
+					<CustomButton onClick={disconn}>
+						sse 연결해제
 					</CustomButton>
 				</StyledBox>
 			</StyledIndexPage>
