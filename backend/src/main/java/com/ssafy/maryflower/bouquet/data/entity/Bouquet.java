@@ -3,6 +3,7 @@ package com.ssafy.maryflower.bouquet.data.entity;
 import com.ssafy.maryflower.global.BaseEntity;
 import com.ssafy.maryflower.member.data.entity.Member;
 import jakarta.persistence.*;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
 import org.springframework.lang.NonNull;
@@ -10,8 +11,11 @@ import org.springframework.lang.NonNull;
 import java.util.List;
 import java.util.ArrayList;
 
+import static lombok.AccessLevel.PROTECTED;
+
 @Entity
 @Setter
+@NoArgsConstructor //(access = PROTECTED)
 public class Bouquet extends BaseEntity {
 
     @Id
@@ -30,8 +34,8 @@ public class Bouquet extends BaseEntity {
     private Member member;
 
 
-    @OneToMany(mappedBy = "bouquet")
-    private List<FlowerBouquet> FlowerBouquets = new ArrayList<>();
+    @OneToMany(mappedBy = "bouquet", cascade = CascadeType.ALL)
+    private List<FlowerBouquet> flowerBouquets = new ArrayList<>();
 
     @OneToMany(mappedBy = "bouquet")
     private List<MemberBouquet> MemberBouquets = new ArrayList<>();
