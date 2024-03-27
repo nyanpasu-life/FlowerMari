@@ -10,7 +10,6 @@ import {
 	StyledClickArea,
 } from './StyledFlowerListModal';
 import { FlowerColor } from '../../flowerColorButton/FlowerColorButton';
-import { useNavigate } from 'react-router-dom';
 import { FlowerCard } from '../../../components/flowers/FlowerCard';
 import { useEffect, useRef, useState } from 'react';
 import { bouquetStore } from '../../../stores/bouquetStore';
@@ -18,21 +17,29 @@ import CustomButton from '../../button/CustomButton';
 
 interface RecommendProps {
 	CloseListModal: () => void;
+	selectUserFlower: (id : number) => void;
 }
 
-export const FlowerListModal = ({ CloseListModal }: RecommendProps) => {
-	const { allFlowers } = bouquetStore.getState();
+interface FlowerDto {
+	flowerId: number;
+	name: string;
+	color: string;
+	meaning: string;
+	imgUrl: string;
+}
 
-	const navigate = useNavigate();
+export const FlowerListModal = ({ CloseListModal, selectUserFlower }: RecommendProps) => {
+	const { allFlowers } = bouquetStore.getState();
 
 	const fixedRef = useRef<HTMLDivElement>(null);
 	const [fixedHeight, setFixedHeight] = useState<number>(0);
-	const [clickIndex, setClickIndex] = useState<number>(-1);
 
-	const goToGenerate = () => {
-		CloseListModal();
-		navigate('/generate');
-	};
+	const [clickIndex, setClickIndex] = useState<number>(-1);
+	const [userFlowerId, setUserFlowerId] = useState<number>(-1);
+	const [flowerList, setFlowerList] = useState<FlowerDto[]>(allFlowers);
+	// 선택한 위치, 추가하려는 꽃의 id, 초기 시작은 전체 목록
+
+	const colorList = ["White", "Yellow", "Blue", "Red", "Pink"]
 
 	useEffect(() => {
 		if (fixedRef.current) {
@@ -43,6 +50,23 @@ export const FlowerListModal = ({ CloseListModal }: RecommendProps) => {
 	const clickOnList = (index: number) => {
 		setClickIndex(index);
 	};
+
+	const clickColorButton = (color : String) => {
+		setFlowerList(allFlowers.filter(
+			(flower) =>
+				color === flower.color
+		))
+	} // 선택한 색 버튼에 해당하는 꽃만 추출
+
+	const goToGenerate = (id : number) => {
+		if(userFlowerId >= 0) {
+			selectUserFlower(id)
+			CloseListModal();
+		} else {
+			alert("꽃을 선택해주세요.")
+		}
+	}; // 선택한 꽃이 있을때만 선택 버튼 클릭이 가능
+	// 그와 동시에 선택한 꽃의 id를 설정
 
 	return (
 		<>
@@ -56,15 +80,19 @@ export const FlowerListModal = ({ CloseListModal }: RecommendProps) => {
 						</StyledCloseButton>
 					</div>
 					{/* 그 외 영역 */}
-					<StyledConfirmInfo fixedHeight={fixedHeight}>
+					<StyledConfirmInfo $fixedHeight={fixedHeight}>
 						{/* 카드 스크롤 영역 */}
 						<StyledScroll>
-							{allFlowers.map(($item, index) => {
+							{flowerList.map(($item, index) => {
 									const meanings = $item.meaning.split(',').map((item) => item.trim());
 									// 꽃말에 의한 추천, 꽃말만 추출 후 분리
 								return (
 									<StyledClickArea
-										onClick={() => clickOnList(index)}
+										key={index}
+										onClick={() => {
+											clickOnList(index)
+											setUserFlowerId($item.flowerId)
+										}}
 										$isChoice={index === clickIndex}
 									>
 										<FlowerCard
@@ -83,16 +111,15 @@ export const FlowerListModal = ({ CloseListModal }: RecommendProps) => {
 						<StyledFixed ref={fixedRef}>
 							{/* 색상 버튼 */}
 							<ColorButtonList>
-								<FlowerColor></FlowerColor>
-								<FlowerColor fillColor='#FFE247' strokeColor='none'></FlowerColor>
-								<FlowerColor fillColor='#FFA6A6' strokeColor='none'></FlowerColor>
-								<FlowerColor fillColor='#FF4141' strokeColor='none'></FlowerColor>
-								<FlowerColor fillColor='#E28AF1' strokeColor='none'></FlowerColor>
+								<FlowerColor clickColorButton={() => clickColorButton("White")}></FlowerColor>
+								<FlowerColor $fillColor='#FFE247' $strokeColor='none' clickColorButton={() => clickColorButton("Yellow")}></FlowerColor>
+								<FlowerColor $fillColor='#2194ff' $strokeColor='none' clickColorButton={() => clickColorButton("Blue")}></FlowerColor>
+								<FlowerColor $fillColor='#FF4141' $strokeColor='none' clickColorButton={() => clickColorButton("Red")}></FlowerColor>
+								<FlowerColor $fillColor='#E28AF1' $strokeColor='none' clickColorButton={() => clickColorButton("Pink")}></FlowerColor>
 							</ColorButtonList>
-
 							{/* 선택 버튼 */}
 							<div style={{ marginBottom: '2vh' }}>
-								<CustomButton $check={true} onClick={goToGenerate}>
+								<CustomButton $check={true} onClick={() => goToGenerate(userFlowerId)}>
 									선택
 								</CustomButton>
 							</div>

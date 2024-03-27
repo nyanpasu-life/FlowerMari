@@ -124,7 +124,7 @@ export const StyledName = styled.p<MarginProps>`
 	font-size: ${(props) => props.$textSize || '1.25rem' };
 
 	@media (min-width: 768px) {
-		font-size: ${(props) => props.$textSize ? parseFloat(props.$textSize) * 1.44 + 'rem' : '1.8rem'};
+		font-size: ${(props) => props.$textSize ? parseFloat(props.$textSize) * 1.44 + 'rem' : '1.5rem'};
 	}
 
 	display: block;
@@ -136,10 +136,10 @@ export const StyledName = styled.p<MarginProps>`
 // 꽃말
 export const StyledMeaning = styled.p<MarginProps>`
 	font-family: 'Cafe 24 Oneprettynight-v2.0';
-	font-size: 0.9rem;
+	font-size: 1.0rem;
 
-	@media (max-width: 340px) {
-		font-size: 0.65rem;
+	@media (max-width: 320px) {
+		font-size: 0.7rem;
 	}
 
 	@media (min-width: 560px) {

@@ -6,6 +6,8 @@ import {
 	BouquetListGrid,
 	StyledBouquetImage,
 	SearchBar,
+	SortBar,
+	SortButton,
 } from './StyledBouquetListPage';
 import { BouquetDetailModal } from '../../components/modal/bouquetDetailModal/BouquetDetailModal';
 import { SearchDropdown } from '../../components/dropdown/searchDropDown/SearchDropDown';
@@ -15,6 +17,8 @@ import CustomButton from '../../components/button/CustomButton';
 export const BouquetListPage = () => {
 	const [isBouquetDetailModal, setIsBouquetDetailModal] = useState(false);
 	const [extractedItems, setExtractedItems] = useState<RecommendItem[]>([]);
+	const [isLatestClick, setIsLatestClick] = useState<boolean>(true);
+
 	const [inputValue, setInputValue] = useState('');	
 
 	const html = document.querySelector('html');
@@ -36,6 +40,14 @@ export const BouquetListPage = () => {
 
 	const getInputValue = (e : ChangeEvent<HTMLInputElement>) => {
 		setInputValue(e.target.value)
+	}
+
+	const sortByLatest = () => {
+		setIsLatestClick(true)
+	}
+
+	const sortByPopularity = () => {
+		setIsLatestClick(false)
 	}
 
 	type MyArrayItem = {
@@ -115,6 +127,10 @@ export const BouquetListPage = () => {
 					<StyledInput onChange={getInputValue}></StyledInput>
 					<CustomButton $check={true}>검색</CustomButton>
 				</SearchBar>
+				<SortBar>
+					<SortButton onClick={sortByLatest} $clicked={isLatestClick}>최신순</SortButton>
+					<SortButton onClick={sortByPopularity} $clicked={!isLatestClick}>인기순</SortButton>
+				</SortBar>
 				{/* 꽃다발 사진 그리드 */}
 				<BouquetListGrid>
 					{arrayOfArrays.map((item, idx) => {

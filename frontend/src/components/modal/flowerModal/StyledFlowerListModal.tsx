@@ -104,11 +104,16 @@ export const StyledClickArea = styled.button<listProps>`
 
 	width: 100%;
 
-	background-color: ${(props) => (props.$isChoice ? '#f3f3f3' : 'transparent')};
+	background-color: ${(props) => (props.$isChoice ? '#e1e1e1' : 'transparent')};
+
+	&:hover {
+		background-color: #f3f3f3;
+		transition: color 0.3s ease;
+	}
 `
 
-export const StyledConfirmInfo = styled.div<{ fixedHeight: number }>`
-  height: calc(110% - ${({ fixedHeight }) => fixedHeight}px);
+export const StyledConfirmInfo = styled.div<{ $fixedHeight: number }>`
+  height: calc(110% - ${({ $fixedHeight }) => $fixedHeight}px);
 	// 수정해야하는 부분
 
 	display: flex;

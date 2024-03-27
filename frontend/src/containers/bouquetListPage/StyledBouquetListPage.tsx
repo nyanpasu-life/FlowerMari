@@ -1,5 +1,9 @@
 import styled from 'styled-components';
 
+interface clickProp {
+	$clicked: boolean;
+}
+
 export const StyledBouquetListPage = styled.div`
 	width: 100vw;
 	height: calc(var(--vh, 1vh) * 100 - 60px);
@@ -45,12 +49,47 @@ export const StyledInput = styled.input`
 	}
 `; // 검색창
 
+export const SortBar = styled.div`
+	width: 100vw;
+	display: flex;
+
+	justify-content: space-around;
+	align-items: center;
+	
+	margin-top: 1vh;
+`// 정렬 위치
+
+export const SortButton = styled.button<clickProp>`
+font-family: 'Cafe 24 Oneprettynight-v2.0';
+
+	width: 40vw;
+	height: 8vh;
+
+	border: none;
+	border-radius: 15px;
+	background-color: ${(props) => props.$clicked ? '$f3f3f3' : 'transparent'};
+
+	font-size: 1.2rem;
+
+	@media (min-width: 320px) {
+		font-size: 1.5rem;
+	}
+
+	@media (min-width: 768px) {
+		font-size: 1.7rem;
+	}
+
+	@media (min-width: 1024px) {
+		font-size: 1.9rem;
+	}
+
+`
+
 export const BouquetListGrid = styled.div`
 	width: 100vw;
 	height: 100vh;
 
 	display: grid;
-	margin-top: 3vh;
 
 	grid-template-columns: repeat(2, 1fr);
 	grid-template-rows: repeat(2, 1fr);

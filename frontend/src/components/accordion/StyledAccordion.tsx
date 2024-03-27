@@ -22,10 +22,12 @@ export const AccordionMenu = styled.div`
 	border: none;
 	outline: none;
 
+	background-color: transparent;
 	transition: background-color 0.6s ease;
 
 	&:hover,
 	&.active {
+		background-color: #f3f3f3;
 	}
 `; // 아코디언 상단 메뉴
 
@@ -48,7 +50,7 @@ export const AccordionContent = styled.div`
 	transition: height 0.8s ease;
 
 	@media (min-width: 768px) {
-		margin-top: 5vh;
+		margin-top: 2vh;
 		margin-bottom: 2vh;
 	}
 `; // 아코디언 collapse 메뉴
@@ -61,4 +63,10 @@ export const AccordionText = styled.p<MarginProps>`
 
 	margin: ${(props) => props.$marginTop || 'auto'} ${(props) => props.$marginRight || 'auto'}
 		${(props) => props.$marginBottom || 'auto'} ${(props) => props.$marginLeft || 'auto'};
+
+	@media (min-width: 768px) {
+		margin-top: 1vh;
+		margin-bottom: -1vh;
+	}
+
 `; // 단순 텍스트용
