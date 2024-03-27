@@ -1,9 +1,11 @@
-package com.ssafy.maryflower.bouquet.data.entitiy;
+package com.ssafy.maryflower.bouquet.data.entity;
 
 import com.ssafy.maryflower.global.BaseEntity;
-import com.ssafy.maryflower.member.data.entitiy.Member;
+import com.ssafy.maryflower.member.data.entity.Member;
 import jakarta.persistence.*;
 import lombok.Setter;
+import org.antlr.v4.runtime.misc.NotNull;
+import org.springframework.lang.NonNull;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -20,6 +22,13 @@ public class Bouquet extends BaseEntity {
     private String situation;
     private String message;
     private String imageUrl;
+
+
+    @ManyToOne
+    @JoinColumn(name="member_id")
+    @NonNull
+    private Member member;
+
 
     @OneToMany(mappedBy = "bouquet")
     private List<FlowerBouquet> FlowerBouquets = new ArrayList<>();

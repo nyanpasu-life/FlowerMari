@@ -1,9 +1,10 @@
 package com.ssafy.maryflower.bouquet.service;
 
 import com.ssafy.maryflower.bouquet.data.FlowerData;
-import com.ssafy.maryflower.bouquet.data.entitiy.Flower;
+import com.ssafy.maryflower.bouquet.data.dto.response.FlowerDto;
+import com.ssafy.maryflower.bouquet.data.entity.Flower;
 import com.ssafy.maryflower.bouquet.data.repository.FlowerRepository;
-import com.ssafy.maryflower.member.data.entitiy.Member;
+import com.ssafy.maryflower.member.data.entity.Member;
 import com.ssafy.maryflower.member.data.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
@@ -16,6 +17,7 @@ import java.util.List;
 @Component
 public class FlowerDataLoader implements CommandLineRunner {
 
+    private final CacheService cacheService;
     private final BouquetService bouquetService;
     private final MemberRepository memberRepository;
     private final FlowerRepository flowerRepository;
@@ -25,8 +27,10 @@ public class FlowerDataLoader implements CommandLineRunner {
         loadFlowerData();
         loadMemberData();
         loadBouquetData();
+        cacheService.getAllFlowers();
     }
     private void loadFlowerData() {
+        System.out.println("flower data load");
         for (FlowerData.FlowerInfo info : FlowerData.FLOWERS) {
             Flower flower = Flower.builder()
                     .koreanName(info.getKoreanName())
@@ -39,14 +43,15 @@ public class FlowerDataLoader implements CommandLineRunner {
         }
     }
     private void loadMemberData(){
+        System.out.println("member data load");
         Member member = new Member();
         member.setKakaoId("TestKakaoId");
-        member.setNickname("TestNickName");
         member.setProfileImage("TestPorfileImage");
         memberRepository.save(member);
     }
 
     private void loadBouquetData(){
+        System.out.println("bouquet data load");
         List<Long> testList;
 
         testList = new ArrayList<>();

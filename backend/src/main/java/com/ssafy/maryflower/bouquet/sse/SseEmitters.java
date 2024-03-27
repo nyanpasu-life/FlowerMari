@@ -20,6 +20,7 @@ public class SseEmitters {
         SseEmitter emitter=new SseEmitter(Long.MAX_VALUE);
         emitters.put(requestId, emitter);
 
+        System.out.println("sse 연결 수 : "+emitters.size());
         //클라이언트와 연결 종료 시 이벤트 핸들러
         emitter.onCompletion(() -> emitters.remove(requestId));
         emitter.onTimeout(() -> emitters.remove(requestId));
@@ -27,7 +28,11 @@ public class SseEmitters {
 
         return emitter;
     }
-
+    
+    // 모든 연결 제거
+    public void removeAllEmitter(){
+        emitters.clear();
+    }
     // 연결을 제거
     public void removeEmitter(String requestId) {
         emitters.remove(requestId);
@@ -36,8 +41,14 @@ public class SseEmitters {
     // requestId에 따라 해당 클라이언트에게 메세지 전송.
     public void sendGenerateDtoToClient(String requestId,firstGenerateDto firstGenerateDto){
         SseEmitter emitter= emitters.get(requestId);
+
         if(emitter !=null){
             try{
+//                System.out.println(firstGenerateDto.getBouquetUrl());
+//                System.out.println(firstGenerateDto.getApiUsageCount());
+//                System.out.println("size = " +firstGenerateDto.getAllFlowers().size());
+//                System.out.println(firstGenerateDto.getUsedFlower().size());
+//                System.out.println(firstGenerateDto.getRecommendByMeaning());
                 emitter.send(SseEmitter.event().name("firstGenerateEvent").data(firstGenerateDto));
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -49,6 +60,7 @@ public class SseEmitters {
         SseEmitter emitter= emitters.get(requestId);
         if(emitter !=null){
             try{
+//                System.out.println("콘솔 "+regeneratedto.getUsedFlower());
                 emitter.send(SseEmitter.event().name("reGenerateEvent").data(regeneratedto));
             } catch (IOException e) {
                 throw new RuntimeException(e);

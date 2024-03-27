@@ -1,9 +1,9 @@
 package com.ssafy.maryflower.bouquet.service;
 
 
-import com.ssafy.maryflower.bouquet.data.entitiy.*;
+import com.ssafy.maryflower.bouquet.data.entity.*;
 import com.ssafy.maryflower.bouquet.data.repository.*;
-import com.ssafy.maryflower.member.data.entitiy.Member;
+import com.ssafy.maryflower.member.data.entity.Member;
 import com.ssafy.maryflower.member.data.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -52,16 +52,20 @@ public class BouquetService {
     public void saveBucketData(String whom,String situation, String message,String imageUrl,Long memberId,List<Long> flowerIds){
         // 사용자가 입력한 Text
         Bouquet bouquet = new Bouquet();
+
+        // Member 엔티티 조회
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalArgumentException("부적절한 멤버 아이디"));
         bouquet.setWhom(whom);
         bouquet.setSituation(situation);
         bouquet.setMessage(message);
         bouquet.setImageUrl(imageUrl);
+        bouquet.setMember(member);
         // 꽃다발 저장.
         bouquetRepository.save(bouquet);
 
-        // Member 엔티티 조회.
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(()->new IllegalArgumentException("부적절한 멤버 아이디"));
+
+
 
         // MemberBouquet 생성 및 저장.
         MemberBouquet MemberBouquet = new MemberBouquet();
@@ -81,13 +85,4 @@ public class BouquetService {
 
     }
 
-    // 사용자가 입력한 text 기반 프롬프트 생성. (메인 꽃, 꽃말 기준 추천 꽃 생성)
-    public String generatePrompt(String whom, String situation, String message){
-        return "";
-    }
-
-    // 사용자가 선택한 꽃 기반 프롬프트 생성 (꽃말 기준 추천 꽃 생성)
-    public String generatePrompt(List<String> flowers){
-        return "";
-    }
 }
