@@ -7,11 +7,13 @@ import CustomButton from '../../components/button/CustomButton';
 import { FlowerListModal } from '../../components/modal/flowerModal/FlowerListModal';
 import { bouquetStore } from '../../stores/bouquetStore';
 import { postRegenerateInputs } from '../../api/bouquetReCreate.ts'
+import setupSSE from "../../utils/sse.ts";
 
 export const GeneratePage = () => {
 	const {bouquetUrl,usedFlower, recommendByMeaning, allFlowers, setBouquetData,recommendByPopularity} = bouquetStore.getState();
 	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 	// 확인 모달, 꽃 전체 리스트 모달
 	//확인
 	const html = document.querySelector('html');
@@ -25,6 +27,24 @@ export const GeneratePage = () => {
 
 	const flowersByMeaning = allFlowers.filter((flower) => recommendByMeaning.includes(flower.flowerId));
 	// 꽃말로 추천할 목록 추출
+	useEffect(() => {
+		setupSSE({
+			onOpen: () => setIsLoading(true),
+			onDataReceived: (data) => {
+				setBouquetData(data);
+				setIsLoading(false);
+			},
+			onError: () => setIsLoading(false)
+		});
+
+		return () => {
+
+		};
+	}, []);
+
+	useEffect(() => {
+		console.log("usedFlower:", usedFlower);
+	}, [usedFlower]);
 
 	const openModal = () => {
 		setIsMakeModalOpened(true);
@@ -51,7 +71,9 @@ export const GeneratePage = () => {
 		const inputs: string[] = ['빨강 장미', '수국', '백합'];
 		await postRegenerateInputs(inputs);
 	};
-
+	if (isLoading) {
+		return <div>loading...</div>
+	}
 	return (
 		<>
 			<StyledGeneratePage>

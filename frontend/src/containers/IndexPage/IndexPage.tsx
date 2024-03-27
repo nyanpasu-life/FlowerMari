@@ -42,7 +42,7 @@ export const IndexPage: React.FC = () => {
 	}
 	const handleSubmit = async () => {
 		await postTextInputs({ whom, situation, message });
-		setupSSE(navigate);
+		navigate('/generate');
 	};
 
 	return (
