@@ -58,21 +58,23 @@ export const Accordion = ({ $index, $name, $meaning, $color, $recommendByMeaning
 		setEmpty(false);
 		e.stopPropagation();
 	}; // 추가버튼 클릭
-
 	const meaningsByMeaning = $recommendByMeaning.meaning.split(',').map((item) => item.trim());
 	// 꽃말에 의한 추천, 꽃말만 추출 후 분리
 
 	const flowersByColor = allFlowers.filter((flower) => $color === flower.color && !($name === flower.name));
 
 	useEffect(() => {
-		const randomIndex = Math.floor(Math.random() * flowersByColor.length);
-		setRecommendIndexByColor(randomIndex);
-	}, []);
-	// useEffect 사용 이유 : 최초 랜덤값 추출 이후, 랜덤값의 변화가 없어야해서
-	const meaningsByColor = flowersByColor[recommendIndexByColor].meaning.split(',').map((item) => item.trim());
-	// 색상이 같은 꽃들 추출, 같은 꽃이면 추천 안받도록하기
-	// 색상에 의한 추천, 색상이 같은 꽃 중 랜덤으로 하나 추천
-	// 이후 선정된 꽃의 꽃말 분리
+		// flowersByColor.length가 0이 아닐 때만 랜덤 인덱스 설정
+		if (flowersByColor.length > 0) {
+			const randomIndex = Math.floor(Math.random() * flowersByColor.length);
+			setRecommendIndexByColor(randomIndex);
+		}
+	}, [allFlowers, $color, $name]);
+
+	// flowersByColor가 비어 있지 않을 경우에만 처리
+	const meaningsByColor = flowersByColor.length > 0
+		? flowersByColor[recommendIndexByColor]?.meaning.split(',').map((item) => item.trim())
+		: [];
 
 	// 인기도에 의한 추천
 	const flowersByPopularity = allFlowers.filter(

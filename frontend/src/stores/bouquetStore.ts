@@ -39,7 +39,7 @@ export const bouquetStore = create<BouquetState>((set: SetState<BouquetState>, g
         set({
             ...currentState,
             ...data,
-            allFlowers: currentState.allFlowers, // allFlowers만 현재 상태로 유지
+            allFlowers: data.allFlowers ? data.allFlowers : currentState.allFlowers, // allFlowers만 현재 상태로 유지
         });
     },
 }));
