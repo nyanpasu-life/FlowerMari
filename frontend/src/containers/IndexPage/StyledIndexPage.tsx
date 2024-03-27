@@ -28,6 +28,10 @@ export const StyledIndexPage = styled.div`
 export const StyledBox = styled.div`
 	width: 85vw;
 	height: 85vh;
+	
+	@media (min-width: 340px) {
+		height: 80vh;
+	}
 
 	border-radius: 15px;
 	padding: 5px;

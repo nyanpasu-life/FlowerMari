@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 
 interface SvgProps {
-	fillColor?: string;
-	strokeColor?: string;
+	$fillColor?: string;
+	$strokeColor?: string;
 }
 
 export const StyledSVG = styled.svg<SvgProps>`
-	fill: ${(props) => props.fillColor || 'none'};
-	stroke: ${(props) => props.strokeColor || '#D1D1D1'};
+	fill: ${(props) => props.$fillColor || 'none'};
+	stroke: ${(props) => props.$strokeColor || '#D1D1D1'};
 
 	transition:
 		fill 0.3s ease,

@@ -17,15 +17,16 @@ interface FlowerProps {
 	$isSelected?: boolean;
 	$name?: string;
 	$recommend?: boolean;
-	$meaning?: Array<String>;
+	$meaning?: String[];
 	$isChoice?: boolean;
+	$isCollapse? :boolean;
 	clickDelete?: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 }
 
-export const FlowerCard = ({ link, $isMain, $isSelected, $name, $recommend, $meaning, $isChoice, clickDelete }: FlowerProps) => {
+export const FlowerCard = ({ link, $isMain, $isSelected, $name, $recommend, $meaning, $isChoice, $isCollapse, clickDelete }: FlowerProps) => {
 	return (
 		<>
-			<StyledCard $isChoice={$isChoice}>
+			<StyledCard $isChoice={$isChoice} $isCollapse={$isCollapse}>
 				{/* 꽃 이미지 */}
 				<StyledFlowerArea>
 					<div style={{ marginLeft: 'auto' }}>

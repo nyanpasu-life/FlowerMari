@@ -1,32 +1,40 @@
 import { Accordion } from '../../components/accordion/Accordion';
 import { Header } from '../../components/header/Headerbar';
 import { StyledGeneratePage, StyledBouquetImage } from './StyledGeneratePage';
-import {useEffect, useState} from 'react';
+import { useEffect, useState } from 'react';
 import { MakeModal } from '../../components/modal/makeModal/MakeModal';
-import CustomButton from '../../components/button/CustomButton';
 import { FlowerListModal } from '../../components/modal/flowerModal/FlowerListModal';
 import { bouquetStore } from '../../stores/bouquetStore';
+import CustomButton from '../../components/button/CustomButton';
 import { postRegenerateInputs } from '../../api/bouquetReCreate.ts'
 import setupSSE from "../../utils/sse.ts";
+type FlowerDto = {
+	flowerId: number;
+	name: string;
+	color: string;
+	meaning: string;
+	imgUrl: string;
+};
 
 export const GeneratePage = () => {
 	const {bouquetUrl,usedFlower, recommendByMeaning, allFlowers, setBouquetData,recommendByPopularity} = bouquetStore.getState();
 	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
+	
 	const [isLoading, setIsLoading] = useState(true);
-	// 확인 모달, 꽃 전체 리스트 모달
-	//확인
+
+	const [usedFlowerIndexs, setUsedFlowerIndexs] = useState<number[]>([]);
+	// 확인 모달, 꽃 전체 리스트 모달 여부
+
+	const [selectIdByIndex, setSelectIdByIndex] = useState<number[]>([-1, -1, -1]);
+	const [userSelectIndex, setUserSelectIndex] = useState<number>(-1);
+	const [userSelectId, setUserSelectId] = useState<number>(-1);
+	// 유저가 선택한 각 꽃 별 추가 꽃
+	// 선택한 꽃의 위치(0, 1, 2)
+	// 유저가 선택한 꽃의 id
+
 	const html = document.querySelector('html');
 
-	const uf = allFlowers.filter((flower) => usedFlower.includes(flower.flowerId));
-	// 사용된 꽃 목록 추출
-	const colors = uf.map((flower) => flower.color);
-	// 사용된 꽃 색상 추출
-	const meanings = uf.map((flower) => flower.meaning.split(',').map((item) => item.trim()));
-	// 사용된 꽃 꽃말 추출
-
-	const flowersByMeaning = allFlowers.filter((flower) => recommendByMeaning.includes(flower.flowerId));
-	// 꽃말로 추천할 목록 추출
 	useEffect(() => {
 		setupSSE({
 			onOpen: () => setIsLoading(true),
@@ -46,6 +54,17 @@ export const GeneratePage = () => {
 		console.log("usedFlower:", usedFlower);
 	}, [usedFlower]);
 
+
+	const uf = allFlowers.filter((flower) => usedFlower.includes(flower.flowerId));
+	// 사용된 꽃 목록 추출
+	const colors = uf.map((flower) => flower.color);
+	// 사용된 꽃 색상 추출
+	const meanings = uf.map((flower) => flower.meaning.split(',').map((item) => item.trim()));
+	// 사용된 꽃 꽃말 추출
+
+	const flowersByMeaning = allFlowers.filter((flower) => recommendByMeaning.includes(flower.flowerId));
+	// 꽃말로 추천할 목록 추출
+
 	const openModal = () => {
 		setIsMakeModalOpened(true);
 		html?.classList.add('scroll-locked');
@@ -56,8 +75,9 @@ export const GeneratePage = () => {
 		html?.classList.remove('scroll-locked');
 	}; // 확인 모달 닫기
 
-	const openListModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+	const openListModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index : number) => {
 		setIsListModalOpened(true);
+		setUserSelectIndex(index);
 		e.stopPropagation();
 		html?.classList.add('scroll-locked');
 	}; // 꽃 전체 리스트 모달 열기
@@ -67,13 +87,38 @@ export const GeneratePage = () => {
 		html?.classList.remove('scroll-locked');
 	}; // 꽃 전체 리스트 모달 닫기
 
+	useEffect(() => {
+		if(userSelectId !== -1 && userSelectIndex !== -1) {
+			const newState = [...selectIdByIndex];
+			newState[userSelectIndex] = userSelectId;
+			setSelectIdByIndex(newState.map((id) => id));
+
+			setUserSelectId(-1)
+			setUserSelectIndex(-1)
+		}
+	}, [userSelectId, userSelectIndex]);
+	// 새로 꽃을 추가했다면, 그 값을 저장하고
+	// 임시 변수는 초기화
+
+	const changeFlower = (index: number, newFlower: number) => {
+		const newState = [...usedFlowerIndexs];
+		newState[index] = newFlower;
+		setUsedFlowerIndexs(newState.map((flower) => flower));
+	}; // 기본 추천 꽃과 새로운 추천 꽃의 위치를 바꿀 때
+
+	const selectUserFlower = (id : number) => {
+		setUserSelectId(id)
+	} // 추가하려는 꽃의 id
+
 	const handleSubmit = async () => {
 		const inputs: string[] = ['빨강 장미', '수국', '백합'];
 		await postRegenerateInputs(inputs);
 	};
+
 	if (isLoading) {
 		return <div>loading...</div>
 	}
+	
 	return (
 		<>
 			<StyledGeneratePage>
@@ -93,7 +138,9 @@ export const GeneratePage = () => {
 							$meaning={meanings[index]}
 							$color={colors[index]}
 							$recommendByMeaning={flowersByMeaning[index]}
-							openListModal={(e) => openListModal(e)}
+							openListModal={(e) => openListModal(e, index)}
+							changeFlower={changeFlower}
+							$userSelectId={selectIdByIndex[index]}
 						></Accordion>
 					);
 				})}
@@ -110,7 +157,7 @@ export const GeneratePage = () => {
 			{/* 완성 확인 모달 */}
 			{isMakeModalOpened && <MakeModal closeModal={closeModal}></MakeModal>}
 			{/* 꽃 전체 리스트 모달 */}
-			{isListModalOpened && <FlowerListModal CloseListModal={CloseListModal}></FlowerListModal>}
+			{isListModalOpened && <FlowerListModal CloseListModal={CloseListModal} selectUserFlower={selectUserFlower}></FlowerListModal>}
 		</>
 	);
 };

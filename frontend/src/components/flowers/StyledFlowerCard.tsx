@@ -23,6 +23,7 @@ interface isMain {
 
 interface listProps {
 	$isChoice?: boolean;
+	$isCollapse?: boolean
 }
 
 // 전체
@@ -37,13 +38,15 @@ export const StyledCard = styled.div<MarginProps & listProps>`
 	margin-top: 1vh;
 	margin-bottom: 1vh;
 
+	border: none;
+
 	@media (min-width: 768px) {
-		margin-top: 2vh;
-		margin-bottom: 2vh;
+		height: 190px;
+
+		margin-top: 4vh;
+		margin-bottom: 4vh;
 	}
 
-	border: none;
-	background-color: ${(props) => (props.$isChoice ? '#f3f3f3' : 'transparent')};
 `; 
 
 // 꽃 사진 + 버튼 영역

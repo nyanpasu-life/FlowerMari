@@ -31,11 +31,7 @@ export const IndexPage: React.FC = () => {
 		if (e.target.scrollHeight === e.target.clientHeight) {
 			setValue(value);
 		}
-	};
-
-	// const goToGenerate = () => {
-	// 	navigate('/generate');
-	// };
+	}; // 줄 수 제한
 
 	const disconn = async () => {
 		await discon();
@@ -81,13 +77,14 @@ export const IndexPage: React.FC = () => {
 							<StyledTextarea
 								value={whom}
 								placeholder='dear : 귀엽고 사랑스러운 여자친구에게'
-								onChange={(e) => setWhom(e.target.value)}
+								onChange={(e) => handleChangeOptionValues(e, setWhom)}
 							></StyledTextarea>
 							{/* 마음 입력 영역 */}
 							<StyledTextarea
+								value={message}
 								placeholder='꽃을 통해 전하고 싶은 마음을 적어주세요.'
 								height='6rem'
-								onChange={(e) => setMessage(e.target.value)}
+								onChange={(e) => handleChangeOptionValues(e, setMessage)}
 							></StyledTextarea>
 						</TextAlign>
 					</StyledLetter>

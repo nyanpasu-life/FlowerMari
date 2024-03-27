@@ -19,11 +19,14 @@ export const StyledCard = styled.div<MarginProps>`
 	display: flex;
 	justify-content: center;
 	align-items: center;
-
-	margin-top: 2vh;
+	
+	margin-top: 1vh;
+	margin-bottom: 1vh;
 
 	@media (min-width: 768px) {
+		height: 170px;
 		margin-top: 4vh;
+		margin-bottom: 4vh;
 	}
 
 	border: none;
