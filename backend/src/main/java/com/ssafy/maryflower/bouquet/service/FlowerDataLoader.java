@@ -24,7 +24,7 @@ public class FlowerDataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("run?");
-//        loadFlowerData();
+        loadFlowerData();
 //        loadMemberData();
 //        loadBouquetData();
 //        cacheService.getAllFlowers();

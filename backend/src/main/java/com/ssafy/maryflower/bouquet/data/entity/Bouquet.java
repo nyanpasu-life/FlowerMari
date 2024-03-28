@@ -25,6 +25,7 @@ public class Bouquet extends BaseEntity {
     private String situation;
     private String message;
     private String imageUrl;
+    private String flowerIds;
 
 
     @ManyToOne
