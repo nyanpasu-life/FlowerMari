@@ -1,11 +1,12 @@
 import json
+import time
 import toml
 from Dto import BouquetUrlTransferDto
 from service.imgGenerate import imgGenerate
 from service.upload import upload
 
-def worker(work_queue, pipeline, publisher, threadNum):
-    print(pipeline)
+def worker(work_queue, publisher, threadNum):
+    # print(pipeline)
     while True:
         message = work_queue.get()  # 큐에서 작업을 하나 가져옴
         if message['type'] == 'message':
@@ -14,6 +15,7 @@ def worker(work_queue, pipeline, publisher, threadNum):
             requestId = inputDto['requestId']
 
             print("############################")
+            print('현재시각; ' + time.strftime('%H:%M:%S'))
             print(flowersId)
             print(requestId)
 
