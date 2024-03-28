@@ -5,7 +5,7 @@ import io
 
 import boto3
 
-def upload(img = Image.new('RGB', (1024, 1024), 'black')):
+def upload(img = Image.new('RGB', (1024, 1024), 'black'), fileName = 'test'):
 
     s3 = boto3.client(
     's3',
@@ -17,7 +17,7 @@ def upload(img = Image.new('RGB', (1024, 1024), 'black')):
     img.save(img_byte_arr, format='PNG')
     img_byte_arr = img_byte_arr.getvalue()
 
-    s3_file_path = 'test.png'
+    s3_file_path = f'{fileName}.png'
 
     bucket_name = os.getenv('AWS_BUCKET_NAME')
     region_name = os.getenv('AWS_REGION_NAME')

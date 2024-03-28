@@ -9,4 +9,5 @@ class BouquetUrlTransferDto:
     def __init__(self):
         self.requestId = None
         self.bouquetUrl = None
+        self.finish = None
 

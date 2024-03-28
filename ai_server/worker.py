@@ -3,6 +3,7 @@ import time
 import toml
 from Dto import BouquetUrlTransferDto
 from service.imgGenerate import imgGenerate
+from service.publish import publish
 from service.upload import upload
 
 def worker(work_queue, publisher, threadNum):
@@ -30,15 +31,12 @@ def worker(work_queue, publisher, threadNum):
 
             print(flowers)
 
-            # image = imgGenerate(flowers, pipeline, threadNum)
+            #image = imgGenerate(flowers, threadNum, requestId, publisher)
 
-            # url = upload(img=image)
+            #url = upload(img=image)
 
             url = upload()
 
-            testDto = BouquetUrlTransferDto()
-            testDto.requestId = requestId
-            testDto.bouquetUrl = url
-            publisher.publish('ch2', json.dumps(testDto.__dict__))
+            publish(requestId, url, True, publisher)
 
         work_queue.task_done()

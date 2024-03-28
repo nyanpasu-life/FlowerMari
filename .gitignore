@@ -1,3 +1,4 @@
 *.env
 *.safetensors
+*.bat
 __pycache__
