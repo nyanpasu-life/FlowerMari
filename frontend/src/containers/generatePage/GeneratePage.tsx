@@ -37,22 +37,37 @@ export const GeneratePage = () => {
 
 	useEffect(() => {
 		setupSSE({
-			onOpen: () => setIsLoading(true),
-			onDataReceived: (data) => {
-				setBouquetData(data);
+			onOpen: () => {
+				console.log('SSE 연결이 열림');
+				setIsLoading(true);
+			},
+			onError: (error) => {
+				console.error('SSE 에러 발생', error);
 				setIsLoading(false);
 			},
-			onError: () => setIsLoading(false)
+			events: {
+				firstGenerateEvent: (data) => {
+					bouquetStore.getState().setBouquetData(data);
+					console.log('첫 번째 생성 이벤트 데이터 처리', data);
+					setIsLoading(false);
+				},
+				reGenerateEvent: (data) => {
+					bouquetStore.getState().setBouquetData(data);
+					console.log('재생성 이벤트 데이터 처리', data);
+					setIsLoading(false);
+				}
+			}
 		});
 
 		return () => {
-
 		};
 	}, []);
 
+
 	useEffect(() => {
-		console.log("usedFlower:", usedFlower);
-	}, [usedFlower]);
+		console.log("generatePage: usedFlower:", usedFlower);
+		console.log("bouURl",bouquetUrl)
+	}, [usedFlower, bouquetUrl]);
 
 
 	const uf = allFlowers.filter((flower) => usedFlower.includes(flower.flowerId));
