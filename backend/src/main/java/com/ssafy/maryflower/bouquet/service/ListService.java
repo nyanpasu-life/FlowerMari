@@ -21,8 +21,7 @@ public class ListService {
 
   private final BouquetRepository bouquetRepository;
   public Slice<BouquetFlowerResponseDto> search(BouquetListRequestDto req, Pageable pageable) {
-    Slice<BouquetFlowerResponseDto> res = bouquetRepository.searchRelevantBouquet(req, pageable);
-    return res;
+    return bouquetRepository.searchRelevantBouquet(req, pageable);
   }
 
 }

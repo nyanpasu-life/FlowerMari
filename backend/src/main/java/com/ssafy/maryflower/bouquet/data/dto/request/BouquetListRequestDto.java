@@ -19,4 +19,5 @@ public class BouquetListRequestDto {
     this.orderBy = orderBy;
   }
 
+
 }

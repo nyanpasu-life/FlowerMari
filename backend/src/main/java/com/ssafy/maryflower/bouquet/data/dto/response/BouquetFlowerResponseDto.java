@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class BouquetFlowerResponseDto {
-  private Long memberId;
+  private Long memberId; //nickname
   private Long bouquetId;
   private String imageUrl;
   private List<Flower> flowers;

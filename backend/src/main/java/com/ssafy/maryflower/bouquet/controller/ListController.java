@@ -25,7 +25,7 @@ public class ListController {
   private final ListService listService;
 
   @GetMapping("")
-  public ResponseEntity<Slice<BouquetFlowerResponseDto>> search(@Valid BouquetListRequestDto req, @PageableDefault(size = 20) Pageable pageable) {
+  public ResponseEntity<Slice<BouquetFlowerResponseDto>> search(BouquetListRequestDto req, @PageableDefault(size = 4) Pageable pageable) {
     Slice<BouquetFlowerResponseDto> res = listService.search(req, pageable);
     return ResponseEntity.ok(res);
   }

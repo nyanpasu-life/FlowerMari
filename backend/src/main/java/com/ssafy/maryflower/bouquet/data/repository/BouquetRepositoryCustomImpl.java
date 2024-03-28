@@ -20,6 +20,7 @@ import java.util.List;
 import static com.ssafy.maryflower.bouquet.data.entity.QBouquet.bouquet;
 import static com.ssafy.maryflower.bouquet.data.entity.QFlower.flower;
 import static com.ssafy.maryflower.bouquet.data.entity.QFlowerBouquet.flowerBouquet;
+import static com.ssafy.maryflower.member.data.entity.QMember.member;
 
 @RequiredArgsConstructor
 @Repository
@@ -31,7 +32,8 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
   public Slice<BouquetFlowerResponseDto> searchRelevantBouquet(BouquetListRequestDto req, Pageable pageable) {
     int pageSize = pageable.getPageSize();
     List<Bouquet> content = jpaQueryFactory
-        .selectFrom(bouquet)
+        .selectFrom(bouquet) //dto로 수정,
+        .leftJoin(bouquet.member, member)
         .leftJoin(bouquet.flowerBouquets, flowerBouquet)
         .leftJoin(flowerBouquet.flower, flower).distinct()
         .where(
@@ -48,7 +50,7 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
       hasNext = true;
     }
 
-//    List<BouquetFlowerResponseDto> res = content.stream().map(BouquetFlowerResponseDto::new).toList();
+    List<BouquetFlowerResponseDto> res = content.stream().map(BouquetFlowerResponseDto::new).toList();
 
     return new SliceImpl(content, pageable, hasNext);
   }
@@ -88,10 +90,10 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
 
   private <T> OrderSpecifier<?> makeOrder(BouquetListRequestDto req) {
     // default는 최신순으로 가져오기로 함
-    if (req.getOrderBy() == null) return new OrderSpecifier<>(Order.DESC, bouquet.bouquetId);
+    if (req.getOrderBy() == null) return new OrderSpecifier<>(Order.DESC, bouquet.createDateTime);
     return switch (req.getOrderBy()) {
-      case LIKE -> new OrderSpecifier<>(Order.DESC, bouquet.bouquetId);
-      case RECENT -> new OrderSpecifier<>(Order.ASC, bouquet.bouquetId);
+      case LIKE -> new OrderSpecifier<>(Order.DESC, flowerBouquet.bouquet);
+      case RECENT -> new OrderSpecifier<>(Order.DESC, bouquet.createDateTime);
     };
   }
 
