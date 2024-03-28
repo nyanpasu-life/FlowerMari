@@ -24,10 +24,10 @@ public class FlowerDataLoader implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         System.out.println("run?");
-        loadFlowerData();
-        loadMemberData();
-        loadBouquetData();
-        cacheService.getAllFlowers();
+//        loadFlowerData();
+//        loadMemberData();
+//        loadBouquetData();
+//        cacheService.getAllFlowers();
     }
     private void loadFlowerData() {
         System.out.println("flower data load");
