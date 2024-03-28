@@ -80,7 +80,6 @@ dependencies {
 	annotationProcessor "com.querydsl:querydsl-apt:${dependencyManagement.importedProperties['querydsl.version']}:jakarta"
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
-  implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8"
 }
 
 //// querydsl 저장 위치
@@ -112,7 +111,4 @@ sonarqube {
         property "sonar.test.inclusions", "**/*Test.java"
         property "sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/reports/jacoco/test/jacocoTestReport.xml"
     }
-}
-kotlin {
-  jvmToolchain(17)
 }

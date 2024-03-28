@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 public class BouquetFlowerResponseDto {
-  private Long memberId; //nickname
+  private Long memberId; //nickname: memberId로 구분하기로 함.
   private Long bouquetId;
   private String imageUrl;
   private List<Flower> flowers;

@@ -2,6 +2,7 @@ package com.ssafy.maryflower.bouquet.data.repository;
 
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.ssafy.maryflower.bouquet.data.SearchType;
@@ -31,8 +32,16 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
   @Override
   public Slice<BouquetFlowerResponseDto> searchRelevantBouquet(BouquetListRequestDto req, Pageable pageable) {
     int pageSize = pageable.getPageSize();
-    List<Bouquet> content = jpaQueryFactory
-        .selectFrom(bouquet) //dto로 수정,
+    List<BouquetFlowerResponseDto> content = jpaQueryFactory.select(
+            Projections.constructor(
+                BouquetFlowerResponseDto.class,
+                member.memberId,
+                bouquet.bouquetId,
+                bouquet.imageUrl,
+                flowerBouquet.flower
+            ) //dto로 수정,
+        )
+        .from(bouquet)
         .leftJoin(bouquet.member, member)
         .leftJoin(bouquet.flowerBouquets, flowerBouquet)
         .leftJoin(flowerBouquet.flower, flower).distinct()
@@ -55,7 +64,7 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
     return new SliceImpl(content, pageable, hasNext);
   }
 //  public Slice<BouquetFlowerResponseDto> searchRelevantBouquet(BouquetListRequestDto req, Pageable pageable) {
-//
+//.
 //    List<Bouquet> content = jpaQueryFactory
 //        .selectFrom(bouquet)
 //        .leftJoin(bouquet.flowerBouquets, flowerBouquet)
@@ -92,7 +101,7 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
     // default는 최신순으로 가져오기로 함
     if (req.getOrderBy() == null) return new OrderSpecifier<>(Order.DESC, bouquet.createDateTime);
     return switch (req.getOrderBy()) {
-      case LIKE -> new OrderSpecifier<>(Order.DESC, flowerBouquet.bouquet);
+      case LIKE -> new OrderSpecifier<>(Order.DESC, flowerBouquet.flower);
       case RECENT -> new OrderSpecifier<>(Order.DESC, bouquet.createDateTime);
     };
   }
