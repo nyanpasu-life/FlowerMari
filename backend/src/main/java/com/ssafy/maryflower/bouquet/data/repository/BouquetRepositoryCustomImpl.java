@@ -4,7 +4,9 @@ import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+import com.ssafy.maryflower.bouquet.data.BouquetOrderBy;
 import com.ssafy.maryflower.bouquet.data.SearchType;
 import com.ssafy.maryflower.bouquet.data.dto.request.BouquetListRequestDto;
 import com.ssafy.maryflower.bouquet.data.dto.response.BouquetFlowerResponseDto;
@@ -22,6 +24,7 @@ import static com.ssafy.maryflower.bouquet.data.entity.QBouquet.bouquet;
 import static com.ssafy.maryflower.bouquet.data.entity.QFlower.flower;
 import static com.ssafy.maryflower.bouquet.data.entity.QFlowerBouquet.flowerBouquet;
 import static com.ssafy.maryflower.member.data.entity.QMember.member;
+import static com.ssafy.maryflower.bouquet.data.entity.QMemberBouquet.memberBouquet;
 
 @RequiredArgsConstructor
 @Repository
@@ -32,7 +35,7 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
   @Override
   public Slice<BouquetFlowerResponseDto> searchRelevantBouquet(BouquetListRequestDto req, Pageable pageable) {
     int pageSize = pageable.getPageSize();
-    List<BouquetFlowerResponseDto> content = jpaQueryFactory.select(
+    JPAQuery<BouquetFlowerResponseDto> query = jpaQueryFactory.select(
             Projections.constructor(
                 BouquetFlowerResponseDto.class,
                 member.memberId,
@@ -47,9 +50,18 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
         .leftJoin(flowerBouquet.flower, flower).distinct()
         .where(
             eqKeyword(req)
-        )
-        .orderBy(makeOrder(req))
-        .offset(pageable.getOffset())
+        );
+
+
+    switch(req.getOrderBy()){
+      case LIKE -> query.leftJoin(memberBouquet)
+            .on(bouquet.bouquetId.eq(memberBouquet.bouquet.bouquetId))
+            .groupBy(bouquet.bouquetId)
+            .orderBy(memberBouquet.bouquet.count().desc(), bouquet.createDateTime.desc());
+      case RECENT -> query.orderBy(bouquet.createDateTime.desc());
+      }
+
+    List<BouquetFlowerResponseDto> content = query.offset(pageable.getOffset())
         .limit(pageSize + 1)
         .fetch();
 
@@ -59,31 +71,9 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
       hasNext = true;
     }
 
-    List<BouquetFlowerResponseDto> res = content.stream().map(BouquetFlowerResponseDto::new).toList();
-
     return new SliceImpl(content, pageable, hasNext);
   }
-//  public Slice<BouquetFlowerResponseDto> searchRelevantBouquet(BouquetListRequestDto req, Pageable pageable) {
-//.
-//    List<Bouquet> content = jpaQueryFactory
-//        .selectFrom(bouquet)
-//        .leftJoin(bouquet.flowerBouquets, flowerBouquet)
-//        .leftJoin(flowerBouquet.flower, flower).distinct()
-//        .where(
-//            eqKeyword(req)
-//        )
-//        .orderBy(makeOrder(req))
-//        .offset(pageable.getOffset())
-//        .limit(pageable.getPageSize() + 1)
-//        .fetch();
-//
-//    boolean hasNext = content.size() > pageable.getPageSize(); // 뒤에 더 있는지 확인
-//    content = hasNext ? content.subList(0, pageable.getPageSize()) : content; // 뒤에 더 있으면 1개 더 가져온거 빼고 넘긴다
-//
-//    List<BouquetFlowerResponseDto> res = content.stream().map(BouquetFlowerResponseDto::new).toList();
-//
-//    return new SliceImpl<>(res, pageable, hasNext);
-//  }
+
   private BooleanExpression eqKeyword(BouquetListRequestDto req) {
     if (req.getType().equals("name")) {
       return flower.koreanName.contains(req.getSearchKeyword());
@@ -95,15 +85,6 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
           .or(bouquet.message.contains(req.getSearchKeyword()));
     }
     return null;
-  }
-
-  private <T> OrderSpecifier<?> makeOrder(BouquetListRequestDto req) {
-    // default는 최신순으로 가져오기로 함
-    if (req.getOrderBy() == null) return new OrderSpecifier<>(Order.DESC, bouquet.createDateTime);
-    return switch (req.getOrderBy()) {
-      case LIKE -> new OrderSpecifier<>(Order.DESC, flowerBouquet.flower);
-      case RECENT -> new OrderSpecifier<>(Order.DESC, bouquet.createDateTime);
-    };
   }
 
 }
