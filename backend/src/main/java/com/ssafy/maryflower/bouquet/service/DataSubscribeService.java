@@ -14,14 +14,18 @@ public class DataSubscribeService {
     private final SseEmitters sseEmitters;
     private final CacheService cacheService;
     public void subscribeBouquetDataFromAIServer(BouquetUrlTransferDto bouquetUrlTransferDto){
+
         // Test
         System.out.println("AI로부터 subscribe");
-
-        if(cacheService.cachereGenerateDto(bouquetUrlTransferDto.getRequestId())!=null){
+        if(!bouquetUrlTransferDto.isFinish()){
+            System.out.println("middle image = " + bouquetUrlTransferDto.getBouquetUrl());
+            sseEmitters.sendImageUrlToClient(bouquetUrlTransferDto.getRequestId(),bouquetUrlTransferDto.getBouquetUrl());
+        }
+        else if(cacheService.cachereGenerateDto(bouquetUrlTransferDto.getRequestId())!=null){
             reGenerateDto regeneratedto= cacheService.cachereGenerateDto(bouquetUrlTransferDto.getRequestId());
             regeneratedto.setBouquetUrl(bouquetUrlTransferDto.getBouquetUrl());
             sseEmitters.sendGenerateDtoToClient(bouquetUrlTransferDto.getRequestId(),regeneratedto);
-        }else {
+        } else {
             firstGenerateDto firstgeneratedto = cacheService.cachefirstGenerateDto(bouquetUrlTransferDto.getRequestId());
             firstgeneratedto.setBouquetUrl(bouquetUrlTransferDto.getBouquetUrl());
             sseEmitters.sendGenerateDtoToClient(bouquetUrlTransferDto.getRequestId(),firstgeneratedto);

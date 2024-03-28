@@ -76,9 +76,8 @@ public class DataPublishService {
 
         reGenerateDto regenerateDto=new reGenerateDto();
 
+        System.out.println("front data size : "+userFlowers.size());
         for(int i=0;i<userFlowers.size();i++){
-            Optional<Long> id=flowerRepository.findFlowerByName(userFlowers.get(i));
-            regenerateDto.getUsedFlower().add(id.orElseThrow());
 
             // dto에 mainflower pk 저장
             flowerRepository.findFlowerByName(userFlowers.get(i)).ifPresent(regenerateDto.getUsedFlower()::add);

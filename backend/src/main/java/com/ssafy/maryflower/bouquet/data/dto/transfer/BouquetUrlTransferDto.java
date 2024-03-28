@@ -12,4 +12,5 @@ AI서버로부터 꽃다발이 생성된 후 그것이 저장된 url을 받는 d
 public class BouquetUrlTransferDto {
     private String requestId;
     private String bouquetUrl;
+    private boolean finish;
 }
