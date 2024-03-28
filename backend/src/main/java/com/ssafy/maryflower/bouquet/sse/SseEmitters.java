@@ -74,12 +74,21 @@ public class SseEmitters {
                 System.out.println("Recommended Flower Size : "+regeneratedto.getRecommendByMeaning());
                 System.out.println("Recommended By Popularity : "+regeneratedto.getRecommendByPopularity());
                 emitter.send(SseEmitter.event().name("reGenerateEvent").data(regeneratedto));
+
+
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         }
     }
 
-    // sse를 통해 연결되어 있는 클라이언트에게 메세지를 보냄.
+    public void sendImageUrlToClient(String requestId, String ImageUrl)  {
 
+        try{
+            SseEmitter emitter= emitters.get(requestId);
+            emitter.send(SseEmitter.event().name("middleImageSendEvent").data(ImageUrl));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

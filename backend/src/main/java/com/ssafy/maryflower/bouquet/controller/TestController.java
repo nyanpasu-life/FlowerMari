@@ -186,4 +186,9 @@ public class TestController {
         return ResponseEntity.ok("success");
     }
 
+    @PostMapping("/clearAllFlowersCache")
+    public ResponseEntity<String> testClearAllFlowersCache(){
+        cacheService.clearAllFlowersCache();;
+        return ResponseEntity.ok("success");
+    }
 }
