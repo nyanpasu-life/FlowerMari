@@ -85,6 +85,8 @@ public class SseEmitters {
     public void sendImageUrlToClient(String requestId, String ImageUrl)  {
 
         try{
+            System.out.println("-------------------------middleImageSendEvent---------------------");
+            System.out.println(ImageUrl);
             SseEmitter emitter= emitters.get(requestId);
             emitter.send(SseEmitter.event().name("middleImageSendEvent").data(ImageUrl));
         } catch (IOException e) {
