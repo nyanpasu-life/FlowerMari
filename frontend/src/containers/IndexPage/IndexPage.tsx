@@ -38,7 +38,7 @@ export const IndexPage: React.FC = () => {
 	}
 	const handleSubmit = async () => {
 		await postTextInputs({ whom, situation, message });
-		navigate('/generate');
+		navigate('/gtp');
 	};
 
 	return (
