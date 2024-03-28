@@ -13,31 +13,37 @@ interface FlowerDto {
 }
 
 interface RecommendProps {
-	$index: number;
-	$name: string;
-	$meaning: string[];
-	$color: string;
-	$recommendByMeaning: FlowerDto;
-	$userSelectId: number;
+	$bouquetUrl : string; // 꽃다발 이미지 url
+	$index: number; // 현재 꽃의 위치
+	$name: string; // 꽃 이름
+	$meaning: string[]; // 꽃말
+	$color: string; // 꽃 색
+	$recommendByMeaning: FlowerDto; // 꽃말에 의한 추천 꽃 목록
+	$userSelectId: number; // 사용자가 바꾸고자 하는 꽃의 id
+	$empty: boolean; // 현재 칸이 비었는지 여부
 	openListModal: (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => void;
 	changeFlower: (index: number, newFlower: number) => void;
+	setUsedState: (index: number, state: boolean) => void;
 }
 
 export const Accordion = ({
+	$bouquetUrl,
 	$index,
 	$name,
 	$meaning,
 	$color,
 	$recommendByMeaning,
 	$userSelectId,
+	$empty = false,
 	openListModal,
 	changeFlower,
+	setUsedState
 }: RecommendProps) => {
 	const { allFlowers, recommendByPopularity } = bouquetStore.getState();
 
 	const [active, setActive] = useState(false); // 아코디언 활성 여부
 	const [height, setHeight] = useState('0px'); // 아코디언 메뉴 높이
-	const [empty, setEmpty] = useState(false); // 아코디언 활성 여부
+	const [empty, setEmpty] = useState($empty); // 아코디언 활성 여부
 	const [clickIndex, setClickIndex] = useState<number>(-1); // 클릭 인덱스
 
 	const [recommendIndexByColor, setRecommendIndexByColor] = useState<number>(0); // 색상에 의한 추천 
@@ -62,28 +68,19 @@ export const Accordion = ({
 	const clickDelete = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		setEmpty(true);
 		setActive(false);
+		setUsedState($index, false);
 		e.stopPropagation();
 	}; // 삭제버튼 클릭
 
 	const clickAddFlower = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
 		setEmpty(false);
+		setUsedState($index, true);
 		e.stopPropagation();
 	}; // 추가버튼 클릭
 
 	useEffect(() => {
-		// flowersByColor.length가 0이 아닐 때만 랜덤 인덱스 설정
-		if (flowersByColor.length > 0) {
-			const randomIndex = Math.floor(Math.random() * flowersByColor.length);
-			setRecommendIndexByColor(randomIndex);
-		}
-	}, [allFlowers, $color, $name]);
-
-	// 인기도에 의한 추천
-
-	useEffect(() => {
-		const randomIndex = Math.floor(Math.random() * flowersByPopularity.length);
-		setRecommendIndexByPopularity(randomIndex);
-	}, []);
+		setEmpty(false)
+	}, [$recommendByMeaning])
 
 	const meaningsByMeaning = $recommendByMeaning.meaning.split(',').map((item) => item.trim());
 	// 꽃말에 의한 추천, 꽃말만 추출 후 분리
@@ -120,7 +117,9 @@ export const Accordion = ({
 	// 그 중에서 인기도에 의한 추천에 해당하는 꽃을 추출
 
 	useEffect(() => {
-		const randomIndex = Math.floor(Math.random() * flowersByPopularity.length);
+		let randomIndex = Math.floor(Math.random() * flowersByPopularity.length);
+
+		while (flowersByPopularity.length <= randomIndex) randomIndex = Math.floor(Math.random() * flowersByPopularity.length);
 		setRecommendIndexByPopularity(randomIndex);
 	}, []); // 인기도에 의한 추천 리스트 중 랜덤으로 하나 추천
 
@@ -133,7 +132,7 @@ export const Accordion = ({
 	const flowersBySelect = allFlowers.filter(
     (flower) => flower.flowerId === $userSelectId && $userSelectId !== -1
 	);
-
+	
 	return (
 		<AccordionSection>
 			<div className='accordion__section'>
@@ -142,6 +141,7 @@ export const Accordion = ({
 					<AccordionMenu className={`accordion ${active ? 'active' : ''}`} onClick={toggleAccordion}>
 						{/* 메인 꽃 여부, 버튼 클릭 여부, 추천 꽃여부, 이름, 꽃말, 이미지 주소 */}
 						<FlowerCard
+							$bouquetUrl={$bouquetUrl}
 							$isMain={$index === 0}
 							$isSelected={active}
 							$recommend={true}
@@ -149,7 +149,6 @@ export const Accordion = ({
 							$meaning={$meaning}
 							$isChoice={$index === clickIndex}
 							clickDelete={(e) => clickDelete(e)}
-							link='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
 						/>
 						<AccordionIcon className={active ? 'rotate' : ''}>▶</AccordionIcon>
 					</AccordionMenu>
@@ -170,22 +169,22 @@ export const Accordion = ({
 					{/* 꽃말에 의한 추천 */}
 					<div onClick={() => changeFlower($index, $recommendByMeaning.flowerId)}>
 						<FlowerCard
+							$bouquetUrl={$recommendByMeaning.imgUrl}
 							$isMain={false}
 							$name={$recommendByMeaning.name}
 							$meaning={meaningsByMeaning}
 							$isCollapse={true}
-							link='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
 						/>
 					</div>
 					{/* 색상에 의한 추천 */}
 					<div onClick={() => changeFlower($index, flowersByColor[recommendIndexByColor].flowerId)}>
 						{flowersByColor.length > recommendIndexByColor ? (
 							<FlowerCard
+								$bouquetUrl={flowersByColor[recommendIndexByColor].imgUrl}
 								$isMain={false}
 								$name={flowersByColor[recommendIndexByColor].name}
 								$meaning={meaningsByColor}
 								$isCollapse={true}
-								link='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
 							/>
 						) : (
 							<div></div>
@@ -195,27 +194,27 @@ export const Accordion = ({
 					<div onClick={() => changeFlower($index, flowersByPopularity[recommendIndexByPopularity].flowerId)}>
 						{flowersByPopularity.length > recommendIndexByPopularity ? (
 							<FlowerCard
+								$bouquetUrl={flowersByPopularity[recommendIndexByPopularity].imgUrl}
 								$isMain={false}
 								$name={flowersByPopularity[recommendIndexByPopularity].name}
 								$meaning={meaningsByPopularity}
 								$isCollapse={true}
-								link='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
 							/>
 						) : (
 							<div></div>
 						)}
 					</div>
 					{/* 모든 꽃 리스트를 보는 버튼(공간) && 꽃 리스트애서 선택한 것이 있으면 보여주는 공간 */}
-					{$userSelectId === -1 ? (
+					{($userSelectId === undefined || $userSelectId === -1) ? (
 						<EmptyFlowerCard $recommend={false} openListModal={openListModal}></EmptyFlowerCard>
 					) : (
 						<div onClick={() => changeFlower($index, $userSelectId)}>
 							<FlowerCard
+								$bouquetUrl={flowersBySelect[0].imgUrl}
 								$isMain={false}
 								$name={flowersBySelect[0].name}
 								$meaning={flowersBySelect[0].meaning.split(',').map((item) => item.trim())}
 								$isCollapse={true}
-								link='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
 							/>
 						</div>
 					)}
