@@ -18,18 +18,22 @@ type FlowerDto = {
 };
 
 export const GeneratePage = () => {
-	const {bouquetUrl,usedFlower, recommendByMeaning, allFlowers, setBouquetData,recommendByPopularity} = bouquetStore();
+	const {bouquetUrl, usedFlower, recommendByMeaning, allFlowers, setBouquetData, setBouquetUrl } = bouquetStore();
 	const [isMakeModalOpened, setIsMakeModalOpened] = useState(false);
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
 	
 	const [isLoading, setIsLoading] = useState(true);
 	const axiosInstance = useLocalAxios(true);
-	const [usedFlowerIndexs, setUsedFlowerIndexs] = useState<number[]>([]);
 	// 확인 모달, 꽃 전체 리스트 모달 여부
 
-	const [selectIdByIndex, setSelectIdByIndex] = useState<number[]>([-1, -1, -1]);
+	//const [bouquetImg, setBouquetImg] = useState("")
+	const [uf, setUf] = useState<FlowerDto[]>([]);
+	const [usedFlowerIndexs, setUsedFlowerIndexs] = useState<number[]>([]);
+	const [flowersByMeaning, setFlowersByMeaning] = useState<FlowerDto[]>([]);
+	const [selectIdByIndex, setSelectIdByIndex] = useState<number[]>([]);
 	const [userSelectIndex, setUserSelectIndex] = useState<number>(-1);
 	const [userSelectId, setUserSelectId] = useState<number>(-1);
+	const [isUsed, setIsUsed] = useState<boolean[]>([true, true, true]);
 	// 유저가 선택한 각 꽃 별 추가 꽃
 	// 선택한 꽃의 위치(0, 1, 2)
 	// 유저가 선택한 꽃의 id
@@ -40,22 +44,22 @@ export const GeneratePage = () => {
 		setupSSE({
 			onOpen: () => {
 				console.log('SSE 연결이 열림');
-				setIsLoading(true);
 			},
 			onError: (error) => {
 				console.error('SSE 에러 발생', error);
-				setIsLoading(false);
 			},
 			events: {
 				firstGenerateEvent: (data) => {
-					bouquetStore.getState().setBouquetData(data);
+					setBouquetData(data);
 					console.log('첫 번째 생성 이벤트 데이터 처리', data);
-					setIsLoading(false);
 				},
 				reGenerateEvent: (data) => {
-					bouquetStore.getState().setBouquetData(data);
+					setBouquetData(data);
 					console.log('재생성 이벤트 데이터 처리', data);
-					setIsLoading(false);
+				},
+				middleImageSendEvent: (data) => {
+					setBouquetUrl(data)
+					// console.log(data)
 				}
 			}
 		});
@@ -64,21 +68,45 @@ export const GeneratePage = () => {
 		};
 	}, []);
 
+	// useEffect(() => {
+	// 	console.log(bouquetUrl)
+	// 	setBouquetImg(bouquetStore.getState().bouquetUrl)
+	// }, [bouquetUrl])
+
 
 	useEffect(() => {
-		console.log("generatePage: usedFlower:", usedFlower);
-		console.log("bouURl",bouquetUrl)
-	}, [usedFlower, bouquetUrl]);
+		const unsubscribe = bouquetStore.subscribe((usedFlowerState) => {
+			// bouquetStore의 usedFlower 값이 변경될 때마다 호출
 
+			const limitedUsedFlower = usedFlowerState.usedFlower.slice(0, 3);
+			setUsedFlowerIndexs(limitedUsedFlower.map((flower) => flower));
+		});
+		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
+		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
 
-	const uf = allFlowers.filter((flower) => usedFlower.includes(flower.flowerId));
-	// 사용된 꽃 목록 추출
-	const colors = uf.map((flower) => flower.color);
-	// 사용된 꽃 색상 추출
-	const meanings = uf.map((flower) => flower.meaning.split(',').map((item) => item.trim()));
-	// 사용된 꽃 꽃말 추출
+		// console.log("generatePage: usedFlower:", usedFlower);
+		// console.log("bouURl",bouquetUrl)
 
-	const flowersByMeaning = allFlowers.filter((flower) => recommendByMeaning.includes(flower.flowerId));
+		return unsubscribe;
+	},[usedFlower])
+
+	useEffect(() => {
+		const extractFlower = usedFlowerIndexs
+			.map((index) => allFlowers.find((flower) => flower.flowerId === index))
+			.filter((flower) => flower !== undefined) as FlowerDto[];
+		setUf(extractFlower);
+		// 사용된 꽃 목록 추출
+	}, [usedFlowerIndexs]);
+
+	useEffect(() => {
+		const extractByMeaning = recommendByMeaning
+			.map((id) => {
+				return allFlowers.find((flower) => flower.flowerId === id);
+			})
+			.filter((flower) => flower !== undefined) as FlowerDto[];
+
+		setFlowersByMeaning(extractByMeaning)
+	}, [usedFlowerIndexs]);
 	// 꽃말로 추천할 목록 추출
 
 	const openModal = () => {
@@ -91,7 +119,7 @@ export const GeneratePage = () => {
 		html?.classList.remove('scroll-locked');
 	}; // 확인 모달 닫기
 
-	const openListModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index : number) => {
+	const openListModal = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>, index: number) => {
 		setIsListModalOpened(true);
 		setUserSelectIndex(index);
 		e.stopPropagation();
@@ -104,13 +132,13 @@ export const GeneratePage = () => {
 	}; // 꽃 전체 리스트 모달 닫기
 
 	useEffect(() => {
-		if(userSelectId !== -1 && userSelectIndex !== -1) {
+		if (userSelectId !== -1 && userSelectIndex !== -1) {
 			const newState = [...selectIdByIndex];
 			newState[userSelectIndex] = userSelectId;
 			setSelectIdByIndex(newState.map((id) => id));
 
-			setUserSelectId(-1)
-			setUserSelectIndex(-1)
+			setUserSelectId(-1);
+			setUserSelectIndex(-1);
 		}
 	}, [userSelectId, userSelectIndex]);
 	// 새로 꽃을 추가했다면, 그 값을 저장하고
@@ -122,41 +150,50 @@ export const GeneratePage = () => {
 		setUsedFlowerIndexs(newState.map((flower) => flower));
 	}; // 기본 추천 꽃과 새로운 추천 꽃의 위치를 바꿀 때
 
-	const selectUserFlower = (id : number) => {
-		setUserSelectId(id)
-	} // 추가하려는 꽃의 id
+	const selectUserFlower = (id: number) => {
+		setUserSelectId(id);
+	}; // 추가하려는 꽃의 id
 
 	const handleSubmit = async () => {
-		const inputs: string[] = ['빨강 장미', '수국', '백합'];
-		await postRegenerateInputs(inputs, axiosInstance);
+		const inputs = usedFlowerIndexs
+			.map((index, i) => {
+				const flower = allFlowers.find((flower) => flower.flowerId === index);
+				return flower && isUsed[i] ? flower.name : undefined;
+			})
+			.filter((name) => name !== undefined) as string[];
+		// 사용한 꽃 이름만 추출
+
+		await postRegenerateInputs(inputs,axiosInstance);
 	};
 
-	if (isLoading) {
-		return <div>loading...</div>
-	}
-	
+	const setUsedState = (index: number, state: boolean) => {
+		const newState = [...isUsed];
+		newState[index] = state;
+		setIsUsed(newState.map((state) => state));
+	}; // 꽃의 사용 여부를 체크 -> 삭제한 경우에는 추출하지 않기 위함
+
 	return (
 		<>
 			<StyledGeneratePage>
 				{/* 로그인 헤더 */}
-				<Header link='https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'></Header>
-				<StyledBouquetImage
-					src='https://velog.velcdn.com/images/lee02g29/post/8160a3b5-8123-4b91-95d1-f813781f6000/image.png'
-					alt='img'
-				></StyledBouquetImage>
+				<Header></Header>
+				<StyledBouquetImage src={bouquetUrl} alt='img'></StyledBouquetImage>
 				{/* 최초 추천 꽃 + 변경 추천 꽃 */}
 				{uf.map((item, index) => {
 					return (
 						<Accordion
 							key={index}
+							$bouquetUrl={uf[index].imgUrl}
 							$index={index}
 							$name={uf[index].name}
-							$meaning={meanings[index]}
-							$color={colors[index]}
+							$meaning={uf[index].meaning.split(',').map((item) => item.trim())}
+							$color={uf[index].color}
 							$recommendByMeaning={flowersByMeaning[index]}
+							$userSelectId={selectIdByIndex[index]}
+							$empty={!isUsed[index]}
 							openListModal={(e) => openListModal(e, index)}
 							changeFlower={changeFlower}
-							$userSelectId={selectIdByIndex[index]}
+							setUsedState={setUsedState}
 						></Accordion>
 					);
 				})}
@@ -164,16 +201,16 @@ export const GeneratePage = () => {
 					<CustomButton $check={true} onClick={openModal}>
 						확인
 					</CustomButton>
-					<CustomButton onClick={handleSubmit}>
-						재생성
-					</CustomButton>
+					<CustomButton onClick={handleSubmit}>재생성</CustomButton>
 				</div>
 			</StyledGeneratePage>
 
 			{/* 완성 확인 모달 */}
 			{isMakeModalOpened && <MakeModal closeModal={closeModal}></MakeModal>}
 			{/* 꽃 전체 리스트 모달 */}
-			{isListModalOpened && <FlowerListModal CloseListModal={CloseListModal} selectUserFlower={selectUserFlower}></FlowerListModal>}
+			{isListModalOpened && (
+				<FlowerListModal CloseListModal={CloseListModal} selectUserFlower={selectUserFlower}></FlowerListModal>
+			)}
 		</>
 	);
 };
