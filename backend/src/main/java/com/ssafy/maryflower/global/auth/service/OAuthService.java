@@ -56,15 +56,18 @@ public class OAuthService {
         String kakaoId = res.getOauthId();
         log.info("oauthId : {}", kakaoId);
         Long memberId = createIfNewMember(kakaoId, res);
-        return login(memberId);
+        return login(kakaoId);
     }
 
-    private LoginDto login(Long memberId) {
-        JwtToken jwtToken = makeJwtToken(memberId.toString());
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> new RuntimeException("멤버가 없습니다."));
+    private LoginDto login(String kakaoId) {
+        log.info("kakaoId while making JWT : {}", kakaoId);
+        JwtToken jwtToken = makeJwtToken(kakaoId);
+        log.info("jwt token build");
+        Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("멤버가 없습니다."));
 
         return LoginDto.builder()
                 .memberId(member.getMemberId())
+                .kakaoId(kakaoId)
                 .nickname(member.getNickname())
                 .profileImage(member.getProfileImage())
                 .jwtToken(jwtToken)

@@ -6,6 +6,7 @@ import com.ssafy.maryflower.global.auth.service.OAuthService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,7 @@ import java.nio.charset.StandardCharsets;
 @RestController
 @RequestMapping("/auth/oauth2")
 @RequiredArgsConstructor
+@Slf4j
 public class OAuthController {
 
   private final OAuthService oAuthService;
@@ -32,6 +34,7 @@ public class OAuthController {
   @GetMapping("login/kakao")
   public ResponseEntity<LoginResponseDto> kakaoLogin(@RequestParam String code){
     LoginDto dto = oAuthService.kakaoOAuthClient(code);
+    log.info("최종 memberId : {}", dto.getMemberId());
     HttpHeaders headers = getHeadersWithCookie(dto.getJwtToken().getRefreshToken());
     LoginResponseDto res = new LoginResponseDto(dto);
     return new ResponseEntity<>(res, headers, HttpStatus.OK);
