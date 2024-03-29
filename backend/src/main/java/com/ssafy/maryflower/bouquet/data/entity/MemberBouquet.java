@@ -7,10 +7,10 @@ import org.springframework.lang.NonNull;
 
 @Entity
 @Getter
-@Setter
 @Builder
-@AllArgsConstructor
+@Setter
 @NoArgsConstructor
+@AllArgsConstructor
 public class MemberBouquet {
 
     @Id

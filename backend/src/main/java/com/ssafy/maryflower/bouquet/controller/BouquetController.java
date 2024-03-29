@@ -11,6 +11,7 @@ import com.ssafy.maryflower.bouquet.service.CacheService;
 import com.ssafy.maryflower.bouquet.service.DataPublishService;
 import com.ssafy.maryflower.bouquet.sse.SseEmitters;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -35,10 +36,17 @@ public class BouquetController {
 
     // SSE 통신 엔드포인트
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
-    public SseEmitter subscribe(){
+    public ResponseEntity<SseEmitter> subscribe() {
         System.out.println("sse 연결");
         Long userId = 1L;
-        return sseEmitters.addEmitter(cacheService.cacheRequestIdWithUserId(userId));
+
+        SseEmitter sseEmitter = sseEmitters.addEmitter(cacheService.cacheRequestIdWithUserId(userId));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache");
+        headers.add("X-Accel-Buffering", "no");
+
+        return new ResponseEntity<>(sseEmitter, headers, HttpStatus.OK);
     }
 
     // whom ,
