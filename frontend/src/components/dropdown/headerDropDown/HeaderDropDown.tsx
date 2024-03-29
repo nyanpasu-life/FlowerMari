@@ -6,7 +6,7 @@ import { useAuthStore } from '../../../stores/auth.ts';
 export const HeaderDropdown = () => {
 	const [isVisible, setIsVisible] = useState(false);
 	const menu = ["로그아웃"]
-	const { clearAuth } = useAuthStore();
+	const { clearAuth, profileImage } = useAuthStore();
 	const navigate = useNavigate();
 
 	const logout = () => {
@@ -30,7 +30,7 @@ export const HeaderDropdown = () => {
 			<DropdownMain>
 				{/* 드롭다운 상단 위치 */}
 				<DropdownBar onClick={toggleDropdown}>
-					<Avatar link='https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'></Avatar>
+					<Avatar link={profileImage || 'https://src.hidoc.co.kr/image/lib/2022/11/15/1668491763670_0.jpg'}></Avatar>
 				</DropdownBar>
 					{/* 드롭다운 메뉴 */}
 					<DropdownMenu $visible={isVisible}>

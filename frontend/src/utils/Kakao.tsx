@@ -45,7 +45,6 @@ export const KakaoCallback = () => {
 
     useEffect(() => {
         const code = new URL(document.location.toString()).searchParams.get('code');
-        console.log(code);
         if (authStore.accessToken) {
             navigate('/index');
             return;
@@ -56,8 +55,8 @@ export const KakaoCallback = () => {
                 .get('/auth/oauth2/login/kakao', {params: {"code" : code}})
                 .then((response) => {
                     authStore.setAuth(response.data);
-                    navigate('/index');
                     console.log("로그인 완료");
+                    navigate('/index');
                 })
                 .catch((e) => {
                     console.error(e);

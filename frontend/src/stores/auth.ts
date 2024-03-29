@@ -29,8 +29,6 @@ const useAuthStore = create<AuthState>()(
             tokenExpireAt: undefined,
 
             setAuth: ({ memberId, nickname, profileImage, accessToken }) => {
-                console.log(import.meta.env.VITE_JWT_ACCESS_EXPIRE_TIME);
-                console.log("date",Date.now());
                 set({
                     accessToken,
                     memberId,
