@@ -6,8 +6,19 @@ from service.imgGenerate import imgGenerate
 from service.publish import publish
 from service.upload import upload
 
+from diffusers import StableDiffusionXLPipeline, StableDiffusionXLImg2ImgPipeline
+import torch
+import os
+
 def worker(work_queue, publisher, threadNum):
-    # print(pipeline)
+    print("파이프라인 준비중..")
+    pipeline = StableDiffusionXLPipeline.from_single_file(
+      os.getenv('SD_MODEL_NAME'), use_safetensors=True,
+      torch_dtype=torch.float16,
+    ).to("cuda:"+str(threadNum))
+
+    print("파이프라인 준비 완료")
+    print(pipeline)
     while True:
         message = work_queue.get()  # 큐에서 작업을 하나 가져옴
         if message['type'] == 'message':
@@ -31,11 +42,11 @@ def worker(work_queue, publisher, threadNum):
 
             print(flowers)
 
-            #image = imgGenerate(flowers, threadNum, requestId, publisher)
+            image = imgGenerate(flowers, threadNum, requestId, pipeline, publisher)
 
-            #url = upload(img=image)
+            url = upload(img=image)
 
-            url = upload()
+            #url = upload()
 
             publish(requestId, url, True, publisher)
 

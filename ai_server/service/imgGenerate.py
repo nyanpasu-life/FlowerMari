@@ -36,12 +36,7 @@ def decode_tensors(pipe, step, timestep, callback_kwargs, requestId, publisher):
 
     return callback_kwargs
 
-def imgGenerate(flowers=['res_rose, hydrangea, lily'], threadNum=-1, requestId=-1, publisher=None):
-
-  pipeline = StableDiffusionXLPipeline.from_single_file(
-      os.getenv('SD_MODEL_NAME'), use_safetensors=True,
-      torch_dtype=torch.float16,
-    ).to("cuda:"+str(threadNum))
+def imgGenerate(flowers=['res_rose, hydrangea, lily'], threadNum=-1, requestId=-1, pipeline=None, publisher=None):
 
   prompt = f"a fresh and beautiful bouquet wraped in paper. {flowers[0] if len(flowers) > 0 else ''}, {flowers[1] if len(flowers) > 1 else ''}, {flowers[2] if len(flowers) > 2 else ''}, product image, sunny spring morning, high resolution, 4k image"
   negative_prompt ="ugly, deformed, disfigured, poor, blurry, human, arms, hand, finger"
