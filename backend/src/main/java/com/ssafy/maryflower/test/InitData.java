@@ -47,7 +47,6 @@ public class InitData {
 
         // 시간 설정
         TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-
         String[] whoms = {"친구", "연인", "가족", "여자친구", "남자친구"};
         String[] situations = {"졸업", "생일", "결혼", "시험", "기념일"};
         String[] message = {"고생했어", "사랑해", "영원한 사랑", "귀여움", "소중함"};

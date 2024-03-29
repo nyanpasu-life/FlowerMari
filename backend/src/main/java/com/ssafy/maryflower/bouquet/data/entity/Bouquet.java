@@ -33,10 +33,10 @@ public class Bouquet extends BaseEntity {
     private Member member;
 
 
-    @OneToMany(mappedBy = "bouquet", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "bouquet", cascade = CascadeType.REMOVE)
     private List<FlowerBouquet> flowerBouquets = new ArrayList<>();
 
-    @OneToMany(mappedBy = "bouquet")
+    @OneToMany(mappedBy = "bouquet", cascade = CascadeType.REMOVE)
     private List<MemberBouquet> memberBouquets = new ArrayList<>();
     /*
     매핑되는 상대테이블의 List를 가지고 있는 이유

@@ -4,11 +4,14 @@ import com.ssafy.maryflower.bouquet.data.dto.request.UserDataHolder;
 import com.ssafy.maryflower.bouquet.data.dto.response.firstGenerateDto;
 import com.ssafy.maryflower.bouquet.data.dto.response.reGenerateDto;
 import com.ssafy.maryflower.bouquet.data.repository.FlowerRepository;
+import com.ssafy.maryflower.bouquet.exception.BouquetErrorCode;
+import com.ssafy.maryflower.bouquet.exception.BouquetException;
 import com.ssafy.maryflower.bouquet.service.BouquetService;
 import com.ssafy.maryflower.bouquet.service.CacheService;
 import com.ssafy.maryflower.bouquet.service.DataPublishService;
 import com.ssafy.maryflower.bouquet.sse.SseEmitters;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -33,12 +36,20 @@ public class BouquetController {
 
     // SSE 통신 엔드포인트
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
-    public SseEmitter subscribe(){
+    public ResponseEntity<SseEmitter> subscribe() {
         System.out.println("sse 연결");
         Long userId = 1L;
-        return sseEmitters.addEmitter(cacheService.cacheRequestIdWithUserId(userId));
+
+        SseEmitter sseEmitter = sseEmitters.addEmitter(cacheService.cacheRequestIdWithUserId(userId));
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Cache-Control", "no-cache");
+        headers.add("X-Accel-Buffering", "no");
+
+        return new ResponseEntity<>(sseEmitter, headers, HttpStatus.OK);
     }
 
+    // whom ,
     @PostMapping("/text-input")
     public ResponseEntity<String> processSendUserInputToAIServer(@RequestBody UserDataHolder userDataHolder) {
 
@@ -46,9 +57,9 @@ public class BouquetController {
         Long userId = 1L;
 
         // api 호출 회수 조회.
-        if (bouquetService.checkApiUses(userId) > 5) {
-            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "API 사용 횟수를 초과하였습니다");
-        }
+//        if (bouquetService.checkApiUses(userId) > 5) {
+//            throw new BouquetException(BouquetErrorCode.API_USAGE_EXCEEDED);
+//        }
 
         // api 사용로그 저장
         bouquetService.createApiLog(userId);
@@ -80,16 +91,16 @@ public class BouquetController {
         Long userId = 1L;
 
         // api 호출 회수 조회.
-        if (bouquetService.checkApiUses(userId) > 5) {
-            throw new ResponseStatusException(HttpStatus.TOO_MANY_REQUESTS, "API 사용 횟수를 초과하였습니다");
-        }
+//        if (bouquetService.checkApiUses(userId) > 5) {
+//            throw new BouquetException(BouquetErrorCode.API_USAGE_EXCEEDED);
+//        }
 
         // api 사용로그 저장
         bouquetService.createApiLog(userId);
 
         // redis 캐시 확인해 requestId 조회.
         String requestId = cacheService.cacheRequestIdWithUserId(userId);
-
+        if(requestId==null) throw new BouquetException(BouquetErrorCode.REQUEST_ID_NOT_FOUND);
         // Redis ch1으로 publish
         DataPublishService.publishFlowerDataToAIServer(flowers, requestId);
 

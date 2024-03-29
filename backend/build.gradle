@@ -84,10 +84,10 @@ dependencies {
 }
 
 // querydsl 저장 위치
-//def querydslSrcDir = 'src/main/generated'
-//tasks.withType(JavaCompile) {
-//	options.generatedSourceOutputDirectory = file(querydslSrcDir)
-//}
+def querydslSrcDir = 'src/main/generated'
+tasks.withType(JavaCompile) {
+	options.generatedSourceOutputDirectory = file(querydslSrcDir)
+}
 
 tasks.named('test') {
 	useJUnitPlatform()

@@ -78,9 +78,13 @@ public class CacheService {
     public void deleteRegenerateDtoFromCache(String requestId){
 
     }
+
+
+
     /*
     Redis Cache에서 먼저 데이터 확인 후, 없으면 DB 조회
      */
+
     @Cacheable(value = "allFlowers")
     public List<FlowerDto> getAllFlowers(){
         System.out.println("getAllFlowers 실행 ");
@@ -95,7 +99,7 @@ public class CacheService {
                     flower.getImageUrl(),
                     flower.getKoreanName(),
                     flower.getMeaning(),
-                    flower.getImageUrl()
+                    flower.getColor()
             );
             flowerDtos.add(dto);
         }
@@ -103,7 +107,10 @@ public class CacheService {
         return flowerDtos;
     }
 
-
+    @CacheEvict(value = "allFlowers", allEntries = true)
+    public void clearAllFlowersCache() {
+        System.out.println("allFlowers 캐시 삭제됨");
+    }
 
     @CachePut(value = "requestId", key="#userId")
     public String cacheRequestIdWithUserId(Long userId,String requestId){
