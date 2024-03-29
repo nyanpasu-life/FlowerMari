@@ -1,9 +1,12 @@
 package com.ssafy.maryflower.bouquet.service;
 
+import com.ssafy.maryflower.bouquet.data.dto.request.DeleteRequestDto;
 import com.ssafy.maryflower.bouquet.data.dto.request.DownloadRequestDto;
 import com.ssafy.maryflower.bouquet.data.entity.Bouquet;
+import com.ssafy.maryflower.bouquet.data.entity.FlowerBouquet;
 import com.ssafy.maryflower.bouquet.data.entity.MemberBouquet;
 import com.ssafy.maryflower.bouquet.data.repository.BouquetRepository;
+import com.ssafy.maryflower.bouquet.data.repository.FlowerBouquetRepository;
 import com.ssafy.maryflower.bouquet.data.repository.MemberBouquetRepository;
 import com.ssafy.maryflower.member.data.entity.Member;
 import com.ssafy.maryflower.member.data.repository.MemberRepository;
@@ -12,10 +15,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
+@Transactional
 @RequiredArgsConstructor
 @Slf4j
 public class DownloadService {
@@ -23,9 +27,9 @@ public class DownloadService {
   private final MemberRepository memberRepository;
   private final BouquetRepository bouquetRepository;
   private final MemberBouquetRepository memberBouquetRepository;
+  private final FlowerBouquetRepository flowerBouquetRepository;
 
-  @Transactional
-  public void downloadImage(DownloadRequestDto req) {
+  public void downloadBouquetImage(DownloadRequestDto req) {
     // 사용자가 다운로드 요청을 보내면 memberboquet에 있는지 확인
     if(req.getMemberId() != null && req.getBouquetId()!= null) {
       Member member = memberRepository.findByMemberId(req.getMemberId());
@@ -38,6 +42,21 @@ public class DownloadService {
             .bouquet(bouquet)
             .build();
         memberBouquetRepository.save(mb);
+      }
+    }
+  }
+
+  public void deleteBouquet(DeleteRequestDto req) {
+    if (req.getMemberId() != null && req.getBouquetId() != null) {
+      Member member = memberRepository.findByMemberId(req.getMemberId());
+      Bouquet bouquet = bouquetRepository.findByBouquetIdAndMember(req.getBouquetId(), member);
+      if(bouquet != null) {
+        bouquetRepository.delete(bouquet);
+        List<MemberBouquet> mb = memberBouquetRepository.findAllByBouquet(bouquet);
+        memberBouquetRepository.deleteAll(mb);
+        flowerBouquetRepository.deleteByBouquet(bouquet);
+        List<FlowerBouquet> fb = flowerBouquetRepository.findAllByBouquet(bouquet);
+        flowerBouquetRepository.deleteAll(fb);
       }
     }
   }
