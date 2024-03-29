@@ -33,10 +33,10 @@ public class ListService {
   private final FlowerBouquetRepository flowerBouquetRepository;
 
   @Transactional
-  public void downloadBouquetImage(DownloadRequestDto req) {
+  public void downloadBouquetImage(DownloadRequestDto req, String kakaoId) {
     // 사용자가 다운로드 요청을 보내면 memberboquet에 있는지 확인
-    if(req.getMemberId() != null && req.getBouquetId()!= null) {
-      Member member = memberRepository.findByMemberId(req.getMemberId());
+    if(req.getBouquetId()!= null) {
+        Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("없는 유저입니다."));
       Bouquet bouquet = bouquetRepository.findByBouquetId(req.getBouquetId());
       MemberBouquet memberBouquet = memberBouquetRepository.findByMemberAndBouquet(member, bouquet);
       // 만일 등록되어 있지 않으면, memberbouquet에 등록하고 true 반환
@@ -51,9 +51,9 @@ public class ListService {
   }
 
     @Transactional
-    public void deleteBouquet(DeleteRequestDto req) {
-        if (req.getMemberId() != null && req.getBouquetId() != null) {
-            Member member = memberRepository.findByMemberId(req.getMemberId());
+    public void deleteBouquet(DeleteRequestDto req, String kakaoId) {
+        if (req.getBouquetId() != null) {
+            Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("없는 유저입니다."));
             Bouquet bouquet = bouquetRepository.findByBouquetIdAndMember(req.getBouquetId(), member);
             if (bouquet != null) {
                 bouquetRepository.delete(bouquet);

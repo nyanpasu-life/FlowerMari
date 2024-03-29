@@ -41,18 +41,17 @@ public class ListController {
     // 부케 다운로드 요청
   @PostMapping("/download")
   public ResponseEntity<Void> downloadBouquet(@RequestBody DownloadRequestDto req) {
-
-    listService.downloadBouquetImage(req);
-    // 200 응답 반환
+    String kakaoId = MemberUtil.getKakaoId();
+    listService.downloadBouquetImage(req, kakaoId);
     return ResponseEntity.ok().build();
   }
 
   // 부케 삭제 요청
   @DeleteMapping("/delete")
-  public ResponseEntity<String> deleteBouquet(@RequestBody DeleteRequestDto req) {
-    // 프로필 사진 등록
-    listService.deleteBouquet(req);
-    return ResponseEntity.ok("success");
+  public ResponseEntity<Void> deleteBouquet(@RequestBody DeleteRequestDto req) {
+    String kakaoId = MemberUtil.getKakaoId();
+    listService.deleteBouquet(req, kakaoId);
+    return ResponseEntity.ok().build();
   }
 
 }

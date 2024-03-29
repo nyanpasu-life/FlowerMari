@@ -54,16 +54,19 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
                 .leftJoin(bouquet.memberBouquets, memberBouquet).distinct()
                 .where(eqKeyword(req));
 
-        switch (req.getOrderBy()) {
-            case LIKE:
-                query.groupBy(bouquet.bouquetId, flowerBouquet.flower.flowerId) // flowerId도 PK임으로 groupBy 조건에 넣어줘야함
-                        .orderBy(memberBouquet.bouquet.count().desc(), bouquet.createDateTime.desc());
-                break;
-            case RECENT:
-                query.orderBy(bouquet.createDateTime.desc());
-                break;
-            default:
-                query.orderBy(bouquet.createDateTime.desc());
+        if (req.getOrderBy() == null) query.orderBy(bouquet.createDateTime.desc());
+        else {
+            switch (req.getOrderBy()) {
+                case LIKE:
+                    query.groupBy(bouquet.bouquetId, flowerBouquet.flower.flowerId) // flowerId도 PK임으로 groupBy 조건에 넣어줘야함
+                            .orderBy(memberBouquet.bouquet.count().desc(), bouquet.createDateTime.desc());
+                    break;
+                case RECENT:
+                    query.orderBy(bouquet.createDateTime.desc());
+                    break;
+                default:
+                    query.orderBy(bouquet.createDateTime.desc());
+            }
         }
 
         int pageSize = pageable.getPageSize();
