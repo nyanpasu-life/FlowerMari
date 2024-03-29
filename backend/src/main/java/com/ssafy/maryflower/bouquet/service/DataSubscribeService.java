@@ -1,6 +1,5 @@
 package com.ssafy.maryflower.bouquet.service;
 
-import com.ssafy.maryflower.bouquet.data.dto.response.MiddleImageUrlDto;
 import com.ssafy.maryflower.bouquet.data.dto.response.firstGenerateDto;
 import com.ssafy.maryflower.bouquet.data.dto.response.reGenerateDto;
 import com.ssafy.maryflower.bouquet.data.dto.transfer.BouquetUrlTransferDto;

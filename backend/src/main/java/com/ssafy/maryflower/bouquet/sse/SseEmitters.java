@@ -1,6 +1,5 @@
 package com.ssafy.maryflower.bouquet.sse;
 
-import com.ssafy.maryflower.bouquet.data.dto.response.MiddleImageUrlDto;
 import com.ssafy.maryflower.bouquet.data.dto.response.firstGenerateDto;
 import com.ssafy.maryflower.bouquet.data.dto.response.reGenerateDto;
 import org.springframework.stereotype.Service;
@@ -83,13 +82,13 @@ public class SseEmitters {
         }
     }
 
-    public void sendImageUrlToClient(String requestId, String middleImageUrl)  {
+    public void sendImageUrlToClient(String requestId, String ImageUrl)  {
 
         try{
             System.out.println("-------------------------middleImageSendEvent---------------------");
-            System.out.println(middleImageUrl);
+            System.out.println(ImageUrl);
             SseEmitter emitter= emitters.get(requestId);
-            emitter.send(SseEmitter.event().name("middleImageSendEvent").data(new MiddleImageUrlDto(middleImageUrl)));
+            emitter.send(SseEmitter.event().name("middleImageSendEvent").data(ImageUrl));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
