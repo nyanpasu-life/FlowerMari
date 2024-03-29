@@ -2,21 +2,28 @@ import { useState } from 'react';
 import { Avatar } from '../../avatar/Avatar';
 import { DropdownMain, DropdownBar, DropdownMenu, DropdownMenuText } from './StyledHeaderDropDown';
 import { useNavigate } from 'react-router-dom';
-
+import { useAuthStore } from '../../../stores/auth.ts';
 export const HeaderDropdown = () => {
 	const [isVisible, setIsVisible] = useState(false);
 	const menu = ["로그아웃"]
-
+	const { clearAuth } = useAuthStore();
 	const navigate = useNavigate();
 
+	const logout = () => {
+		clearAuth();
+		console.log("logout");
+		alert("로그아웃");
+		//document.cookie = 'refreshToken=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+		navigate('/');
+	};
 	const toggleDropdown = () => {
 		setIsVisible((prev) => !prev);
 	}; // 드롭다운 닫기 
 
 	const clickMenu = () => {
 		setIsVisible((prev) => !prev);
-		navigate('/');
-	}; // 드롭다운 닫기 
+		logout();
+	}; // 드롭다운 닫기
 
 	return (
 		<>

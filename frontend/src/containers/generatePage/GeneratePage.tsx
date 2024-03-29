@@ -8,6 +8,7 @@ import { bouquetStore } from '../../stores/bouquetStore';
 import CustomButton from '../../components/button/CustomButton';
 import { postRegenerateInputs } from '../../api/bouquetReCreate.ts'
 import setupSSE from "../../utils/sse.ts";
+import {useLocalAxios} from "../../utils/axios.ts";
 type FlowerDto = {
 	flowerId: number;
 	name: string;
@@ -22,7 +23,7 @@ export const GeneratePage = () => {
 	const [isListModalOpened, setIsListModalOpened] = useState(false);
 	
 	const [isLoading, setIsLoading] = useState(true);
-
+	const axiosInstance = useLocalAxios(true);
 	const [usedFlowerIndexs, setUsedFlowerIndexs] = useState<number[]>([]);
 	// 확인 모달, 꽃 전체 리스트 모달 여부
 
@@ -127,7 +128,7 @@ export const GeneratePage = () => {
 
 	const handleSubmit = async () => {
 		const inputs: string[] = ['빨강 장미', '수국', '백합'];
-		await postRegenerateInputs(inputs);
+		await postRegenerateInputs(inputs, axiosInstance);
 	};
 
 	if (isLoading) {
