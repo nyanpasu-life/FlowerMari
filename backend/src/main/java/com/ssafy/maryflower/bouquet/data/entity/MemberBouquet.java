@@ -8,6 +8,7 @@ import org.springframework.lang.NonNull;
 @Entity
 @Getter
 @Builder
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 public class MemberBouquet {
