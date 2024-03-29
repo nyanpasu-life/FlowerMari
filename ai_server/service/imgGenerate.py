@@ -9,6 +9,7 @@ from PIL import Image
 from Dto import BouquetUrlTransferDto
 from service.publish import publish
 from service.upload import upload
+import time
 
 def latents_to_rgb(latents):
     weights = (
@@ -31,7 +32,7 @@ def decode_tensors(pipe, step, timestep, callback_kwargs, requestId, publisher):
     
     image = latents_to_rgb(latents)
 
-    url = upload(img=image)
+    url = upload(img=image, fileName=f'middle/{requestId}_{step}_{time.strftime("%H%M%S")}')
     publish(requestId, url, False, publisher)
 
     return callback_kwargs

@@ -44,7 +44,7 @@ def worker(work_queue, publisher, threadNum):
 
             image = imgGenerate(flowers, threadNum, requestId, pipeline, publisher)
 
-            url = upload(img=image)
+            url = upload(img=image, fileName=f'complete/{requestId}_{time.strftime("%H%M%S")}')
 
             #url = upload()
 
