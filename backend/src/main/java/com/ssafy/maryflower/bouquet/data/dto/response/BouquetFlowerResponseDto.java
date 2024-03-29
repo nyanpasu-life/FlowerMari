@@ -14,14 +14,14 @@ public class BouquetFlowerResponseDto {
   private Long bouquetId;
   private String imageUrl;
   private LocalDateTime createDateTime;
-  private List<Flower> flowers;
+  private List<Long> flowerIds;
 
   @QueryProjection
-  public BouquetFlowerResponseDto(Long memberId, Long bouquetId, String imageUrl, LocalDateTime createDateTime, List<Flower> flowers) {
+  public BouquetFlowerResponseDto(Long memberId, Long bouquetId, String imageUrl, LocalDateTime createDateTime, List<Long> flowerIds) {
     this.memberId = memberId;
     this.bouquetId = bouquetId;
     this.imageUrl = imageUrl;
     this.createDateTime = createDateTime;
-    this.flowers = flowers;
+    this.flowerIds = flowerIds;
   }
 }

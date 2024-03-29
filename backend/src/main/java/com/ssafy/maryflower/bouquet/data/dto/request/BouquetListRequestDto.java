@@ -8,16 +8,16 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 public class BouquetListRequestDto {
-  private String type;
+  private SearchType type;
   private String searchKeyword;
   private BouquetOrderBy orderBy;
+  private int lastIndex;
 
   @Builder
-  public BouquetListRequestDto(String type, String searchKeyword, BouquetOrderBy orderBy) {
+  public BouquetListRequestDto(SearchType type, String searchKeyword, BouquetOrderBy orderBy, int lastIndex) {
     this.type = type;
     this.searchKeyword = searchKeyword;
     this.orderBy = orderBy;
+    this.lastIndex = lastIndex;
   }
-
-
 }

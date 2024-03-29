@@ -2,6 +2,9 @@ package com.ssafy.maryflower.bouquet.service;
 
 import com.ssafy.maryflower.bouquet.data.dto.request.BouquetListRequestDto;
 import com.ssafy.maryflower.bouquet.data.dto.response.BouquetFlowerResponseDto;
+import com.ssafy.maryflower.bouquet.data.dto.response.BouquetListResponse;
+import com.ssafy.maryflower.bouquet.data.dto.response.BouquetSliceResponse;
+import com.ssafy.maryflower.bouquet.data.dto.transfer.BouquetSearchDto;
 import com.ssafy.maryflower.bouquet.data.repository.BouquetRepository;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,8 +23,12 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ListService {
 
   private final BouquetRepository bouquetRepository;
-  public Slice<BouquetFlowerResponseDto> search(BouquetListRequestDto req, Pageable pageable) {
+  public BouquetSliceResponse search(BouquetListRequestDto req, Pageable pageable) {
     return bouquetRepository.searchRelevantBouquet(req, pageable);
+  }
+
+  public Slice<BouquetFlowerResponseDto> searchLegacy(BouquetListRequestDto req, Pageable pageable) {
+    return bouquetRepository.searchRelevantBouquetLegacy(req, pageable);
   }
 
 }

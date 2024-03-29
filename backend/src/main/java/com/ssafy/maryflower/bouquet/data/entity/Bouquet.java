@@ -25,7 +25,6 @@ public class Bouquet extends BaseEntity {
     private String situation;
     private String message;
     private String imageUrl;
-    private String flowerIds;
 
 
     @ManyToOne
@@ -45,7 +44,6 @@ public class Bouquet extends BaseEntity {
     Bouquet 엔티티에서 연관된 Flower 엔티티를 조회 할 수 있으며, 반대로도 조회 가능.
     또 데이터의 일관성을 유지. flower
      */
-
 
 
     @Builder
