@@ -44,7 +44,7 @@ application-test.yml
 data.mv.db
 
 ### querydsl ###
-**/generated
+**/generated/
 
 
 .idea/

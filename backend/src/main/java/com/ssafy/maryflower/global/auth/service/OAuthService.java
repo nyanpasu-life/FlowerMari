@@ -98,7 +98,7 @@ public class OAuthService {
                             .kakaoId(kakaoId)
                             .nickname(res.getNickname())
                             .password(passwordEncoder.encode(kakaoId + salt))
-                            .profileImage(res.getProfileImageUrl())
+                            .profileImage(res.getProfileImageUrl().replaceFirst("http", "https"))
                             .role(UserRole.USER).build();
             memberRepository.save(member);
         }
