@@ -8,6 +8,7 @@ const useLocalAxios = (isAuth: boolean = true): AxiosInstance => {
 
     const instance = Axios.create({
         baseURL: import.meta.env.VITE_API_BASE_URL,
+        withCredentials: true,
     });
 
     if (isAuth) {
