@@ -206,7 +206,7 @@ export const GeneratePage = () => {
 			</StyledGeneratePage>
 
 			{/* 완성 확인 모달 */}
-			{isMakeModalOpened && <MakeModal closeModal={closeModal}></MakeModal>}
+			{isMakeModalOpened && <MakeModal closeModal={closeModal} axiosInstance={axiosInstance}></MakeModal>}
 			{/* 꽃 전체 리스트 모달 */}
 			{isListModalOpened && (
 				<FlowerListModal CloseListModal={CloseListModal} selectUserFlower={selectUserFlower}></FlowerListModal>
