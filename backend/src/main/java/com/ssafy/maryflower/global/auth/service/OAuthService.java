@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -35,7 +36,6 @@ public class OAuthService {
     private final OAuthClient kakaoOAuthClient;
     private final AES128Util aes128Util;
 
-
     @Value("spring.security.oauth2.client.registration.password-salt")
     private String salt;
 
@@ -46,9 +46,6 @@ public class OAuthService {
         // userId 정보를 가져와서 redis에 있는 refreshtoken과 같은지 확인
         Claims claims = jwtTokenProvider.parseClaims(refreshToken);
         String kakaoId = claims.getSubject();
-//
-//        String redisRefreshToken = jwtRedisRepository.find(KeyUtil.getRefreshTokenKey(memberId));
-//        if (redisRefreshToken == null || !redisRefreshToken.equals(refreshToken)) throw new RuntimeException("refreshToken이 유효하지 않습니다");
         // 같다면 refreshToken을 활용하여 새로운 accessToken을 발급
         return jwtTokenProvider.generateAccessToken(kakaoId, claims.get("auth").toString());
     }
@@ -56,18 +53,21 @@ public class OAuthService {
     @Transactional
     public LoginDto kakaoOAuthClient(String code) {
         KakaoOAuthMemberInfoResponse res = getKakaoUserInfo(code);
-        String memberId = res.getOauthId();
-        log.info("oauthId : {}", memberId);
-        createIfNewMember(memberId, res);
-        return login(memberId);
+        String kakaoId = res.getOauthId();
+        log.info("oauthId : {}", kakaoId);
+        Long memberId = createIfNewMember(kakaoId, res);
+        return login(kakaoId);
     }
 
     private LoginDto login(String kakaoId) {
+        log.info("kakaoId while making JWT : {}", kakaoId);
         JwtToken jwtToken = makeJwtToken(kakaoId);
+        log.info("jwt token build");
         Member member = memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("멤버가 없습니다."));
 
         return LoginDto.builder()
                 .memberId(member.getMemberId())
+                .kakaoId(kakaoId)
                 .nickname(member.getNickname())
                 .profileImage(member.getProfileImage())
                 .jwtToken(jwtToken)
@@ -91,17 +91,18 @@ public class OAuthService {
         return jwtTokenProvider.generateToken(authentication);
     }
 
-    private void createIfNewMember(String kakaoId, KakaoOAuthMemberInfoResponse res) {
+    private Long createIfNewMember(String kakaoId, KakaoOAuthMemberInfoResponse res) {
         if (!memberRepository.existsByKakaoId(kakaoId)) {
             Member member =
                     Member.builder()
                             .kakaoId(kakaoId)
                             .nickname(res.getNickname())
                             .password(passwordEncoder.encode(kakaoId + salt))
-                            .profileImage(res.getProfileImageUrl())
+                            .profileImage(res.getProfileImageUrl().replaceFirst("http", "https"))
                             .role(UserRole.USER).build();
             memberRepository.save(member);
         }
+        return memberRepository.findByKakaoId(kakaoId).orElseThrow(() -> new RuntimeException("멤버가 없습니다")).getMemberId();
     }
 
 

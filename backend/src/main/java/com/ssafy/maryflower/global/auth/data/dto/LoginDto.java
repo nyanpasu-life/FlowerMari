@@ -10,6 +10,7 @@ import lombok.Getter;
 public class LoginDto {
 
     private Long memberId;
+    private String kakaoId;
     private String nickname;
     private String profileImage;
     private JwtToken jwtToken;

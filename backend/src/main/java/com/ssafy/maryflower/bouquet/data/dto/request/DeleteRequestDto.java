@@ -4,6 +4,5 @@ import lombok.Getter;
 
 @Getter
 public class DeleteRequestDto {
-  private Long memberId;
   private Long bouquetId;
 }

@@ -3,6 +3,7 @@ package com.ssafy.maryflower.bouquet.service;
 import com.ssafy.maryflower.bouquet.data.FlowerData;
 import com.ssafy.maryflower.bouquet.data.dto.response.FlowerDto;
 import com.ssafy.maryflower.bouquet.data.entity.Flower;
+import com.ssafy.maryflower.bouquet.data.repository.BouquetRepository;
 import com.ssafy.maryflower.bouquet.data.repository.FlowerRepository;
 import com.ssafy.maryflower.member.data.entity.Member;
 import com.ssafy.maryflower.member.data.repository.MemberRepository;
@@ -21,6 +22,7 @@ public class FlowerDataLoader implements CommandLineRunner {
     private final BouquetService bouquetService;
     private final MemberRepository memberRepository;
     private final FlowerRepository flowerRepository;
+    private final BouquetRepository bouquetRepository;
     @Override
     public void run(String... args) throws Exception {
         System.out.println("run?");
@@ -31,6 +33,9 @@ public class FlowerDataLoader implements CommandLineRunner {
     }
     private void loadFlowerData() {
         System.out.println("flower data load");
+
+        if (flowerRepository.count() >= FlowerData.FLOWERS.size()) return;
+
         for (FlowerData.FlowerInfo info : FlowerData.FLOWERS) {
             Flower flower = Flower.builder()
                     .koreanName(info.getKoreanName())
@@ -44,14 +49,21 @@ public class FlowerDataLoader implements CommandLineRunner {
     }
     private void loadMemberData(){
         System.out.println("member data load");
-        Member member = new Member();
-        member.setKakaoId("TestKakaoId");
-        member.setProfileImage("TestPorfileImage");
-        memberRepository.save(member);
+        String kakaoId = "TestKakaoId";
+
+        if (!memberRepository.existsByKakaoId(kakaoId)){
+            Member member = new Member();
+            member.setKakaoId(kakaoId);
+            member.setProfileImage("TestPorfileImage");
+            memberRepository.save(member);
+        }
     }
 
     private void loadBouquetData(){
         System.out.println("bouquet data load");
+
+
+
         List<Long> testList;
 
         testList = new ArrayList<>();
