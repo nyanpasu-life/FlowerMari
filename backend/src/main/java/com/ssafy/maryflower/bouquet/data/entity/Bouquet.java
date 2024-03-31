@@ -31,10 +31,10 @@ public class Bouquet extends BaseEntity {
 
 
     @OneToMany(mappedBy = "bouquet", cascade = CascadeType.REMOVE)
-    private List<FlowerBouquet> FlowerBouquets = new ArrayList<>();
+    private List<FlowerBouquet> flowerBouquets = new ArrayList<>();
 
     @OneToMany(mappedBy = "bouquet", cascade = CascadeType.REMOVE)
-    private List<MemberBouquet> MemberBouquets = new ArrayList<>();
+    private List<MemberBouquet> memberBouquets = new ArrayList<>();
     /*
     매핑되는 상대테이블의 List를 가지고 있는 이유
     - 한 엔티티에서 연관된 다른 엔티티로의 접근과 반대 방향으로의 접근 모두 가능하게 하기 위해.

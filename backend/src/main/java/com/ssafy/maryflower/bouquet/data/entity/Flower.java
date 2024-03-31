@@ -35,7 +35,7 @@ public class Flower extends BaseEntity {
      */
 
     @OneToMany(mappedBy = "flower")
-    private List<FlowerBouquet> FlowerBouquets = new ArrayList<>();
+    private List<FlowerBouquet> flowerBouquets = new ArrayList<>();
 
 
 

@@ -33,7 +33,6 @@ public class BouquetController {
     private final DataPublishService DataPublishService;
 
 
-
     // SSE 통신 엔드포인트
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     public ResponseEntity<SseEmitter> subscribe() {
@@ -55,6 +54,7 @@ public class BouquetController {
 
         // 토큰에서 userId 추출.
         Long userId = 1L;
+
 
         // api 호출 회수 조회.
 //        if (bouquetService.checkApiUses(userId) > 5) {
@@ -111,7 +111,7 @@ public class BouquetController {
     public ResponseEntity<String> confirmBouquet() {
 
         // 토큰에서  userId 추출.
-        Long userId = 1l;
+        Long userId = 1L;
 
         // redis 캐시 확인해 requestId 조회.
         String requestId = cacheService.cacheRequestIdWithUserId(userId);
