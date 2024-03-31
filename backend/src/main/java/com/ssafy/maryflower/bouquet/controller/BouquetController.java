@@ -10,6 +10,9 @@ import com.ssafy.maryflower.bouquet.service.BouquetService;
 import com.ssafy.maryflower.bouquet.service.CacheService;
 import com.ssafy.maryflower.bouquet.service.DataPublishService;
 import com.ssafy.maryflower.bouquet.sse.SseEmitters;
+import com.ssafy.maryflower.global.util.MemberUtil;
+import com.ssafy.maryflower.infrastructure.config.CacheConfig;
+import com.ssafy.maryflower.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -31,14 +34,14 @@ public class BouquetController {
     private final BouquetService bouquetService;
     private final CacheService cacheService;
     private final DataPublishService DataPublishService;
-
-
+    private final MemberService memberService;
     // SSE 통신 엔드포인트
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     public ResponseEntity<SseEmitter> subscribe() {
         System.out.println("sse 연결");
-        Long userId = 1L;
 
+        Long userId=memberService.getMemberIdByKakaoId(MemberUtil.getKakaoId())
+                .orElseThrow(()->new RuntimeException("Member를 찾을 수 없습니다"));
         SseEmitter sseEmitter = sseEmitters.addEmitter(cacheService.cacheRequestIdWithUserId(userId));
 
         HttpHeaders headers = new HttpHeaders();
@@ -53,7 +56,8 @@ public class BouquetController {
     public ResponseEntity<String> processSendUserInputToAIServer(@RequestBody UserDataHolder userDataHolder) {
 
         // 토큰에서 userId 추출.
-        Long userId = 1L;
+        Long userId=memberService.getMemberIdByKakaoId(MemberUtil.getKakaoId())
+                .orElseThrow(()->new RuntimeException("Member를 찾을 수 없습니다"));
 
 
         // api 호출 회수 조회.
@@ -88,7 +92,8 @@ public class BouquetController {
     private ResponseEntity<String> processSendUserFlowersToAIServer(@RequestBody List<String> flowers) {
 
         // 토큰에서 userId 추출.
-        Long userId = 1L;
+        Long userId=memberService.getMemberIdByKakaoId(MemberUtil.getKakaoId())
+                .orElseThrow(()->new RuntimeException("Member를 찾을 수 없습니다"));
 
         // api 호출 회수 조회.
 //        if (bouquetService.checkApiUses(userId) > 5) {

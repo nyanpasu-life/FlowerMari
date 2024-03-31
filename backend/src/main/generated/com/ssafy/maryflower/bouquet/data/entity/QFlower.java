@@ -29,7 +29,7 @@ public class QFlower extends EntityPathBase<Flower> {
 
     public final StringPath englishName = createString("englishName");
 
-    public final ListPath<FlowerBouquet, QFlowerBouquet> FlowerBouquets = this.<FlowerBouquet, QFlowerBouquet>createList("FlowerBouquets", FlowerBouquet.class, QFlowerBouquet.class, PathInits.DIRECT2);
+    public final ListPath<FlowerBouquet, QFlowerBouquet> flowerBouquets = this.<FlowerBouquet, QFlowerBouquet>createList("flowerBouquets", FlowerBouquet.class, QFlowerBouquet.class, PathInits.DIRECT2);
 
     public final NumberPath<Long> flowerId = createNumber("flowerId", Long.class);
 
