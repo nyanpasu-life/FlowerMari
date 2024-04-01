@@ -40,9 +40,9 @@ public class BouquetController {
     public ResponseEntity<SseEmitter> subscribe() {
         System.out.println("sse 연결");
 
-        Long userId=1L;
-//        Long userId=memberService.getMemberIdByKakaoId(MemberUtil.getKakaoId())
-//                .orElseThrow(()->new RuntimeException("Member를 찾을 수 없습니다"));
+//        Long userId=1L;
+        Long userId=memberService.getMemberIdByKakaoId(MemberUtil.getKakaoId())
+                .orElseThrow(()->new RuntimeException("Member를 찾을 수 없습니다"));
         SseEmitter sseEmitter = sseEmitters.addEmitter(cacheService.cacheRequestIdWithUserId(userId));
 
         HttpHeaders headers = new HttpHeaders();
