@@ -84,12 +84,6 @@ export const GeneratePage = () => {
 		}
 	}, [requestId]);
 
-	// useEffect(() => {
-	// 	console.log(bouquetUrl)
-	// 	setBouquetImg(bouquetStore.getState().bouquetUrl)
-	// }, [bouquetUrl])
-
-
 	useEffect(() => {
 		const unsubscribe = bouquetStore.subscribe((usedFlowerState) => {
 			// bouquetStore의 usedFlower 값이 변경될 때마다 호출
@@ -99,9 +93,6 @@ export const GeneratePage = () => {
 		});
 		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
-
-		// console.log("generatePage: usedFlower:", usedFlower);
-		// console.log("bouURl",bouquetUrl)
 
 		return unsubscribe;
 	},[usedFlower])

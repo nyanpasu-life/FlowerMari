@@ -7,6 +7,7 @@ import { CompletePage } from './containers/completePage/CompletePage.tsx';
 import { BouquetListPage } from './containers/bouquetListPage/BouquetListPage.tsx';
 // import { GenerateTestPage} from "./containers/generatePage/GenerateTestPage.tsx";
 import {KakaoCallback} from "./utils/Kakao.tsx";
+import { FindFlowerShopPage } from './containers/findFlowerShop/FindFlowerShopPage.tsx';
 import {BouquetListTestPage} from "./containers/bouquetListPage/BoutquetListTestPage.tsx";
 
 export default function App() {
@@ -42,6 +43,7 @@ export default function App() {
 						{/*<Route path='/gtp' element={<GenerateTestPage />} />*/}
 						<Route path='/complete' element={<CompletePage />} />
 						<Route path='/list' element={<BouquetListPage />} />
+						<Route path='/map' element={<FindFlowerShopPage />} />
 						<Route path='/ltp' element={<BouquetListTestPage />}/>
 					</Route>
 					<Route>
