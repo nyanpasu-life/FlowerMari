@@ -46,7 +46,7 @@ public class SseEmitters {
             try{
                 if(firstGenerateDto.getUsedFlower().size()!=firstGenerateDto.getRecommendByMeaning().size()){
                     for(int i=0;i<firstGenerateDto.getUsedFlower().size()-firstGenerateDto.getRecommendByMeaning().size();i++){
-                        firstGenerateDto.getRecommendByMeaning().add(Long.valueOf(i+2));
+                        firstGenerateDto.getRecommendByMeaning().add((long) (i + 2));
                     }
                 }
                 System.out.println("--------------------firstGenerate-------------------");

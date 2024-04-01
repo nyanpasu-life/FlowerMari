@@ -22,6 +22,7 @@ public class SelectFlowerService {
     public String chat(String prompt){
         ChatGPTRequest request = new ChatGPTRequest(model, prompt);
         ChatGPTResponse chatGPTResponse =  template.postForObject(apiURL, request, ChatGPTResponse.class);
+        assert chatGPTResponse != null;
         return chatGPTResponse.getChoices().get(0).getMessage().getContent();
     }
 

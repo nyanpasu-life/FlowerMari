@@ -14,6 +14,7 @@ import com.ssafy.maryflower.global.util.MemberUtil;
 import com.ssafy.maryflower.infrastructure.config.CacheConfig;
 import com.ssafy.maryflower.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/bouquet")
 @RequiredArgsConstructor
+@Slf4j
 public class BouquetController {
 
     private final SseEmitters sseEmitters;
@@ -40,9 +42,9 @@ public class BouquetController {
     public ResponseEntity<SseEmitter> subscribe() {
         System.out.println("sse 연결");
 
-        Long userId=1L;
-//        Long userId=memberService.getMemberIdByKakaoId(MemberUtil.getKakaoId())
-//                .orElseThrow(()->new RuntimeException("Member를 찾을 수 없습니다"));
+//        Long userId=1L;
+        Long userId=memberService.getMemberIdByKakaoId(MemberUtil.getKakaoId())
+                .orElseThrow(()->new RuntimeException("Member를 찾을 수 없습니다"));
         SseEmitter sseEmitter = sseEmitters.addEmitter(cacheService.cacheRequestIdWithUserId(userId));
 
         HttpHeaders headers = new HttpHeaders();
@@ -59,6 +61,7 @@ public class BouquetController {
         // 토큰에서 userId 추출.
         Long userId=memberService.getMemberIdByKakaoId(MemberUtil.getKakaoId())
                 .orElseThrow(()->new RuntimeException("Member를 찾을 수 없습니다"));
+        log.info("kakaoId : {}",MemberUtil.getKakaoId());
 //        Long userId=1L;
 
         // api 호출 회수 조회.

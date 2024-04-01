@@ -33,7 +33,7 @@ import static com.ssafy.maryflower.bouquet.data.entity.QMemberBouquet.memberBouq
 public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private static final int MAX_FLOWER_COUNT = 3;
+    private static final long MAX_FLOWER_COUNT = 3L;
 
     @Override
     public BouquetSliceResponse searchRelevantBouquet(BouquetListRequestDto req, Pageable pageable) {
@@ -72,7 +72,7 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
         int pageSize = pageable.getPageSize();
         List<BouquetFlowerDto> content =
                 query.offset(req.getLastIndex())
-                        .limit(pageSize * MAX_FLOWER_COUNT + 1)
+                        .limit( pageSize * MAX_FLOWER_COUNT + 1)
                         .fetch();
 
         return makeResponse(content, req, pageable);
@@ -83,15 +83,17 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
 
         int count = 0;
         for (BouquetFlowerDto dto : content) {
-            log.info("bouquet Id : {}", dto.getBouquetId());
             if (!makeBouquet(dto, pageable.getPageSize(), list)) break;
             count++;
-            log.info("count : {}", count);
-
         }
 
-        boolean hasNext = content.size() >= count;
+        boolean hasNext = content.size() > count;
         int lastindex = req.getLastIndex() + count;
+
+        log.info("count : {}", count);
+        log.info("content.size() : {}", content.size());
+        log.info("hasNext : {}", hasNext);
+
         return new BouquetSliceResponse(new SliceImpl<>(list, pageable, hasNext), lastindex);
     }
 
