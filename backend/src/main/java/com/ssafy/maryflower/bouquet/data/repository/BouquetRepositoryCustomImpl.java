@@ -33,7 +33,7 @@ import static com.ssafy.maryflower.bouquet.data.entity.QMemberBouquet.memberBouq
 public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
 
     private final JPAQueryFactory jpaQueryFactory;
-    private static final int MAX_FLOWER_COUNT = 3;
+    private static final long MAX_FLOWER_COUNT = 3L;
 
     @Override
     public BouquetSliceResponse searchRelevantBouquet(BouquetListRequestDto req, Pageable pageable) {
@@ -72,7 +72,7 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
         int pageSize = pageable.getPageSize();
         List<BouquetFlowerDto> content =
                 query.offset(req.getLastIndex())
-                        .limit(pageSize * MAX_FLOWER_COUNT + 1)
+                        .limit( pageSize * MAX_FLOWER_COUNT + 1)
                         .fetch();
 
         return makeResponse(content, req, pageable);
