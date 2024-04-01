@@ -94,12 +94,13 @@ public class FlowerDataLoader implements CommandLineRunner {
 
     private void initData() {
 
-        memberRepository.save(
-                Member.builder()
-                        .nickname("닉네임")
-                        .kakaoId("123")
-                        .build()
-        );
+        if (!memberRepository.existsByKakaoId("123")){
+            memberRepository.save(
+                    Member.builder()
+                            .nickname("닉네임")
+                            .kakaoId("123")
+                            .build());
+        }
 
         Member member1 = memberRepository.findByKakaoId("123").get();
         Long memberId = member1.getMemberId();

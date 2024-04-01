@@ -83,15 +83,17 @@ public class BouquetRepositoryCustomImpl implements BouquetRepositoryCustom {
 
         int count = 0;
         for (BouquetFlowerDto dto : content) {
-            log.info("bouquet Id : {}", dto.getBouquetId());
             if (!makeBouquet(dto, pageable.getPageSize(), list)) break;
             count++;
-            log.info("count : {}", count);
-
         }
 
-        boolean hasNext = content.size() >= count;
+        boolean hasNext = content.size() > count;
         int lastindex = req.getLastIndex() + count;
+
+        log.info("count : {}", count);
+        log.info("content.size() : {}", content.size());
+        log.info("hasNext : {}", hasNext);
+
         return new BouquetSliceResponse(new SliceImpl<>(list, pageable, hasNext), lastindex);
     }
 
