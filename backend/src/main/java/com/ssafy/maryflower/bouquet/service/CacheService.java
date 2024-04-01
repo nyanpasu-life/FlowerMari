@@ -122,7 +122,7 @@ public class CacheService {
         return null;
     }
 
-    @CacheEvict(value="requestId", key="userId")
+    @CacheEvict(value="requestId", key="#userId")
     public void deleteRequestIdFromCache(Long userId){}
 
 
