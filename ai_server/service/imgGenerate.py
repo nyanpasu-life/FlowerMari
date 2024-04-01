@@ -3,7 +3,6 @@ import json
 from diffusers import StableDiffusionXLPipeline, StableDiffusionXLImg2ImgPipeline
 import torch
 import os
-from compel import Compel, ReturnedEmbeddingsType
 from PIL import Image
 
 from Dto import BouquetUrlTransferDto
