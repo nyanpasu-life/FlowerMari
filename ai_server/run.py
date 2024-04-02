@@ -31,4 +31,8 @@ subscriber = rd.pubsub()
 subscriber.subscribe('ch1')
 
 for message in subscriber.listen():
+    if message['type'] == 'message':
+        print("############################")
+        print("요청이 들어옴")
+        print(message['data'].decode())
     work_queue.put(message)  # 작업 큐에 메시지 추가
