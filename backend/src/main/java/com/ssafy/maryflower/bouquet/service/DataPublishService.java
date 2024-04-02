@@ -27,20 +27,30 @@ public class DataPublishService {
     public void publishFlowerDataToAIServer(String whom,String situation,String message,String requestId){
 
 
-        // gpt api를 통해 사용될 꽃, 추천 꽃 생성,
+
         String[] flowers= selectFlowerService.chat(selectFlowerService.makePrompt(whom,situation,message)).split(",");
 
         firstGenerateDto firstgeneratedto=new firstGenerateDto();
 
         for(int i=0;i<flowers.length;i++){
-
+            System.out.println("첫 생성 꽃 이름 : "+flowers[i]);
             if(i%2 ==0 ){
                 // mainflower
                 flowerRepository.findFlowerByName(flowers[i]).ifPresent(firstgeneratedto.getUsedFlower()::add);
+
             }else{
                 // subflower
+
+
                 flowerRepository.findFlowerByName(flowers[i]).ifPresent(firstgeneratedto.getRecommendByMeaning()::add);
             }
+        }
+        for(Long l:firstgeneratedto.getUsedFlower()){
+            System.out.println("사용된 Main 꽃 ID : "+l);
+        }
+
+        for(Long l:firstgeneratedto.getRecommendByMeaning()){
+            System.out.println("사용된 Sub 꽃 ID : "+l);
         }
 
         // 인기순 Top 7 꽃 id 리스트에 저징.
@@ -67,29 +77,30 @@ public class DataPublishService {
     @Async
     public void publishFlowerDataToAIServer(List<String> userFlowers, String requestId){
 
+        // 메인 꽃 추출
         String[] flowers= selectFlowerService.chat(selectFlowerService.makePrompt(userFlowers))
                 .replace(", ",",") .split(",");
+
+
         System.out.println("regenerate Test");
+
         for(String test:flowers){
-            System.out.print(test+",");
+            System.out.println("재생성 꽃이름 : " +test);
         }
 
         reGenerateDto regenerateDto=new reGenerateDto();
 
         System.out.println("front data size : "+userFlowers.size());
-        for(int i=0;i<userFlowers.size();i++){
 
+        for(int i=0;i<userFlowers.size();i++) {
             // dto에 mainflower pk 저장
             flowerRepository.findFlowerByName(userFlowers.get(i)).ifPresent(regenerateDto.getUsedFlower()::add);
-            final Long tempI = Long.valueOf(i);
-            // dto에 꽃말기준 추천 꽃 pk 저장
-            flowerRepository.findFlowerByName(flowers[i]).
-                    ifPresentOrElse(
-                            regenerateDto.getRecommendByMeaning()::add,
-                            ()-> {
-                                regenerateDto.getRecommendByMeaning().add(tempI);
-                            }
-                    );
+
+            if (i < flowers.length) {
+                flowerRepository.findFlowerByName(flowers[i]).ifPresent(regenerateDto.getRecommendByMeaning()::add);
+            } else {
+                regenerateDto.getRecommendByMeaning().add(regenerateDto.getUsedFlower().get(i));
+            }
 
         }
 
@@ -103,7 +114,7 @@ public class DataPublishService {
         cacheService.cachereGenerateDto(requestId,regenerateDto);
 
         for(Long l:regenerateDto.getRecommendByMeaning()){
-            System.out.println(l+" ");
+            System.out.println("추천 꽃 id : "+l);
         }
 
         // main flower 정보, 요청 아이디 dto로 Redis publish
