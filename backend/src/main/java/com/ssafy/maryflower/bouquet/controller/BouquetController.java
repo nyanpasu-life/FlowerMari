@@ -142,7 +142,7 @@ public class BouquetController {
                 usedFlowers.add(regeneratedto.getUsedFlower().get(i));
             }
             bouquetService.saveBucketData(userDataHolder.getWhom(), userDataHolder.getSituation(), userDataHolder.getMessage()
-                    , regeneratedto.getBouquetUrl(), userId, regeneratedto.getUsedFlower());
+                    , regeneratedto.getBouquetUrl(), userId, usedFlowers);
             // 캐시 데이터 삭제.
             cacheService.deleteRegenerateDtoFromCache(requestId);
         } else {
@@ -154,7 +154,7 @@ public class BouquetController {
                 usedFlowers.add(firstgeneratedto.getUsedFlower().get(i));
             }
             bouquetService.saveBucketData(userDataHolder.getWhom(), userDataHolder.getSituation(), userDataHolder.getMessage()
-                    , firstgeneratedto.getBouquetUrl(), userId, firstgeneratedto.getUsedFlower());
+                    , firstgeneratedto.getBouquetUrl(), userId, usedFlowers);
             // 캐시 데이터 삭제.
             cacheService.deleteFirstGenerateDto(requestId);
         }
