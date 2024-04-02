@@ -46,7 +46,7 @@ public class SseEmitters {
             try{
                 if(firstGenerateDto.getUsedFlower().size()!=firstGenerateDto.getRecommendByMeaning().size()){
                     for(int i=0;i<firstGenerateDto.getUsedFlower().size()-firstGenerateDto.getRecommendByMeaning().size();i++){
-                        firstGenerateDto.getRecommendByMeaning().add((long) (i + 2));
+                        firstGenerateDto.getRecommendByMeaning().add(firstGenerateDto.getUsedFlower().get(i));
                     }
                 }
                 System.out.println("--------------------firstGenerate-------------------");
@@ -67,6 +67,11 @@ public class SseEmitters {
         SseEmitter emitter= emitters.get(requestId);
         if(emitter !=null){
             try{
+                if(regeneratedto.getUsedFlower().size()!=regeneratedto.getRecommendByMeaning().size()){
+                    for(int i=0;i<regeneratedto.getUsedFlower().size()-regeneratedto.getRecommendByMeaning().size();i++){
+                        regeneratedto.getRecommendByMeaning().add(regeneratedto.getUsedFlower().get(i));
+                    }
+                }
                 System.out.println("--------------------regeneratedto-------------------");
                 System.out.println("url : "+regeneratedto.getBouquetUrl());
                 System.out.println("Api 호출 횟수 : "+regeneratedto.getApiUsageCount());

@@ -22,6 +22,8 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import java.util.Optional;
@@ -134,15 +136,25 @@ public class BouquetController {
         if (cacheService.cachereGenerateDto(requestId) != null) {
             // 재생성을 했을 경우
             reGenerateDto regeneratedto = cacheService.cachereGenerateDto(requestId);
+            List<Long> usedFlowers=new ArrayList<>();
+            for(int i=0;i<regeneratedto.getUsedFlower().size();i++){
+                if(i==3) break;
+                usedFlowers.add(regeneratedto.getUsedFlower().get(i));
+            }
             bouquetService.saveBucketData(userDataHolder.getWhom(), userDataHolder.getSituation(), userDataHolder.getMessage()
-                    , regeneratedto.getBouquetUrl(), userId, regeneratedto.getUsedFlower());
+                    , regeneratedto.getBouquetUrl(), userId, usedFlowers);
             // 캐시 데이터 삭제.
             cacheService.deleteRegenerateDtoFromCache(requestId);
         } else {
             // 재생성을 하지 않았을 경우,
             firstGenerateDto firstgeneratedto = cacheService.cachefirstGenerateDto(requestId);
+            List<Long> usedFlowers=new ArrayList<>();
+            for(int i=0;i<firstgeneratedto.getUsedFlower().size();i++){
+                if(i==3) break;
+                usedFlowers.add(firstgeneratedto.getUsedFlower().get(i));
+            }
             bouquetService.saveBucketData(userDataHolder.getWhom(), userDataHolder.getSituation(), userDataHolder.getMessage()
-                    , firstgeneratedto.getBouquetUrl(), userId, firstgeneratedto.getUsedFlower());
+                    , firstgeneratedto.getBouquetUrl(), userId, usedFlowers);
             // 캐시 데이터 삭제.
             cacheService.deleteFirstGenerateDto(requestId);
         }

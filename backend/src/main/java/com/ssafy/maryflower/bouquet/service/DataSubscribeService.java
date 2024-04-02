@@ -24,10 +24,12 @@ public class DataSubscribeService {
         else if(cacheService.cachereGenerateDto(bouquetUrlTransferDto.getRequestId())!=null){
             reGenerateDto regeneratedto= cacheService.cachereGenerateDto(bouquetUrlTransferDto.getRequestId());
             regeneratedto.setBouquetUrl(bouquetUrlTransferDto.getBouquetUrl());
+            cacheService.cachereGenerateDto(bouquetUrlTransferDto.getRequestId(),regeneratedto);
             sseEmitters.sendGenerateDtoToClient(bouquetUrlTransferDto.getRequestId(),regeneratedto);
         } else {
             firstGenerateDto firstgeneratedto = cacheService.cachefirstGenerateDto(bouquetUrlTransferDto.getRequestId());
             firstgeneratedto.setBouquetUrl(bouquetUrlTransferDto.getBouquetUrl());
+            cacheService.cachefirstGenerateDto(bouquetUrlTransferDto.getRequestId(),firstgeneratedto);
             sseEmitters.sendGenerateDtoToClient(bouquetUrlTransferDto.getRequestId(),firstgeneratedto);
         }
     }
