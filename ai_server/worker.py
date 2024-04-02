@@ -18,7 +18,6 @@ def worker(work_queue, publisher, threadNum):
     ).to("cuda:"+str(threadNum))
 
     print("파이프라인 준비 완료")
-    print(pipeline)
     while True:
         message = work_queue.get()  # 큐에서 작업을 하나 가져옴
         if message['type'] == 'message':
