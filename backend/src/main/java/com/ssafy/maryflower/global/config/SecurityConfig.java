@@ -46,13 +46,14 @@ public class SecurityConfig  {
             .sessionManagement(sm -> sm
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             // 테스트를 위해 authorize 기능 잠시 꺼둠
-//            .authorizeHttpRequests(authorize -> authorize
-//                    // 해당 API에 대해서는 모든 요청을 허가
-//                    .requestMatchers("/auth/oauth2/login/*", "/actuator/health").permitAll()
-//                    .anyRequest().authenticated())
             .authorizeHttpRequests(authorize -> authorize
-                    // 모든 요청을 허가
-                    .anyRequest().permitAll())
+                    // 해당 API에 대해서는 모든 요청을 허가
+                    .requestMatchers("/auth/oauth2/login/*", "/actuator/health").permitAll()
+                    .requestMatchers("/bouquet/subscribe").permitAll()
+                    .anyRequest().authenticated())
+//            .authorizeHttpRequests(authorize -> authorize
+//                    // 모든 요청을 허가
+//                    .anyRequest().permitAll())
 
             .exceptionHandling(ex -> {
               ex.authenticationEntryPoint(jwtAuthenticationEntryPoint)
