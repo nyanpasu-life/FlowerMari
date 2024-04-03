@@ -31,10 +31,10 @@ public class FlowerDataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         log.info("RUN");
         loadFlowerData();
-        loadMemberData();
-        loadBouquetData();
-        cacheService.getAllFlowers();
-        initData();
+//        loadMemberData();
+//        loadBouquetData();
+//        cacheService.getAllFlowers();
+//        initData();
     }
     private void loadFlowerData() {
         log.info("flower data load");

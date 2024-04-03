@@ -19,6 +19,7 @@ public class SseEmitters {
 
     // 클라이언트와 연결 추가.
     public SseEmitter addEmitter(String requestId){
+
         SseEmitter emitter=new SseEmitter(Long.MAX_VALUE);
         emitters.put(requestId, emitter);
 
