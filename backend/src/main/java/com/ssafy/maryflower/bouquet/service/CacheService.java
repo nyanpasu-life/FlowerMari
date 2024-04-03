@@ -7,6 +7,7 @@ import com.ssafy.maryflower.bouquet.data.dto.response.reGenerateDto;
 import com.ssafy.maryflower.bouquet.data.entity.Flower;
 import com.ssafy.maryflower.bouquet.data.repository.FlowerRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
@@ -18,6 +19,7 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class CacheService {
 
     private final FlowerRepository flowerRepository;
@@ -87,7 +89,7 @@ public class CacheService {
 
     @Cacheable(value = "allFlowers")
     public List<FlowerDto> getAllFlowers(){
-        System.out.println("getAllFlowers 실행 ");
+        log.info("getAllFlowers 실행");
         // 엔티티 전체 조회
         List<Flower> flowers= flowerRepository.findAll();
         // 클라이언트로 반환 할 전체 DTO
@@ -103,13 +105,13 @@ public class CacheService {
             );
             flowerDtos.add(dto);
         }
-        System.out.println(flowerDtos.size());
+        log.info("flower 갯수 : {}", flowerDtos.size());
         return flowerDtos;
     }
 
     @CacheEvict(value = "allFlowers", allEntries = true)
     public void clearAllFlowersCache() {
-        System.out.println("allFlowers 캐시 삭제됨");
+        log.info("allFlowers 캐시 삭제됨");
     }
 
     @CachePut(value = "requestId", key="#userId")
