@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -29,19 +32,26 @@ public class DataPublishService {
     public void publishFlowerDataToAIServer(String whom,String situation,String message,String requestId){
 
 
+        List<String> listFlower=new ArrayList<>();
 
-        String[] flowers= selectFlowerService.chat(selectFlowerService.makePrompt(whom,situation,message)).split(",");
+
+        while(listFlower.size()<6){
+
+            String[] flowers= selectFlowerService.chat(selectFlowerService.makePrompt(whom,situation,message)).split(",");
+            listFlower.addAll(Arrays.asList(flowers));
+        }
+
 
         firstGenerateDto firstgeneratedto=new firstGenerateDto();
 
-        for(int i=0;i<flowers.length;i++){
-            log.info("첫 생성 꽃 이름 : {}", flowers[i]);
+        for(int i=0;i<6;i++){
+            log.info("첫 생성 꽃 이름 : {}", listFlower.get(i));
             if(i%2 ==0 ){
                 // mainflower
-                flowerRepository.findFlowerByName(flowers[i]).ifPresent(firstgeneratedto.getUsedFlower()::add);
+                flowerRepository.findFlowerByName(listFlower.get(i)).ifPresent(firstgeneratedto.getUsedFlower()::add);
             }else{
                 // subflower
-                flowerRepository.findFlowerByName(flowers[i]).ifPresent(firstgeneratedto.getRecommendByMeaning()::add);
+                flowerRepository.findFlowerByName(listFlower.get(i)).ifPresent(firstgeneratedto.getRecommendByMeaning()::add);
             }
         }
         for(Long l:firstgeneratedto.getUsedFlower()){
@@ -80,13 +90,21 @@ public class DataPublishService {
     @Async
     public void publishFlowerDataToAIServer(List<String> userFlowers, String requestId){
 
+        List<String> listFlower=new ArrayList<>();
+
+        while(listFlower.size()<userFlowers.size()){
+
+            String[] flowers= selectFlowerService.chat(selectFlowerService.makePrompt(userFlowers))
+                    .replace(", ",",") .split(",");
+            listFlower.addAll(Arrays.asList(flowers));
+        }
+
         // 메인 꽃 추출
-        String[] flowers= selectFlowerService.chat(selectFlowerService.makePrompt(userFlowers))
-                .replace(", ",",") .split(",");
+
 
         log.info("regenerate test");
 
-        for(String test:flowers){
+        for(String test:listFlower){
             log.info("재생성 꽃이름 : {}", test);
         }
 
@@ -98,8 +116,8 @@ public class DataPublishService {
             // dto에 mainflower pk 저장
             flowerRepository.findFlowerByName(userFlowers.get(i)).ifPresent(regenerateDto.getUsedFlower()::add);
 
-            if (i < flowers.length) {
-                flowerRepository.findFlowerByName(flowers[i]).ifPresent(regenerateDto.getRecommendByMeaning()::add);
+            if (i < listFlower.size()) {
+                flowerRepository.findFlowerByName(listFlower.get(i)).ifPresent(regenerateDto.getRecommendByMeaning()::add);
             } else {
                 regenerateDto.getRecommendByMeaning().add(regenerateDto.getUsedFlower().get(i));
             }
