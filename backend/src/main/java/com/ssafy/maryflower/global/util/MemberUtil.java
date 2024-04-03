@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class MemberUtil {
     public static String getKakaoId(){
         Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        log.info("principal = {}", principal);
         UserDetails userDetails = (UserDetails) principal;
         return userDetails.getUsername();
     }

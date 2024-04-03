@@ -6,6 +6,7 @@ import com.ssafy.maryflower.bouquet.data.dto.transfer.FlowersTransferDto;
 import com.ssafy.maryflower.bouquet.data.repository.FlowerRepository;
 import com.ssafy.maryflower.infrastructure.RedisEventPublisher;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class DataPublishService {
 
     private final BouquetService bouquetService;
@@ -33,24 +35,21 @@ public class DataPublishService {
         firstGenerateDto firstgeneratedto=new firstGenerateDto();
 
         for(int i=0;i<flowers.length;i++){
-            System.out.println("첫 생성 꽃 이름 : "+flowers[i]);
+            log.info("첫 생성 꽃 이름 : {}", flowers[i]);
             if(i%2 ==0 ){
                 // mainflower
                 flowerRepository.findFlowerByName(flowers[i]).ifPresent(firstgeneratedto.getUsedFlower()::add);
-
             }else{
                 // subflower
-
-
                 flowerRepository.findFlowerByName(flowers[i]).ifPresent(firstgeneratedto.getRecommendByMeaning()::add);
             }
         }
         for(Long l:firstgeneratedto.getUsedFlower()){
-            System.out.println("사용된 Main 꽃 ID : "+l);
+            log.info("사용된 Main 꽃 ID : {}", l);
         }
 
         for(Long l:firstgeneratedto.getRecommendByMeaning()){
-            System.out.println("사용된 Sub 꽃 ID : "+l);
+            log.info("사용된 Sub 꽃 ID : {}", l);
         }
 
         // 인기순 Top 7 꽃 id 리스트에 저징.
@@ -64,9 +63,7 @@ public class DataPublishService {
 
         // firstgeneratedto redis cache에 저장.
         cacheService.cachefirstGenerateDto(requestId,firstgeneratedto);
-        System.out.println("꽃다발 생성 로직 AI로 Publish");
-
-
+        log.info("꽃다발 생성 로직 AI로 Publish");
 
         // main flower 정보, 요청 아이디 dto로 Redis publish
         redisEventPublisher.sendMessage(new FlowersTransferDto(firstgeneratedto.getUsedFlower(),requestId));
@@ -81,16 +78,15 @@ public class DataPublishService {
         String[] flowers= selectFlowerService.chat(selectFlowerService.makePrompt(userFlowers))
                 .replace(", ",",") .split(",");
 
-
-        System.out.println("regenerate Test");
+        log.info("regenerate test");
 
         for(String test:flowers){
-            System.out.println("재생성 꽃이름 : " +test);
+            log.info("재생성 꽃이름 : {}", test);
         }
 
         reGenerateDto regenerateDto=new reGenerateDto();
 
-        System.out.println("front data size : "+userFlowers.size());
+        log.info("front data size : {}", userFlowers.size());
 
         for(int i=0;i<userFlowers.size();i++) {
             // dto에 mainflower pk 저장
@@ -114,7 +110,7 @@ public class DataPublishService {
         cacheService.cachereGenerateDto(requestId,regenerateDto);
 
         for(Long l:regenerateDto.getRecommendByMeaning()){
-            System.out.println("추천 꽃 id : "+l);
+            log.info("추천 꽃 id : {}", l);
         }
 
         // main flower 정보, 요청 아이디 dto로 Redis publish

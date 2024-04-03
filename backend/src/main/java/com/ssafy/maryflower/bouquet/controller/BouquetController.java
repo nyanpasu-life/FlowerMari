@@ -43,7 +43,7 @@ public class BouquetController {
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     public ResponseEntity<SseEmitter> subscribe(@RequestParam String requestId) {
 
-        System.out.println("sse 연결  requestId : "+requestId);
+        log.info("sse 연결  requestId : {}", requestId);
         Long userId=cacheService.cacheUserDataWithUserId(requestId).getUserId();
 //        Long userId=1L;
 //        Long userId=memberService.getMemberIdByKakaoId(MemberUtil.getKakaoId())
@@ -90,7 +90,6 @@ public class BouquetController {
         // API를 통해 꽃다발에 사용할 꽃 추출 후, Redis ch1으로 publish
         DataPublishService.publishFlowerDataToAIServer(userDataHolder.getWhom(), userDataHolder.getSituation(), userDataHolder.getMessage(), requestId);
 
-        System.out.println("여기까지 옴");
         // 200 응답 반환
         return ResponseEntity.ok(requestId);
     }

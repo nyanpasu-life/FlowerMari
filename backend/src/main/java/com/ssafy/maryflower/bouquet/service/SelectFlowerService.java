@@ -85,7 +85,6 @@ public class SelectFlowerService {
                 "이때 "+flowerText+"에 있는 꽃들은 제외하고 추천해줘\n"+
                 "응답형식은 꽃의 이름을 , 기준으로 나눠줘\n"+
                 "위 응답 형식에 맞게 꽃 "+size+"개 추천해줘 추천 꽃 개수 꼭 지켜줘";
-//        System.out.println(prompt);
          return prompt;
     }
 

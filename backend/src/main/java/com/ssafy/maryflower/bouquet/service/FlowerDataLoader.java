@@ -29,7 +29,7 @@ public class FlowerDataLoader implements CommandLineRunner {
     private final BouquetRepository bouquetRepository;
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("run?");
+        log.info("RUN");
         loadFlowerData();
         loadMemberData();
         loadBouquetData();
@@ -37,7 +37,7 @@ public class FlowerDataLoader implements CommandLineRunner {
         initData();
     }
     private void loadFlowerData() {
-        System.out.println("flower data load");
+        log.info("flower data load");
 
         if (flowerRepository.count() >= FlowerData.FLOWERS.size()) return;
 
@@ -53,7 +53,8 @@ public class FlowerDataLoader implements CommandLineRunner {
         }
     }
     private void loadMemberData(){
-        System.out.println("member data load");
+        log.info("member data load");
+
         String kakaoId = "TestKakaoId";
 
         if (!memberRepository.existsByKakaoId(kakaoId)){
@@ -65,9 +66,7 @@ public class FlowerDataLoader implements CommandLineRunner {
     }
 
     private void loadBouquetData(){
-        System.out.println("bouquet data load");
-
-
+        log.info("bouquet data load");
 
         List<Long> testList;
 
