@@ -29,9 +29,3 @@ def merge_images_with_opacity(imageA, opacityA, imageB, opacityB):
     
     # 결과 이미지 반환
     return merged_image
-
-img1 = loadImg = Image.open('./loading_imgs/img1.png')
-img2 = Image.open('./loading_imgs/img2.png')
-
-m_img = merge_images_with_opacity(img1, 40, img2, 60)
-m_img.show()
