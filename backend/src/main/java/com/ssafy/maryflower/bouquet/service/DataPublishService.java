@@ -52,8 +52,13 @@ public class DataPublishService {
             log.info("사용된 Sub 꽃 ID : {}", l);
         }
 
+
         // 인기순 Top 7 꽃 id 리스트에 저징.
+
         firstgeneratedto.setRecommendByPopularity(flowerRepository.findTopUsedFlowers());
+        if(firstgeneratedto.getRecommendByPopularity().isEmpty()){
+            firstgeneratedto.setRecommendByPopularity(bouquetService.getRandomFlowerIds());
+        }
 
 
         // 전체 꽃 데이터 리스트에 저장.

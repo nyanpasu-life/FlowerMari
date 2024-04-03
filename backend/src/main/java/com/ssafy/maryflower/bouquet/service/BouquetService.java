@@ -10,10 +10,15 @@ import com.ssafy.maryflower.member.data.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.security.SecureRandom;
+import java.util.Collections;
 import java.util.List;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -51,13 +56,13 @@ public class BouquetService {
     }
 
     // 껓다발 확정 후, 관련 정보 DB에 저장.
-    public void saveBucketData(String whom,String situation, String message,String imageUrl,Long memberId,List<Long> flowerIds){
+    public void saveBucketData(String whom,String situation, String message,String imageUrl,Long memberId,List<Long> flowerIds) {
         // 사용자가 입력한 Text
         Bouquet bouquet = new Bouquet();
 
         // Member 엔티티 조회
         Member member = memberRepository.findById(memberId)
-                .orElseThrow(()->new BouquetException(BouquetErrorCode.INVALID_FLOWER_ID));
+                .orElseThrow(() -> new BouquetException(BouquetErrorCode.INVALID_FLOWER_ID));
         bouquet.setWhom(whom);
         bouquet.setSituation(situation);
         bouquet.setMessage(message);
@@ -67,8 +72,6 @@ public class BouquetService {
         bouquetRepository.save(bouquet);
 
 
-
-
         // MemberBouquet 생성 및 저장.
         MemberBouquet MemberBouquet = new MemberBouquet();
         MemberBouquet.setBouquet(bouquet);
@@ -76,15 +79,25 @@ public class BouquetService {
         MemberBouquetRepository.save(MemberBouquet);
 
         // 각 Flower ID에 대해 FlowerBouquet 생성 및 저장.
-        for(Long flowerId:flowerIds){
+        for (Long flowerId : flowerIds) {
             Flower flower = flowerRepository.findById(flowerId)
-                    .orElseThrow(()-> new BouquetException(BouquetErrorCode.INVALID_FLOWER_ID));
-            FlowerBouquet FlowerBouquet=new FlowerBouquet();
+                    .orElseThrow(() -> new BouquetException(BouquetErrorCode.INVALID_FLOWER_ID));
+            FlowerBouquet FlowerBouquet = new FlowerBouquet();
             FlowerBouquet.setBouquet(bouquet);
             FlowerBouquet.setFlower(flower);
             FlowerBouquetRepository.save(FlowerBouquet);
         }
 
+
     }
+    public List<Long> getRandomFlowerIds() {
+        List<Flower> allFlowers = flowerRepository.findAll();
+        Collections.shuffle(allFlowers, new SecureRandom());
+        return allFlowers.stream()
+                .limit(7)
+                .map(Flower::getFlowerId)
+                .collect(Collectors.toList());
+    }
+
 
 }

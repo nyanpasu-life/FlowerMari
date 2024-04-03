@@ -178,4 +178,14 @@ public class TestController {
         cacheService.clearAllFlowersCache();;
         return ResponseEntity.ok("success");
     }
+
+
+    @PostMapping("/getRandomFlowerIds")
+    public ResponseEntity<String> testgetRandomFlowerIds(){
+        List<Long> test=bouquetService.getRandomFlowerIds();
+        for(long l:test){
+            System.out.print(l+" ");
+        }
+        return ResponseEntity.ok("success");
+    }
 }
