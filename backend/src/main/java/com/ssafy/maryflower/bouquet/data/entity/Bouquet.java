@@ -4,6 +4,7 @@ import com.ssafy.maryflower.global.BaseEntity;
 import com.ssafy.maryflower.member.data.entity.Member;
 import jakarta.persistence.*;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.antlr.v4.runtime.misc.NotNull;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 @Entity
+@Getter
 @Setter
 @NoArgsConstructor
 public class Bouquet extends BaseEntity {

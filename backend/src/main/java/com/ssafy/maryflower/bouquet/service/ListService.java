@@ -46,6 +46,11 @@ public class ListService {
                     .bouquet(bouquet)
                     .build();
             memberBouquetRepository.save(mb);
+
+            for (FlowerBouquet fb : bouquet.getFlowerBouquets()){
+                flowerBouquetRepository.save(new FlowerBouquet(fb.getFlower(), fb.getBouquet()));
+            }
+
         }
     }
   }

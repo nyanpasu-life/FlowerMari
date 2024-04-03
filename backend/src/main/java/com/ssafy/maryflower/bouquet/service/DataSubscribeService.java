@@ -5,10 +5,12 @@ import com.ssafy.maryflower.bouquet.data.dto.response.reGenerateDto;
 import com.ssafy.maryflower.bouquet.data.dto.transfer.BouquetUrlTransferDto;
 import com.ssafy.maryflower.bouquet.sse.SseEmitters;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class DataSubscribeService {
 
     private final SseEmitters sseEmitters;
@@ -16,9 +18,9 @@ public class DataSubscribeService {
     public void subscribeBouquetDataFromAIServer(BouquetUrlTransferDto bouquetUrlTransferDto){
 
         // Test
-        System.out.println("AI로부터 subscribe");
+        log.info("AI로부터 subscribe");
         if(!bouquetUrlTransferDto.isFinish()){
-            System.out.println("middle image = " + bouquetUrlTransferDto.getBouquetUrl());
+            log.info("middle image = {}", bouquetUrlTransferDto.getBouquetUrl());
             sseEmitters.sendImageUrlToClient(bouquetUrlTransferDto.getRequestId(),bouquetUrlTransferDto.getBouquetUrl());
         }
         else if(cacheService.cachereGenerateDto(bouquetUrlTransferDto.getRequestId())!=null){
