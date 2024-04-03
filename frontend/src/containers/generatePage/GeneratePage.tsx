@@ -58,15 +58,18 @@ export const GeneratePage = () => {
 	const html = document.querySelector('html');
 	const location = useLocation();
 	const { requestId } = location.state;
+	
 	useEffect(() => {
 		console.log("useEffect");
 		console.log(requestId);
 		if (requestId) {
+			setIsMaking(true);
 			console.log("if");
+			setIsMaking(true)
 			setupSSE(requestId, {
-				onOpen: () => {
-					setIsMaking(true);
+				onOpen: () => {				
 					console.log('SSE 연결이 열림');
+					setIsMaking(true);
 				},
 				onError: (error: Event) => {
 					console.error('SSE 에러 발생', error);
@@ -75,23 +78,20 @@ export const GeneratePage = () => {
 					firstGenerateEvent: (data: any) => { // data 타입을 any로 지정, 더 구체적인 타입이 있다면 변경 가능
 						setBouquetData(data);
 						console.log('첫 번째 생성 이벤트 데이터 처리', data);
-						setIsMaking(false);
+						setIsMaking(false)
 					},
 					reGenerateEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetData(data);
 						console.log('재생성 이벤트 데이터 처리', data);
-						setIsMaking(false);
+						setIsMaking(false)
 					},
 					middleImageSendEvent: (data: any) => { // data 타입을 any로 지정
 						setBouquetUrl(data);
 						console.log('중간 이미지 전송 이벤트 데이터 처리', data);
-						setIsMaking(false);
+						setIsMaking(true)
 					}
 				}
-			});
-			return () => {
-				setIsMaking(false);
-			};	
+			})	
 		}
 	}, [requestId]);
 
@@ -105,6 +105,8 @@ export const GeneratePage = () => {
 		setSelectIdByIndex(new Array(usedFlower.length).fill(-1));
 		setIsUsed(Array.from({ length: usedFlower.length }, () => true));
 
+		setIsMaking(false);
+
 		return unsubscribe;
 	}, [usedFlower]);
 
@@ -113,6 +115,7 @@ export const GeneratePage = () => {
 			.map((index) => allFlowers.find((flower) => flower.flowerId === index))
 			.filter((flower) => flower !== undefined) as FlowerDto[];
 		setUf(extractFlower);
+		
 		// 사용된 꽃 목록 추출
 	}, [usedFlowerIndexs]);
 
@@ -203,7 +206,7 @@ export const GeneratePage = () => {
 
 	const onErrorImg = (e: any) => {
 		e.target.src = white;
-	};
+	}; // 이미지 깨짐 대용 이미지
 
 	return (
 		<>
@@ -212,7 +215,8 @@ export const GeneratePage = () => {
 				<Header></Header>
 				<StyledBouquetImage src={bouquetUrl} onError={onErrorImg}></StyledBouquetImage>
 				{/* 최초 추천 꽃 + 변경 추천 꽃 */}
-				{uf.map((item, index) => {
+				{!isMaking && uf.map((item, index) => 
+				{	
 					return (
 						<Accordion
 							key={index}
