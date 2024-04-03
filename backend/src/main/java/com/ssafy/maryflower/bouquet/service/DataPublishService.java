@@ -56,7 +56,7 @@ public class DataPublishService {
         // 인기순 Top 7 꽃 id 리스트에 저징.
 
         firstgeneratedto.setRecommendByPopularity(flowerRepository.findTopUsedFlowers());
-        if(firstgeneratedto.getRecommendByPopularity().isEmpty()){
+        if(firstgeneratedto.getRecommendByPopularity().size()<5){
             firstgeneratedto.setRecommendByPopularity(bouquetService.getRandomFlowerIds());
         }
 
@@ -108,7 +108,9 @@ public class DataPublishService {
 
         // 인기순 Top 7 꽃 id 리스트에 저징.
         regenerateDto.setRecommendByPopularity(flowerRepository.findTopUsedFlowers());
-
+        if(regenerateDto.getRecommendByPopularity().size()<5){
+            regenerateDto.setRecommendByPopularity(bouquetService.getRandomFlowerIds());
+        }
         // api 사용 횟수 저장.
         regenerateDto.setApiUsageCount(bouquetService.checkApiUses(cacheService.cacheUserDataWithUserId(requestId).getUserId()));
 

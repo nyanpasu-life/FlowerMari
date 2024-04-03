@@ -91,8 +91,10 @@ public class BouquetService {
 
     }
     public List<Long> getRandomFlowerIds() {
+
         List<Flower> allFlowers = flowerRepository.findAll();
         Collections.shuffle(allFlowers, new SecureRandom());
+
         return allFlowers.stream()
                 .limit(7)
                 .map(Flower::getFlowerId)
