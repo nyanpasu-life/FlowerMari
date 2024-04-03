@@ -55,6 +55,7 @@ public class DataPublishService {
         // 인기순 Top 7 꽃 id 리스트에 저징.
         firstgeneratedto.setRecommendByPopularity(flowerRepository.findTopUsedFlowers());
 
+
         // 전체 꽃 데이터 리스트에 저장.
         firstgeneratedto.setAllFlowers(cacheService.getAllFlowers());
 
